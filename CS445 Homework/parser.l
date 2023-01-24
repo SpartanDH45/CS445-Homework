@@ -30,8 +30,15 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 %option noyywrap
 
 %%
-"stop"|"quit"|"exit"   { return setValue(line, QUIT, yytext); }
-"pi"                   { return setValue(line, NUMBER, (char *)"3.141592653589793238"); }
+"true"|"false"         { return setValue(line, BOOLCONST, yytext)}
+[A-Za-z][A-Za-z0-9]*   { return setValue(line, ID, yytext);}
+[0-9]*                 { return setValue(line, NUMCONST, yytext);}
+"'\n'"                 { return setValue(line, CHARCONST, yytext);}
+"'\0'"                 { return setValue(line, CHARCONST, yytext);}
+\'[^\']\'              { return setValue(line, CHARCONST, yytext);}
+\'\\[.]\'              { return setValue(line, CHARCONST, yytext);}
+\"([^\\\"]*(\\[\\\"])*)*    { return setValue(line, STRINGCONST, yytext);}
+
 [0-9]+|[0-9]*\.[0-9]+  { return setValue(line, NUMBER, yytext); }
 [0-9]+\.[0-9]*         { return setValue(line, NUMBER, yytext); }
 [a-z]                  { return setValue(line, ID, yytext); }
