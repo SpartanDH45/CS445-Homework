@@ -14,12 +14,21 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     // fill it up
     yylval.tokenData->linenum = linenum;
     yylval.tokenData->tokenstr = strdup(svalue);  // duplicating string!!
-  
-    if (tokenClass == NUMBER) {
-        yylval.tokenData->numValue = atof(svalue); 
-    }
+    if (tokenClass == BOOLCONST){
+        if (svalue == "true"){
+            yylval.tokenData->numValue = 1;
+        } else {
+            yylval.tokenData->numValue = 0;
+        }
     else if (tokenClass == ID) {
-        yylval.tokenData->idIndex = svalue[0]-'a';
+        //svalue[0]-'a'
+        yylval.tokenData->idIndex = strdup(svalue);
+    }
+    else if (tokenClass == NUMCONST) {
+        yylval.tokenData->numValue = atoi(svalue); 
+    }
+    else if (tokenClass == CHARCONST) {
+        
     }
     // return the tokenclass
     return tokenClass;
@@ -35,7 +44,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 [0-9]*                 { return setValue(line, NUMCONST, yytext);}
 "'\n'"                 { return setValue(line, CHARCONST, yytext);}
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
-\'[^\']\'              { return setValue(line, CHARCONST, yytext);}
+\'[^\\\']\'            { return setValue(line, CHARCONST, yytext);}
 \'\\[.]\'              { return setValue(line, CHARCONST, yytext);}
 \"([^\\\"]*(\\[\\\"])*)*    { return setValue(line, STRINGCONST, yytext);}
 
