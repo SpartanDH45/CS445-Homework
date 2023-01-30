@@ -1,7 +1,10 @@
 %{
+// Donald Hammer CS445
+// Adapted code from provided calculator program
+
 // this *order* of these includes is mandatory
 #include "scanType.h"  // TokenData Type
-#include "calc.tab.h"  // token definitions from the bison
+#include "parser.tab.h"  // token definitions from the bison
 
 int line;
 int numErrors;    // ERR err count
@@ -20,15 +23,19 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         } else {
             yylval.tokenData->numValue = 0;
         }
+    }
     else if (tokenClass == ID) {
         //svalue[0]-'a'
-        yylval.tokenData->idIndex = strdup(svalue);
+        yylval.tokenData->strValue = strdup(svalue);
     }
     else if (tokenClass == NUMCONST) {
         yylval.tokenData->numValue = atoi(svalue); 
     }
     else if (tokenClass == CHARCONST) {
-        
+        yylval.tokenData->charValue = svalue;
+    }
+    else if (tokenClass == STRINGCONST) {
+        yylval.tokenData->strValue = strdup(svalue);
     }
     // return the tokenclass
     return tokenClass;
@@ -44,16 +51,8 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 [0-9]*                 { return setValue(line, NUMCONST, yytext);}
 "'\n'"                 { return setValue(line, CHARCONST, yytext);}
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
-\'[^\\\']\'            { return setValue(line, CHARCONST, yytext);}
-\'\\[.]\'              { return setValue(line, CHARCONST, yytext);}
-\"([^\\\"]*(\\[\\\"])*)*    { return setValue(line, STRINGCONST, yytext);}
-
-[0-9]+|[0-9]*\.[0-9]+  { return setValue(line, NUMBER, yytext); }
-[0-9]+\.[0-9]*         { return setValue(line, NUMBER, yytext); }
-[a-z]                  { return setValue(line, ID, yytext); }
-[\=\+\-\*\/\(\)]       { return setValue(line, yytext[0], yytext ); }
-[ \t]                  ;
-\/\/.*                 ;
-\n                     { line++; return setValue(line, yytext[0], yytext ); }
+[']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
+"'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
+[\"]([^\\"]*(\\[\\"]))+["] { return setValue(line, STRINGCONST, yytext);}
 .                      { printf("ERROR(%d): char \'%c\' is not in the language\n", line, yytext[0]); numErrors++; }
 %%

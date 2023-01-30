@@ -1,13 +1,13 @@
-BIN = calc
+BIN = parser
 CC = g++
+NAME = c-
 
-DOCS = calcGrammar.pdf
 SRCS = $(BIN).y  $(BIN).l
 HDRS = scanType.h
 OBJS = lex.yy.o $(BIN).tab.o
 
 $(BIN) : $(OBJS)
-	$(CC) $(OBJS) -o $(BIN)
+	$(CC) $(OBJS) -o $(NAME)
 
 lex.yy.c : $(BIN).l $(BIN).tab.h $(HDR)
 	flex $(BIN).l
@@ -19,4 +19,4 @@ clean :
 	rm -f *~ $(OBJS) $(BIN) lex.yy.c $(BIN).tab.h $(BIN).tab.c $(BIN).output
 
 tar : $(HDR) $(SRCS) makefile
-	tar -cvf $(BIN).tar $(HDRS) $(SRCS) $(DOCS) makefile
+	tar -cvf $(BIN).tar $(HDRS) $(SRCS) makefile

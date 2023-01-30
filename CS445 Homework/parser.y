@@ -1,10 +1,6 @@
 %{
-// // // // // // // // // // // // // // // // // // // // // // // 
-// CS445 - Calculator Example Program written in the style of the C-
-// compiler for the class.
-//
-// Robert Heckendorn
-// Jan 21, 2021    
+// Donald Hammer CS445
+// Adapted code from provided calculator program
 
 #include "scanType.h"  // TokenData Type
 #include <stdio.h>
@@ -32,39 +28,21 @@ void yyerror(const char *msg)
     double value;
 }
 
-%token <tokenData> QUIT NUMBER ID
-%type  <value> expression sumexp mulexp unary factor
+%token <tokenData> BOOLCONST ID NUMCONST CHARCONST STRINGCONST
+%type  <value> token
 
 %%
-statementlist : statementlist statement
-              | statement
+
+tokenlist     : tokenlist token
+              | token
               ;
 
-statement     : '\n'
-              | expression '\n'         { printf("THE ANSWER IS %lg\n", $1); }
-              | QUIT '\n'               { exit(0); }
-              ;
+token         : BOOLCONST           {$$ = $1->numValue;}
+              | ID                  {$$ = $1->strValue;}
+              | NUMCONST            {$$ = $1->numValue;}
+              | CHARCONST           {$$ = $1->charValue;}
+              | STRINGCONST         {$$ = $1->stringValue;}
 
-expression    : ID '=' expression   { vars[$1->idIndex] = $3; $$ = $3;}
-              | sumexp              { $$ = $1; }
-
-sumexp        : sumexp '+' mulexp     { $$ = $1 + $3; }
-              | sumexp '-' mulexp     { $$ = $1 - $3; }
-              | mulexp                { $$ = $1; }
-              ;
-
-mulexp        : mulexp '*' unary   { $$ = $1 * $3; }
-              | mulexp '/' unary   { $$ = $1 / $3; } // no check div zero
-              | unary              { $$ = $1; }
-              ;
-
-unary         : '-' unary          { $$ = - $2; }
-              | factor             { $$ = $1; }
-
-factor        : ID                  { $$ = vars[$1->idIndex]; }
-              | '(' expression ')'  { $$ = $2; }
-              | NUMBER              { $$ = $1->numValue; }
-              ;
 %%
 extern int yydebug;
 int main(int argc, char *argv[])
