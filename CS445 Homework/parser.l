@@ -13,6 +13,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 {
     // create the pass-back data space
     yylval.tokenData = new TokenData;
+    printf("Line %i Token: ", linenum);
 
     // fill it up
     yylval.tokenData->linenum = linenum;
@@ -27,9 +28,11 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     else if (tokenClass == ID) {
         //svalue[0]-'a'
         yylval.tokenData->strValue = strdup(svalue);
+        printf("ID Value: %s\n", svalue);
     }
     else if (tokenClass == NUMCONST) {
         yylval.tokenData->numValue = atoi(svalue); 
+        printf(" NUMCONST Value: %i Input %s\n",atoi(svalue), svalue);
     }
     else if (tokenClass == CHARCONST) {
         yylval.tokenData->charValue = svalue[0];
@@ -54,5 +57,5 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 [']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
 [\"]([^\\"]*(\\[\\"]))+["] { return setValue(line, STRINGCONST, yytext);}
-.                      { printf("ERROR(%d): Invalid or misplaced input character: \'%c\' Character Ignored.\n", line, yytext[0]); numErrors++; }
+.                      { printf("ERROR(%i): Invalid or misplaced input character: \'%c\' Character Ignored.\n", line, yytext[0]); numErrors++; }
 %%
