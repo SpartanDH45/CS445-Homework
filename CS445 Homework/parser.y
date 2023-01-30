@@ -25,11 +25,11 @@ void yyerror(const char *msg)
 // so scanType.h must be included before the tab.h file!!!!
 %union {
     TokenData *tokenData;
-    double value;
+    int tNumVal;
+    char* tStringVal
 }
 
 %token <tokenData> BOOLCONST ID NUMCONST CHARCONST STRINGCONST
-%type  <value> token
 
 %%
 
@@ -37,11 +37,12 @@ tokenlist     : tokenlist token
               | token
               ;
 
-token         : BOOLCONST           {$$ = $1->numValue;}
-              | ID                  {$$ = $1->strValue;}
-              | NUMCONST            {$$ = $1->numValue;}
-              | CHARCONST           {$$ = $1->charValue;}
-              | STRINGCONST         {$$ = $1->stringValue;}
+token         : BOOLCONST
+              | ID
+              | NUMCONST
+              | CHARCONST
+              | STRINGCONST
+
 
 %%
 extern int yydebug;
