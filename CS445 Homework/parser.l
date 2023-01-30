@@ -46,7 +46,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 %option noyywrap
 
 %%
-"true"|"false"         { return setValue(line, BOOLCONST, yytext)}
+"true"|"false"         { return setValue(line, BOOLCONST, yytext);}
 [A-Za-z][A-Za-z0-9]*   { return setValue(line, ID, yytext);}
 [0-9]*                 { return setValue(line, NUMCONST, yytext);}
 "'\n'"                 { return setValue(line, CHARCONST, yytext);}
