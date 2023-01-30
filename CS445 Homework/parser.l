@@ -54,5 +54,5 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 [']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
 [\"]([^\\"]*(\\[\\"]))+["] { return setValue(line, STRINGCONST, yytext);}
-.                      { printf("ERROR(%d): char \'%c\' is not in the language\n", line, yytext[0]); numErrors++; }
+.                      { printf("ERROR(%d): Invalid or misplaced input character: \'%c\' Character Ignored.\n", line, yytext[0]); numErrors++; }
 %%
