@@ -32,7 +32,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         yylval.tokenData->numValue = atoi(svalue); 
     }
     else if (tokenClass == CHARCONST) {
-        yylval.tokenData->charValue = svalue;
+        yylval.tokenData->charValue = svalue[0];
     }
     else if (tokenClass == STRINGCONST) {
         yylval.tokenData->strValue = strdup(svalue);
