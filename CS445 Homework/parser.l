@@ -41,7 +41,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         yylval.tokenData->strValue = strdup(svalue);
     }
     // return the tokenclass
-    printf("Test Return")
+    printf("Test Return");
     return tokenClass;
 }
 
