@@ -41,7 +41,6 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         yylval.tokenData->strValue = strdup(svalue);
     }
     // return the tokenclass
-    printf("Test Return");
     return tokenClass;
 }
 
@@ -59,6 +58,6 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
 [\"]([^\\"]*(\\[\\"]))+["] { return setValue(line, STRINGCONST, yytext);}
 [ \t]                  ;
-\n                     { line++; return setValue(line, yytext[0], yytext ); }
+\n                     { line++; }
 .                      { printf("ERROR(%i): Invalid or misplaced input character: \'%c\' Character Ignored.\n", line, yytext[0]); numErrors++; }
 %%
