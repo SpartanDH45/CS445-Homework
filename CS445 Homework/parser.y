@@ -35,11 +35,23 @@ tokenlist     : tokenlist token
               | token
               ;
 
-token         : BOOLCONST
+token         : constant
+              | mulop
+              | sumop
+
+sumop         : '+'
+              | '-'
+
+mulop         : '*'
+              | '/'
+              | '%'
+
+constant      : BOOLCONST
               | ID
               | NUMCONST
               | CHARCONST
               | STRINGCONST
+
 
 
 %%
