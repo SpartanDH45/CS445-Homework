@@ -38,6 +38,7 @@ tokenlist     : tokenlist token
 token         : constant
               | mulop
               | sumop
+              | ops
 
 sumop         : '+'
               | '-'
@@ -58,7 +59,6 @@ ops           : '<'
               | '?'
               | '!'
               | '='
-              | '!'
 
 constant      : BOOLCONST
               | ID
