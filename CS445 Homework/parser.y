@@ -57,7 +57,6 @@ ops           : '<'
               | ';'
               | ','
               | '?'
-              | '!'
               | '='
 
 constant      : BOOLCONST
