@@ -13,7 +13,6 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 {
     // create the pass-back data space
     yylval.tokenData = new TokenData;
-    printf("Line %i Token: ", linenum);
 
     // fill it up
     yylval.tokenData->linenum = linenum;
@@ -59,7 +58,10 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         printf("Line %i Token: CHARCONST Value: '%s' Input: '%s'", linenum);
     }
     else if (tokenClass == STRINGCONST) {
+        printf("Line %i Token: STRINGCONST Value: /"%s/" Input: %s", linenum, svalue, svalue);
         yylval.tokenData->strValue = strdup(svalue);
+    } else {
+        printf("Line %i Token: ", linenum);
     }
     // return the kenclass
     return tokenClass;
