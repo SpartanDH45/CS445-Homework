@@ -66,7 +66,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     // return the kenclass
     return tokenClass;
 }
-//\"([^"\n]*([\\"]*))*\" { return setValue(line, STRINGCONST, yytext);}
+
 %}
 
 %option noyywrap
@@ -77,9 +77,9 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 [0-9]*                 { return setValue(line, NUMCONST, yytext);}
 "'\n'"                 { return setValue(line, CHARCONST, yytext);}
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
-\'([^\\'])\'        { return setValue(line, CHARCONST, yytext);}
+\'([^\\\'])\'           { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
-
+\"([^\"\n]*([\\"]*))*\" { return setValue(line, STRINGCONST, yytext);}
 [\+\-\*\/\(\)\[\]\<\>\%\?\,\:\;\=] {return setValue(line, yytext[0], yytext);}
 [ \t]                  ;
 \n                     { line++; }
