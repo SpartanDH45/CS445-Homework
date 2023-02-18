@@ -56,7 +56,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
             }
         }
         yylval.tokenData->charValue = svalue[0];
-        printf("Line %i Token: CHARCONST Value: '%s' Input: '%s'", linenum)
+        printf("Line %i Token: CHARCONST Value: '%s' Input: '%s'", linenum);
     }
     else if (tokenClass == STRINGCONST) {
         yylval.tokenData->strValue = strdup(svalue);
