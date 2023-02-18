@@ -61,7 +61,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     else if (tokenClass == STRINGCONST) {
         yylval.tokenData->strValue = strdup(svalue);
     }
-    // return the tokenclass
+    // return the kenclass
     return tokenClass;
 }
 
@@ -77,7 +77,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
 [']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
-[\"]([^\\"]*(\\[\\"]))+["] { return setValue(line, STRINGCONST, yytext);}
+\"([^\\"]*(\\[\\"]))+\" { return setValue(line, STRINGCONST, yytext);}
 [\+\-\*\/\(\)\[\]\<\>\%\?\,\:\;\=] {return setValue(line, yytext[0], yytext);}
 [ \t]                  ;
 \n                     { line++; }
