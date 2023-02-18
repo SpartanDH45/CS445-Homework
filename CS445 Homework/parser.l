@@ -35,9 +35,9 @@ static int setValue(int linenum, int tokenClass, char *svalue)
         printf("Line %i Token: NUMCONST Value: %i Input %s\n", linenum, atoi(svalue), svalue);
     }
     else if (tokenClass == CHARCONST) {
-        if (svalue.length() > 3){
-            if(svalue.length() > 4 || svalue[1] != '\\'){
-                printf("WARNING(%i): character is %i characters long and not a single character: '%s'.  The first char will be used.", linenum, svalue.length()-2, svalue);
+        if (strlen(svalue) > 3){
+            if(strlen(svalue) > 4 || svalue[1] != '\\'){
+                printf("WARNING(%i): character is %i characters long and not a single character: '%s'.  The first char will be used.", linenum, strlen(svalue)-2, svalue);
             }
             if(svalue[1] == '\\'){
                 if(svalue[2] == 'n'){
