@@ -66,7 +66,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     // return the kenclass
     return tokenClass;
 }
-
+//\"([^"\n]*([\\"]*))*\" { return setValue(line, STRINGCONST, yytext);}
 %}
 
 %option noyywrap
@@ -79,9 +79,9 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
 [']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
-\"([^"\n]*([\\"]*))*\" { return setValue(line, STRINGCONST, yytext);}
+
 [\+\-\*\/\(\)\[\]\<\>\%\?\,\:\;\=] {return setValue(line, yytext[0], yytext);}
 [ \t]                  ;
 \n                     { line++; }
-.                      { printf("ERROR(%i): Invalid or misplaced input character: \'%s\' Character Ignored.\n", line, yytext); numErrors++; }
+.                      { printf("ERROR(%i): Invalid or misplaced input character: \'%c\' Character Ignored.\n", line, yytext[0]); numErrors++; }
 %%
