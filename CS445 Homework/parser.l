@@ -6,7 +6,7 @@
 #include "scanType.h"  // TokenData Type
 #include "parser.tab.h"  // token definitions from the bison
 
-int line;
+int line = 1;
 int numErrors;    // ERR err count
 
 static int setValue(int linenum, int tokenClass, char *svalue)
@@ -28,14 +28,35 @@ static int setValue(int linenum, int tokenClass, char *svalue)
     else if (tokenClass == ID) {
         //svalue[0]-'a'
         yylval.tokenData->strValue = strdup(svalue);
-        printf("ID Value: %s\n", svalue);
+        printf("Line %i Token: ID Value: %s\n", linenum, svalue);
     }
     else if (tokenClass == NUMCONST) {
         yylval.tokenData->numValue = atoi(svalue); 
-        printf(" NUMCONST Value: %i Input %s\n",atoi(svalue), svalue);
+        printf("Line %i Token: NUMCONST Value: %i Input %s\n", linenum, atoi(svalue), svalue);
     }
     else if (tokenClass == CHARCONST) {
+        if (svalue.length() > 3){
+            if(svalue.length() > 4 || svalue[1] != '\\'){
+                printf("WARNING(%i): character is %i characters long and not a single character: '%s'.  The first char will be used.", linenum, svalue.length()-2, svalue);
+            }
+            if(svalue[1] == '\\'){
+                if(svalue[2] == 'n'){
+                    printf("Line %i Token: CHARCONST Value: '\\n' Input: %s", linenum, svalue);
+                    yylval.tokenData->charValue = '\n';
+                } else if (svalue[2] == '0'){
+                    printf("Line %i Token: CHARCONST Value: '\\0' Input: %s", linenum, svalue);
+                    yylval.tokenData->charValue = '\0';
+                } else {
+                    printf("Line %i Token: CHARCONST Value: '%c' Input: %s", linenum, svalueb[2], svalue);
+                    yylval.tokenData->charValue = svalue[2];
+                }
+            } else {
+                printf("Line %i Token: CHARCONST Value: '%c' Input: %s", linenum, svalue[1], svalue);
+                yylval.tokenData->charValue = svalue[1];
+            }
+        }
         yylval.tokenData->charValue = svalue[0];
+        printf("Line %i Token: CHARCONST Value: '%s' Input: '%s'", linenum)
     }
     else if (tokenClass == STRINGCONST) {
         yylval.tokenData->strValue = strdup(svalue);

@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     numErrors = 0;
     yyparse();
 
-    printf("Number of errors: %d\n", numErrors);   // ERR
+    //printf("Number of errors: %d\n", numErrors);   // ERR
 
     return 0;
 }
