@@ -77,7 +77,7 @@ static int setValue(int linenum, int tokenClass, char *svalue)
 "'\0'"                 { return setValue(line, CHARCONST, yytext);}
 [']([^\\'])[']         { return setValue(line, CHARCONST, yytext);}
 "'\\"([.])[']          { return setValue(line, CHARCONST, yytext);}
-\"([^\\"]*(\\[\\"]))+\" { return setValue(line, STRINGCONST, yytext);}
+\"([^"\n]*([\\"]*))*\" { return setValue(line, STRINGCONST, yytext);}
 [\+\-\*\/\(\)\[\]\<\>\%\?\,\:\;\=] {return setValue(line, yytext[0], yytext);}
 [ \t]                  ;
 \n                     { line++; }
