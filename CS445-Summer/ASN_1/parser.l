@@ -28,7 +28,6 @@ int setValue(int linenum, int tokenClass, char *svalue) {
 
 letter		[a-zA-Z]
 digit		[0-9]
-quote		[\']
 underbar	[_]
 letdig		{digit}|{letter}|{underbar}
 limitters	[\;\,\(\)\{\}\[\]]

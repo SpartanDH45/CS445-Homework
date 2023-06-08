@@ -1,0 +1,22 @@
+#DRBC Testing production rules //1&2
+
+//Choose a number between 1 and 99 (Spots on a plinko machine)
+int choice = 11;    //3,
+int ballSpeed = 1;
+int ballDir = 3;
+//Direction
+//  1B5
+//  234
+char ball = 'O';
+char boardArr[15*54]
+loop i=1..15:1 do{
+    loop j=1..54:1 do{
+
+    }
+}
+
+char bLayer2[53]:"| * * * * * * * * * * * * * * * * * * * * * * * * * |"
+main(){
+    choice = input();
+}
+
