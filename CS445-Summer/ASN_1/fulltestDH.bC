@@ -10,7 +10,7 @@ int testFuncA(int functTestNum, power; char favChar, favStr[]; bool bCisCool){
     char testString[10];                        //9b, 48a
     //24a, 18d, 21, 27a, 43a, 28a, 27d, 29b, 30b, 31b, 32b, 34b, 36b, 38b, 40b, 42a, 44a, 38a, 42b, 39a
     testInt = (functTestNum * functTestNum);    
-    testString[0] = favChar                     //43b
+    testString[0] = favChar;                     //43b
     return testInt;                             //18f, 24b, 25b
 }
 //11b, 12b, 
@@ -56,7 +56,7 @@ int main(){             //3b
     }
     for i = 0 to 100 do {       // 18c, 19a
         //20d, 19b, 20b, 20c
-        for j = 0 to 100 by 2 do if (true == true){numCandy += j;} else while (true == false) do if (false != false) then numCandy = -100;
+        for j = 0 to 100 by 2 do if (true == true) then {numCandy += j;} else while (true == false) do if (false != false) then numCandy = -100;
            
     }
 
