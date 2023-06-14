@@ -1,28 +1,59 @@
-BIN  = bC  # name of thing to be built goes here
+BIN  = bC
+PARSE = parser
 CC   = g++
-# CFLAGS = -g
+# CFLAGS = -g 
 # CCFLAGS = -DCPLUSPLUS -g  # for use with C++ if file ext is .cc
-#CFLAGS = -DCPLUSPLUS -g  # for use with C++ if file ext is .c
+CPPFLAGS = -g     # for use with C++ if file ext is .c
+CPPFLAGS = -O3     # for use with C++ if file ext is .c
 
-SRCS = parser.y parser.l token.h
-OBJS = lex.yy.o parser.tab.o
+SRCS =\
+$(PARSE).y\
+$(PARSE).l\
+main.cpp\
+treeUtils.cpp\
+
+HDRS =\
+scanType.h\
+treeNodes.h\
+treeUtils.h\
+
+OBJS = \
+$(PARSE).tab.o\
+lex.yy.o\
+treeUtils.o\
+
 LIBS = -lm 
 
-bC: $(OBJS)
-	$(CC) $(CCFLAGS) $(OBJS) $(LIBS) -o bC
+$(PARSE): $(OBJS)
+	$(CC) $(CPPFLAGS) $(OBJS) dot.o $(LIBS) -o bC
 
-parser.tab.h parser.tab.c: parser.y
-	bison -v -t -d parser.y  
+$(PARSE).tab.h $(PARSE).tab.c: $(PARSE).y scanType.h treeUtils.h
+	bison -v -t -d $(PARSE).y  
 
-lex.yy.c: parser.l parser.tab.h
-	flex parser.l
+lex.yy.c: $(PARSE).l $(PARSE).tab.h scanType.h
+	flex $(PARSE).l
 
 all:    
 	touch $(SRCS)
 	make
 
 clean:
-	rm -f $(OBJS) bC lex.yy.c parser.tab.h parser.tab.c c-.tar parser.output core
+	/bin/rm *~ $(OBJS) $(BIN) lex.yy.c $(PARSE).tab.h $(PARSE).tab.c $(PARSE).tar $(PARSE).output
 
 tar:
-	tar -cvf bC.tar $(SRCS) makefile 
+	tar -cvf $(BIN).tar $(SRCS) $(HDRS) makefile 
+	ls -l $(BIN).tar
+
+test:
+	echo $(TSTS) | xargs -n1 runtest
+
+tartests: 
+	tar -cvf setOfTests.tar $(TSTS) $(OUTS) $(OUTP)
+	tar -cvf justTests.tar $(TSTS)
+	ls -l setOfTests.tar justTests.tar
+
+tarall: 
+	make tartests
+	tar -cvf $(BIN)-all.tar $(SRCS) $(HDRS) $(TSTS) setOfTests.tar makefile	
+	ls -l $(BIN)-all.tar
+
