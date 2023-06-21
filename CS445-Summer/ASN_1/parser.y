@@ -19,18 +19,31 @@ extern int yylex();
 
 TreeNode *addSibling(TreeNode *t, TreeNode *s)
 {
-// make sure s is not null. If it is this s a major error. Exit the program!
-// Make sure t is not null. If ti is, just return s
-// look down t’s sibling list until you fin with with sibblin = null (the end o f the lsit) and add s there.
-return s;
+   // make sure s is not null. If it is this s a major error. Exit the program!
+   if(s == NULL){
+      printf("Error, sibling without room with parent");
+      exit();
+   }
+   // Make sure t is not null. If ti is, just return s
+   if(t == NULL){
+      return s;
+   }
+   // look down t’s sibling list until you fin with with sibblin = null (the end o f the lsit) and add s there.
+   while(t->sibling != NULL){
+      t = t->sibling;
+   }
+   t->sibling = s;
+   return s;
 }
 // pass the static and type attribute down the sibling list
 void setType(TreeNode *t, ExpType type, bool isStatic)
 {
-while (t) {
-// set t->type and t->isStatic
-// t = t->sibling;
-}
+   while (t) {
+   // set t->type and t->isStatic
+      t->type = type;
+      t->isStatic = isStatic
+      t = t->sibling;
+   }  
 }
 // the syntax tree goes here
 TreeNode *syntaxTree;
@@ -172,14 +185,16 @@ typeSpec  :  INT
    |  BOOL
    |  CHAR
    ;
-funDecl  :  typeSpec ID '(' parms ')' stmt
-   |  ID '(' parms ')' stmt
+funDecl  :  typeSpec ID '(' parms ')' stmt      {$$ = newDeclNode(Funck, $1, $2 $4, $6);}
+   |  ID '(' parms ')' stmt                     {$$ = newDeclNode(FuncK, Void, $1, $3, $5);}
    ;
 parms  :  parmList
    |  /*empty*/
    ;
 parmList  :  parmList ';' parmTypeList
    |  parmTypeList
+   ;
+parmTypeList  :  typeSpec parmIdList
    ;
 parmIdList  :  parmIdList ',' parmId
    |  parmId
@@ -190,9 +205,9 @@ parmId  :  ID
 stmt  :  matched
    |  unmatched
    ;
-matched  :  IF simpleExp THEN matched ELSE matched
-   |  WHILE simpleExp DO matched
-   |  FOR ID '=' iterRange DO matched
+matched  :  IF simpleExp THEN matched ELSE matched       {$$ = newStmtNode(IfK, $1, $2, $4, $6);}
+   |  WHILE simpleExp DO matched                         {$$ = newStmtNode(WhileK, $1, $2, $4);}
+   |  FOR ID '=' iterRange DO matched                    {$$ = newStmtNode(ForK, $1, NULL, $4, $6);}
    |  expstmt
    |  compoundstmt
    |  returnstmt
@@ -208,13 +223,13 @@ unmatched  :  IF simpleExp THEN stmt
    ;
 expstmt  :  exp ';'
    ;
-compoundstmt  :  '{' localDecls stmtList '}'
+compoundstmt  :  '{' localDecls stmtList '}'    {$$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
 localDecls  :  localDecls scopedVarDecl
    |  /*empty*/
    ;
-stmtList  :  stmtList stmt
-   | /*empty*/
+stmtList  :  stmtList stmt          {$$ = ($2==NULL ? $1 : addSibling($1, $2));}
+   | /*empty*/                      {$$ = NULL;}
    ;
 returnstmt  :  RETURN ';'
    | RETURN exp ';'

@@ -12,12 +12,14 @@ char *lastToken=(char *)"";
 int line=1;
 
 int setValue(int linenum, int tokenClass, char *svalue) {
-    yylval.tinfo.tokenclass = tokenClass;
-    yylval.tinfo.linenum = linenum;
-    yylval.tinfo.tokenstr = strdup(svalue);
-    yylval.tinfo.cvalue = '@';
-    yylval.tinfo.nvalue = 777;
-    yylval.tinfo.svalue = NULL;
+    yylval.tokenData = new TokenData;
+    yylval.tokenData->tokenclass = tokenClass;
+    yylval.tokenData->linenum = linenum;
+    yylval.toeknData->tokenstr = lastToken = strdup(svalue);
+    yylval.tokenData->cvalue = svalue[0];
+    //May cause an overflow error
+    yylval.tokenData->nvalue = atoi(svalue);
+    yylval.tokenData->svalue = strdup(svalue);
     return tokenClass;
 }
 
@@ -63,7 +65,7 @@ comment		"//".*
 "to"		{ return setValue(line, TO, yytext); }
 "true"		{ return setValue(line, BOOLCONST, yytext); }
 "while"		{ return setValue(line, WHILE, yytext); }
-{op}		{ return setValue(line, OP, yytext); }
+{op}		{ return setValue(line, yytext[0], yytext); }
 "=="		{ return setValue(line, EQ, yytext); }
 "<="		{ return setValue(line, LEQ, yytext); }
 ">="		{ return setValue(line, GEQ, yytext); }
