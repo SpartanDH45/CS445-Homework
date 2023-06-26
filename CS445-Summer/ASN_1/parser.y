@@ -138,6 +138,8 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %token   <tokenData>  DIVASS
 %token   <tokenData>  INC
 %token   <tokenData>  DEC
+%token   <tokenData>  CHSIGN
+%token   <tokenData>  SIZEOF
 %token   <tokenData>  LASTOP
 
 %token   <tokenData>  BOOL
