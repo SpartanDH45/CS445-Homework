@@ -85,7 +85,6 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %type    <tree>   varDeclList
 %type    <tree>   varDeclInit
 %type    <tree>   varDeclId
-%type    <type>   typeSpec
 %type    <tree>   funDecl
 %type    <tree>   parms
 %type    <tree>   parmList
@@ -103,7 +102,6 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %type    <tree>   returnstmt
 %type    <tree>   breakstmt
 %type    <tree>   exp
-
 %type    <tree>   simpleExp
 %type    <tree>   andExp
 %type    <tree>   unaryRelExp
@@ -119,6 +117,7 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %type    <tree>   args
 %type    <tree>   argList
 %type    <tree>   constant
+
 %type    <type>   typeSpec
 
 %token   <tokenData>  FIRSTOP
@@ -127,7 +126,6 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %token   <tokenData>  AND
 %token   <tokenData>  NOT
 %token   <tokenData>  OR
-
 %token   <tokenData>  EQ
 %token   <tokenData>  LEQ
 %token   <tokenData>  GEQ
@@ -161,7 +159,6 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %token   <tokenData>  NUMCONST
 %token   <tokenData>  CHARCONST
 %token   <tokenData>  STRINGCONST
-
 %token   <tokenData>  '(' ')' ',' ';' '[' '{' '}' ']' ':'
 %token   <tokenData>  LASTTERM
 %%
