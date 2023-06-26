@@ -164,8 +164,8 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %%
 program  :  precomlist declList        {syntaxTree = $2}
    ;
-precomlist  :  precomlist PRECOMPILER  {$$ = $1}
-   |  PRECOMPILER                      { printf("%s\n", yyval.tokenData->tokenstr);}
+precomlist  :  precomlist PRECOMPILER   { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
+   |  PRECOMPILER                      { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
    |  /*empty*/                        {$$ = NULL;}
    ;
 declList  :  declList decl             {$$ = addSibling($1,$2);}
@@ -322,45 +322,6 @@ constant  :  NUMCONST
    |  CHARCONST
    |  STRINGCONST
    |  BOOLCONST
-   ;
-term  : 
-     AND {printToken(yylval.tokenData, "AND");}
-   |  BOOL {printToken(yylval.tokenData, "BOOL");}
-   |  BREAK {printToken(yylval.tokenData, "BREAK");}
-   |  BY {printToken(yylval.tokenData, "BY");}
-   |  CHAR {printToken(yylval.tokenData, "CHAR");}
-   |  DO {printToken(yylval.tokenData, "DO");}
-   |  ELSE {printToken(yylval.tokenData, "ELSE");}
-   |  FOR {printToken(yylval.tokenData, "FOR");}
-   |  IF {printToken(yylval.tokenData, "IF");}
-   |  INT {printToken(yylval.tokenData, "INT");}
-   |  NOT {printToken(yylval.tokenData, "NOT");}
-   |  OR {printToken(yylval.tokenData, "OR");}
-   |  RETURN {printToken(yylval.tokenData, "RETURN");}
-   |  STATIC {printToken(yylval.tokenData, "STATIC");}
-   |  THEN {printToken(yylval.tokenData, "THEN");}
-   |  TO {printToken(yylval.tokenData, "TO");}
-   |  WHILE {printToken(yylval.tokenData, "WHILE");}
-   |  BOOLCONST {printToken(yylval.tokenData, "BOOLCONST");}
-   |  OP {printToken(yylval.tokenData, "OP");}
-   |  EQ {printToken(yylval.tokenData, "EQ");}
-   |  LEQ {printToken(yylval.tokenData, "LEQ");}
-   |  GEQ {printToken(yylval.tokenData, "GEQ");}
-   |  MIN {printToken(yylval.tokenData, "MIN");}
-   |  MAX {printToken(yylval.tokenData, "MAX");}
-   |  NEQ {printToken(yylval.tokenData, "NEQ");}
-   |  ADDASS {printToken(yylval.tokenData, "ADDASS");}
-   |  SUBASS {printToken(yylval.tokenData, "SUBASS");}
-   |  MULASS {printToken(yylval.tokenData, "MULASS");}
-   |  DIVASS {printToken(yylval.tokenData, "DIVASS");}
-   |  INC {printToken(yylval.tokenData, "INC");}
-   |  DEC {printToken(yylval.tokenData, "DEC");}
-   |  ID {printToken(yylval.tokenData, "ID");}
-   |  NUMCONST {printToken(yylval.tokenData, "NUMCONST");}
-   |  CHARCONST {printToken(yylval.tokenData, "CHARCONST");}
-   |  STRINGCONST {printToken(yylval.tokenData, "STRINGCONST");}
-   |  PRECOMPILER {printToken(yylval.tokenData, "PRECOMPILER");}
-   |  ERROR    {cout << "ERROR(" << yylval.tokenData.linenum << "): Invalid or misplaced input character: '" << yylval.tokenData.tokenstr << "'. Character Ignored." << endl; }
    ;
 %%
 void yyerror (const char *msg)
