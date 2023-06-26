@@ -22,7 +22,7 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s)
    // make sure s is not null. If it is this s a major error. Exit the program!
    if(s == NULL){
       printf("Error, sibling without room with parent");
-      exit();
+      exit(1);
    }
    // Make sure t is not null. If ti is, just return s
    if(t == NULL){
@@ -41,7 +41,7 @@ void setType(TreeNode *t, ExpType type, bool isStatic)
    while (t) {
    // set t->type and t->isStatic
       t->type = type;
-      t->isStatic = isStatic
+      t->isStatic = isStatic;
       t = t->sibling;
    }  
 }
@@ -162,7 +162,7 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %token   <tokenData>  '(' ')' ',' ';' '[' '{' '}' ']' ':'
 %token   <tokenData>  LASTTERM
 %%
-program  :  precomlist declList        {syntaxTree = $2}
+program  :  precomlist declList        {syntaxTree = $2;}
    ;
 precomlist  :  precomlist PRECOMPILER   { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
    |  PRECOMPILER                      { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
@@ -192,7 +192,7 @@ typeSpec  :  INT
    |  BOOL
    |  CHAR
    ;
-funDecl  :  typeSpec ID '(' parms ')' stmt      {$$ = newDeclNode(Funck, $1, $2 $4, $6);}
+funDecl  :  typeSpec ID '(' parms ')' stmt      {$$ = newDeclNode(FuncK, $1, $2 $4, $6);}
    |  ID '(' parms ')' stmt                     {$$ = newDeclNode(FuncK, Void, $1, $3, $5);}
    ;
 parms  :  parmList
@@ -324,10 +324,58 @@ constant  :  NUMCONST
    |  BOOLCONST
    ;
 %%
+
 void yyerror (const char *msg)
 { 
    cout << "Error: " <<  msg << endl;
 }
+
+char *largerTokens[LASTTERM+1];        // used in the utils.cpp file printing routines
+
+// create a mapping from token class enum to a printable name in a
+// way that makes it easy to keep the mapping straight.
+void initTokenStrings()
+{
+    largerTokens[ADDASS] = (char *)"+=";
+    largerTokens[AND] = (char *)"and";
+    largerTokens[BOOL] = (char *)"bool";
+    largerTokens[BOOLCONST] = (char *)"boolconst";
+    largerTokens[BREAK] = (char *)"break";
+    largerTokens[BY] = (char *)"by";
+    largerTokens[CHAR] = (char *)"char";
+    largerTokens[CHARCONST] = (char *)"charconst";
+    largerTokens[CHSIGN] = (char *)"chsign";
+    largerTokens[DEC] = (char *)"--";
+    largerTokens[DIVASS] = (char *)"/=";
+    largerTokens[DO] = (char *)"do";
+    largerTokens[ELSE] = (char *)"else";
+    largerTokens[EQ] = (char *)"==";
+    largerTokens[FOR] = (char *)"for";
+    largerTokens[GEQ] = (char *)">=";
+    largerTokens[ID] = (char *)"id";
+    largerTokens[IF] = (char *)"if";
+    largerTokens[INC] = (char *)"++";
+    largerTokens[INT] = (char *)"int";
+    largerTokens[LEQ] = (char *)"<=";
+    largerTokens[MAX] = (char *)":>:";
+    largerTokens[MIN] = (char *)":<:";
+    largerTokens[MULASS] = (char *)"*=";
+    largerTokens[NEQ] = (char *)"!=";
+    largerTokens[NOT] = (char *)"not";
+    largerTokens[NUMCONST] = (char *)"numconst";
+    largerTokens[OR] = (char *)"or";
+    largerTokens[RETURN] = (char *)"return";
+    largerTokens[SIZEOF] = (char *)"sizeof";
+    largerTokens[STATIC] = (char *)"static";
+    largerTokens[STRINGCONST] = (char *)"stringconst";
+    largerTokens[SUBASS] = (char *)"-=";
+    largerTokens[THEN] = (char *)"then";
+    largerTokens[TO] = (char *)"to";
+    largerTokens[WHILE] = (char *)"while";
+    largerTokens[LASTTERM] = (char *)"lastterm";
+}
+
+
 int main(int argc, char **argv) {
    //yylval.tokenData.linenum = 1;
    int index;
