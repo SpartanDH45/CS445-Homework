@@ -373,7 +373,7 @@ int main(int argc, char **argv) {
    char *file = NULL;
    bool dotAST = false;             // make dot file of AST
    extern FILE *yyin;
-
+   initTokenStrings();
    int ch;
 
    while ((ch = getopt(argc, argv, "d")) != -1) {
@@ -396,7 +396,7 @@ int main(int argc, char **argv) {
       fclose (yyin);
    }
    if (numErrors==0) {
-      printTree(stdout, syntaxTree, true, true);
+      printTree(stdout, syntaxTree, false, false);
       if(dotAST) {
          printDotTree(stdout, syntaxTree, false, false);
       }
@@ -406,5 +406,9 @@ int main(int argc, char **argv) {
       printf("Errors: %d\n", numErrors);
       printf("-----------\n");
    }
+   // report the number of errors and warnings
+   printf("Number of warnings: %d\n", numWarnings);
+   printf("Number of errors: %d\n", numErrors);
+   
    return 0;
 }

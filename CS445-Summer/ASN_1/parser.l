@@ -88,6 +88,6 @@ comment		"//".*
 \n       	{ line++; }
 {comment}	;
 {whitespace}+   ;
-.     		{ yylval.tinfo.tokenstr = yytext; return ERROR; }
+.     		{ printf("TOKEN ERROR(%d): invalid or misplaced input character: \'%c\'. Character Ignored.\n", line, yytext[0]); numErrors++;}
 
 %%
