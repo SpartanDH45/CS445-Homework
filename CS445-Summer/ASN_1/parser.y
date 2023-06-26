@@ -64,11 +64,18 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %}
 %union
 {
-   struct   TokenData tinfo ;
    TokenData *tokenData;
    TreeNode *tree;
    ExpType type; // for passing type spec up the tree
 }
+
+%type    <tokenData>   assignop
+%type    <tokenData>   relop
+%type    <tokenData>   minmaxop
+%type    <tokenData>   sumop
+%type    <tokenData>   mulop
+%type    <tokenData>   unaryop
+
 %type    <tree>   program
 %type    <tree>   precomlist
 %type    <tree>   declList
@@ -96,20 +103,15 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %type    <tree>   returnstmt
 %type    <tree>   breakstmt
 %type    <tree>   exp
-%type    <tree>   assignop
+
 %type    <tree>   simpleExp
 %type    <tree>   andExp
 %type    <tree>   unaryRelExp
 %type    <tree>   relExp
-%type    <tree>   relop
 %type    <tree>   minmaxExp
-%type    <tree>   minmaxop
 %type    <tree>   sumExp
-%type    <tree>   sumop
 %type    <tree>   mulExp
-%type    <tree>   mulop
 %type    <tree>   unaryExp
-%type    <tree>   unaryop
 %type    <tree>   factor
 %type    <tree>   mutable
 %type    <tree>   immutable
@@ -117,43 +119,51 @@ void printToken(TokenData myData, string tokenName, int type = 0) {
 %type    <tree>   args
 %type    <tree>   argList
 %type    <tree>   constant
-%token   <tinfo>  AND
-%token   <tinfo>  BOOL
-%token   <tinfo>  BREAK
-%token   <tinfo>  BY
-%token   <tinfo>  CHAR
-%token   <tinfo>  DO
-%token   <tinfo>  ELSE
-%token   <tinfo>  FOR
-%token   <tinfo>  IF
-%token   <tinfo>  INT
-%token   <tinfo>  NOT
-%token   <tinfo>  OR
-%token   <tinfo>  RETURN
-%token   <tinfo>  STATIC
-%token   <tinfo>  THEN
-%token   <tinfo>  TO
-%token   <tinfo>  WHILE
-%token   <tinfo>  BOOLCONST
-%token   <tinfo>  OP
-%token   <tinfo>  EQ
-%token   <tinfo>  LEQ
-%token   <tinfo>  GEQ
-%token   <tinfo>  MIN
-%token   <tinfo>  MAX
-%token   <tinfo>  NEQ
-%token   <tinfo>  ADDASS
-%token   <tinfo>  SUBASS
-%token   <tinfo>  MULASS
-%token   <tinfo>  DIVASS
-%token   <tinfo>  INC
-%token   <tinfo>  DEC
-%token   <tinfo>  ID
-%token   <tinfo>  NUMCONST
-%token   <tinfo>  CHARCONST
-%token   <tinfo>  STRINGCONST
-%token	 <tinfo>  PRECOMPILER
-%token   <tinfo>  ERROR 
+%type    <type>   typeSpec
+
+%token   <tokenData>  FIRSTOP
+%token	<tokenData>  PRECOMPILER
+%token   <tokenData>  '*' '+' '-' '/' '<' '=' '>' '%' '?'
+%token   <tokenData>  AND
+%token   <tokenData>  NOT
+%token   <tokenData>  OR
+
+%token   <tokenData>  EQ
+%token   <tokenData>  LEQ
+%token   <tokenData>  GEQ
+%token   <tokenData>  MIN
+%token   <tokenData>  MAX
+%token   <tokenData>  NEQ
+%token   <tokenData>  ADDASS
+%token   <tokenData>  SUBASS
+%token   <tokenData>  MULASS
+%token   <tokenData>  DIVASS
+%token   <tokenData>  INC
+%token   <tokenData>  DEC
+%token   <tokenData>  LASTOP
+
+%token   <tokenData>  BOOL
+%token   <tokenData>  BREAK
+%token   <tokenData>  BY
+%token   <tokenData>  CHAR
+%token   <tokenData>  DO
+%token   <tokenData>  ELSE
+%token   <tokenData>  FOR
+%token   <tokenData>  IF
+%token   <tokenData>  INT
+%token   <tokenData>  ID
+%token   <tokenData>  RETURN
+%token   <tokenData>  STATIC
+%token   <tokenData>  THEN
+%token   <tokenData>  TO
+%token   <tokenData>  WHILE
+%token   <tokenData>  BOOLCONST
+%token   <tokenData>  NUMCONST
+%token   <tokenData>  CHARCONST
+%token   <tokenData>  STRINGCONST
+
+%token   <tokenData>  '(' ')' ',' ';' '[' '{' '}' ']' ':'
+%token   <tokenData>  LASTTERM
 %%
 program  :  precomlist declList        {syntaxTree = $2}
    ;
@@ -317,43 +327,43 @@ constant  :  NUMCONST
    |  BOOLCONST
    ;
 term  : 
-     AND {printToken(yylval.tinfo, "AND");}
-   |  BOOL {printToken(yylval.tinfo, "BOOL");}
-   |  BREAK {printToken(yylval.tinfo, "BREAK");}
-   |  BY {printToken(yylval.tinfo, "BY");}
-   |  CHAR {printToken(yylval.tinfo, "CHAR");}
-   |  DO {printToken(yylval.tinfo, "DO");}
-   |  ELSE {printToken(yylval.tinfo, "ELSE");}
-   |  FOR {printToken(yylval.tinfo, "FOR");}
-   |  IF {printToken(yylval.tinfo, "IF");}
-   |  INT {printToken(yylval.tinfo, "INT");}
-   |  NOT {printToken(yylval.tinfo, "NOT");}
-   |  OR {printToken(yylval.tinfo, "OR");}
-   |  RETURN {printToken(yylval.tinfo, "RETURN");}
-   |  STATIC {printToken(yylval.tinfo, "STATIC");}
-   |  THEN {printToken(yylval.tinfo, "THEN");}
-   |  TO {printToken(yylval.tinfo, "TO");}
-   |  WHILE {printToken(yylval.tinfo, "WHILE");}
-   |  BOOLCONST {printToken(yylval.tinfo, "BOOLCONST");}
-   |  OP {printToken(yylval.tinfo, "OP");}
-   |  EQ {printToken(yylval.tinfo, "EQ");}
-   |  LEQ {printToken(yylval.tinfo, "LEQ");}
-   |  GEQ {printToken(yylval.tinfo, "GEQ");}
-   |  MIN {printToken(yylval.tinfo, "MIN");}
-   |  MAX {printToken(yylval.tinfo, "MAX");}
-   |  NEQ {printToken(yylval.tinfo, "NEQ");}
-   |  ADDASS {printToken(yylval.tinfo, "ADDASS");}
-   |  SUBASS {printToken(yylval.tinfo, "SUBASS");}
-   |  MULASS {printToken(yylval.tinfo, "MULASS");}
-   |  DIVASS {printToken(yylval.tinfo, "DIVASS");}
-   |  INC {printToken(yylval.tinfo, "INC");}
-   |  DEC {printToken(yylval.tinfo, "DEC");}
-   |  ID {printToken(yylval.tinfo, "ID");}
-   |  NUMCONST {printToken(yylval.tinfo, "NUMCONST");}
-   |  CHARCONST {printToken(yylval.tinfo, "CHARCONST");}
-   |  STRINGCONST {printToken(yylval.tinfo, "STRINGCONST");}
-   |  PRECOMPILER {printToken(yylval.tinfo, "PRECOMPILER");}
-   |  ERROR    {cout << "ERROR(" << yylval.tinfo.linenum << "): Invalid or misplaced input character: '" << yylval.tinfo.tokenstr << "'. Character Ignored." << endl; }
+     AND {printToken(yylval.tokenData, "AND");}
+   |  BOOL {printToken(yylval.tokenData, "BOOL");}
+   |  BREAK {printToken(yylval.tokenData, "BREAK");}
+   |  BY {printToken(yylval.tokenData, "BY");}
+   |  CHAR {printToken(yylval.tokenData, "CHAR");}
+   |  DO {printToken(yylval.tokenData, "DO");}
+   |  ELSE {printToken(yylval.tokenData, "ELSE");}
+   |  FOR {printToken(yylval.tokenData, "FOR");}
+   |  IF {printToken(yylval.tokenData, "IF");}
+   |  INT {printToken(yylval.tokenData, "INT");}
+   |  NOT {printToken(yylval.tokenData, "NOT");}
+   |  OR {printToken(yylval.tokenData, "OR");}
+   |  RETURN {printToken(yylval.tokenData, "RETURN");}
+   |  STATIC {printToken(yylval.tokenData, "STATIC");}
+   |  THEN {printToken(yylval.tokenData, "THEN");}
+   |  TO {printToken(yylval.tokenData, "TO");}
+   |  WHILE {printToken(yylval.tokenData, "WHILE");}
+   |  BOOLCONST {printToken(yylval.tokenData, "BOOLCONST");}
+   |  OP {printToken(yylval.tokenData, "OP");}
+   |  EQ {printToken(yylval.tokenData, "EQ");}
+   |  LEQ {printToken(yylval.tokenData, "LEQ");}
+   |  GEQ {printToken(yylval.tokenData, "GEQ");}
+   |  MIN {printToken(yylval.tokenData, "MIN");}
+   |  MAX {printToken(yylval.tokenData, "MAX");}
+   |  NEQ {printToken(yylval.tokenData, "NEQ");}
+   |  ADDASS {printToken(yylval.tokenData, "ADDASS");}
+   |  SUBASS {printToken(yylval.tokenData, "SUBASS");}
+   |  MULASS {printToken(yylval.tokenData, "MULASS");}
+   |  DIVASS {printToken(yylval.tokenData, "DIVASS");}
+   |  INC {printToken(yylval.tokenData, "INC");}
+   |  DEC {printToken(yylval.tokenData, "DEC");}
+   |  ID {printToken(yylval.tokenData, "ID");}
+   |  NUMCONST {printToken(yylval.tokenData, "NUMCONST");}
+   |  CHARCONST {printToken(yylval.tokenData, "CHARCONST");}
+   |  STRINGCONST {printToken(yylval.tokenData, "STRINGCONST");}
+   |  PRECOMPILER {printToken(yylval.tokenData, "PRECOMPILER");}
+   |  ERROR    {cout << "ERROR(" << yylval.tokenData.linenum << "): Invalid or misplaced input character: '" << yylval.tokenData.tokenstr << "'. Character Ignored." << endl; }
    ;
 %%
 void yyerror (const char *msg)
@@ -361,7 +371,7 @@ void yyerror (const char *msg)
    cout << "Error: " <<  msg << endl;
 }
 int main(int argc, char **argv) {
-   //yylval.tinfo.linenum = 1;
+   //yylval.tokenData.linenum = 1;
    int index;
    char *file = NULL;
    bool dotAST = false;             // make dot file of AST
