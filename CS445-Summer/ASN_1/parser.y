@@ -168,39 +168,39 @@ program  :  precomlist declList        {syntaxTree = $2;}
    ;
 precomlist  :  precomlist PRECOMPILER   { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
    |  PRECOMPILER                      { $$ = NULL; printf("%s\n", yylval.tokenData->tokenstr);}
-   |  /*empty*/                        {$$ = NULL;}
+   |  /*empty*/                        { $$ = NULL;}
    ;
-declList  :  declList decl             {$$ = addSibling($1,$2);}
-   |  decl                             {$$ = $1;}
+declList  :  declList decl             { $$ = addSibling($1,$2);}
+   |  decl                             { $$ = $1;}
    ;
-decl  :  varDecl                       {$$ = $1;}
-   |  funDecl                          {$$ = $1;}
+decl  :  varDecl                       { $$ = $1;}
+   |  funDecl                          { $$ = $1;}
    ;
-varDecl  :  typeSpec varDeclList ';'   {$$ = $2; setType( $2, $1, false); yyerrok;}
+varDecl  :  typeSpec varDeclList ';'   { $$ = $2; setType( $2, $1, false); yyerrok;}
    ;
-scopedVarDecl  :  STATIC typeSpec varDeclList ';'  {$$ = $3; setType($3,$2,true);}
-   |  typeSpec varDeclList ';'                     {$$ = $2; setType($2,$1,false);}
+scopedVarDecl  :  STATIC typeSpec varDeclList ';'  { $$ = $3; setType($3,$2,true);}
+   |  typeSpec varDeclList ';'                     { $$ = $2; setType($2,$1,false);}
    ;
-varDeclList  :  varDeclList ',' varDeclInit
-   |  varDeclInit
+varDeclList  :  varDeclList ',' varDeclInit        { $$ = addSibling($1,$2);}
+   |  varDeclInit                                  { $$ = $1}
    ;
-varDeclInit  :  varDeclId
-   | varDeclId ':' simpleExp
+varDeclInit  :  varDeclId                          { $$ = $1}
+   | varDeclId ':' simpleExp                       { $$ = addSibling($1, $3);}
    ;
-varDeclId  :  ID
-   | ID '['NUMCONST']'
+varDeclId  :  ID                                   { $$ = newDeclNode(VarK, Void, $1);}
+   | ID '['NUMCONST']'                             { $$ = newDeclNode(VarK, Void, $1, $3);}
    ;
-typeSpec  :  INT
-   |  BOOL
-   |  CHAR
+typeSpec  :  INT                                   { $$ = $1;}
+   |  BOOL                                         { $$ = $1;}
+   |  CHAR                                         { $$ = $1;}
    ;
-funDecl  :  typeSpec ID '(' parms ')' stmt      {$$ = newDeclNode(FuncK, $1, $2 $4, $6);}
-   |  ID '(' parms ')' stmt                     {$$ = newDeclNode(FuncK, Void, $1, $3, $5);}
+funDecl  :  typeSpec ID '(' parms ')' stmt         { $$ = newDeclNode(FuncK, $1, $2 $4, $6);}
+   |  ID '(' parms ')' stmt                        { $$ = newDeclNode(FuncK, Void, $1, $3, $5);}
    ;
-parms  :  parmList
-   |  /*empty*/
+parms  :  parmList                                 { $$ = $1;}
+   |  /*empty*/                                    { $$ = NULL;}
    ;
-parmList  :  parmList ';' parmTypeList
+parmList  :  parmList ';' parmTypeList             
    |  parmTypeList
    ;
 parmTypeList  :  typeSpec parmIdList
@@ -214,9 +214,9 @@ parmId  :  ID
 stmt  :  matched
    |  unmatched
    ;
-matched  :  IF simpleExp THEN matched ELSE matched       {$$ = newStmtNode(IfK, $1, $2, $4, $6);}
-   |  WHILE simpleExp DO matched                         {$$ = newStmtNode(WhileK, $1, $2, $4);}
-   |  FOR ID '=' iterRange DO matched                    {$$ = newStmtNode(ForK, $1, NULL, $4, $6);}
+matched  :  IF simpleExp THEN matched ELSE matched       { $$ = newStmtNode(IfK, $1, $2, $4, $6);}
+   |  WHILE simpleExp DO matched                         { $$ = newStmtNode(WhileK, $1, $2, $4);}
+   |  FOR ID '=' iterRange DO matched                    { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
    |  expstmt
    |  compoundstmt
    |  returnstmt
@@ -232,13 +232,13 @@ unmatched  :  IF simpleExp THEN stmt
    ;
 expstmt  :  exp ';'
    ;
-compoundstmt  :  '{' localDecls stmtList '}'    {$$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
+compoundstmt  :  '{' localDecls stmtList '}'    { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
 localDecls  :  localDecls scopedVarDecl
    |  /*empty*/
    ;
-stmtList  :  stmtList stmt          {$$ = ($2==NULL ? $1 : addSibling($1, $2));}
-   | /*empty*/                      {$$ = NULL;}
+stmtList  :  stmtList stmt          { $$ = ($2==NULL ? $1 : addSibling($1, $2));}
+   | /*empty*/                      { $$ = NULL;}
    ;
 returnstmt  :  RETURN ';'
    | RETURN exp ';'
