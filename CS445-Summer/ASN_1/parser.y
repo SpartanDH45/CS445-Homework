@@ -17,6 +17,17 @@ int numWarnings;
 extern int line;
 extern int yylex();
 
+ExpType tData_toType(tokenData tData){
+   switch(tData){
+      case INT:
+         return Integer;
+      case BOOL:
+         return Boolean;
+      case CHAR:
+         return Char;
+   }
+}
+
 TreeNode *addSibling(TreeNode *t, TreeNode *s)
 {
    // make sure s is not null. If it is this s a major error. Exit the program!
@@ -187,12 +198,12 @@ varDeclList  :  varDeclList ',' varDeclInit        { $$ = addSibling($1,$3);}
 varDeclInit  :  varDeclId                          { $$ = $1;}
    | varDeclId ':' simpleExp                       { $$ = addSibling($1, $3);}
    ;
-varDeclId  :  ID                                   { $$ = newDeclNode(VarK, Void, $1);}
-   | ID '['NUMCONST']'                             { $$ = newDeclNode(VarK, Void, $1, $3);}
+varDeclId  :  ID                                   { $$ = newDeclNode(VarK, UndefinedType, $1);}
+   |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1, $3);}
    ;
-typeSpec  :  INT                                   { $$ = $1;}
-   |  BOOL                                         { $$ = $1;}
-   |  CHAR                                         { $$ = $1;}
+typeSpec  :  INT                                   { $$ = tData_toType($1);}
+   |  BOOL                                         { $$ = tData_toType($1);}
+   |  CHAR                                         { $$ = tData_toType($1);}
    ;
 funDecl  :  typeSpec ID '(' parms ')' stmt         { $$ = newDeclNode(FuncK, $1, $2 $4, $6);}
    |  ID '(' parms ')' stmt                        { $$ = newDeclNode(FuncK, Void, $1, $3, $5);}
