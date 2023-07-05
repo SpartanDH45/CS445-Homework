@@ -194,7 +194,7 @@ typeSpec  :  INT                                   { $$ = Integer;}
    |  BOOL                                         { $$ = Boolean;}
    |  CHAR                                         { $$ = Char;}
    ;
-funDecl  :  typeSpec ID '(' parms ')' stmt         { $$ = newDeclNode(FuncK, $1, $2 $4, $6);}
+funDecl  :  typeSpec ID '(' parms ')' stmt         { $$ = newDeclNode(FuncK, $1, $2, $4, $6);}
    |  ID '(' parms ')' stmt                        { $$ = newDeclNode(FuncK, Void, $1, $3, $5);}
    ;
 parms  :  parmList                                 { $$ = $1;}
