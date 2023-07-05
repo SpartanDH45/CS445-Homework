@@ -15,7 +15,7 @@ int setValue(int linenum, int tokenClass, char *svalue) {
     yylval.tokenData = new TokenData;
     yylval.tokenData->tokenclass = tokenClass;
     yylval.tokenData->linenum = linenum;
-    yylval.toeknData->tokenstr = lastToken = strdup(svalue);
+    yylval.tokenData->tokenstr = lastToken = strdup(svalue);
     yylval.tokenData->cvalue = svalue[0];
     //May cause an overflow error
     yylval.tokenData->nvalue = atoi(svalue);
@@ -88,6 +88,6 @@ comment		"//".*
 \n       	{ line++; }
 {comment}	;
 {whitespace}+   ;
-.     		{ printf("TOKEN ERROR(%d): invalid or misplaced input character: \'%c\'. Character Ignored.\n", line, yytext[0]); numErrors++;}
+.     		{ printf("TOKEN ERROR(%d): invalid or misplaced input character: \'%c\'. Character Ignored.\n", line, yytext[0]); /*numErrors++;*/}
 
 %%
