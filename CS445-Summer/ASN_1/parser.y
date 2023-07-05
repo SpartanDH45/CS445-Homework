@@ -181,10 +181,10 @@ varDecl  :  typeSpec varDeclList ';'   { $$ = $2; setType( $2, $1, false); yyerr
 scopedVarDecl  :  STATIC typeSpec varDeclList ';'  { $$ = $3; setType($3,$2,true);}
    |  typeSpec varDeclList ';'                     { $$ = $2; setType($2,$1,false);}
    ;
-varDeclList  :  varDeclList ',' varDeclInit        { $$ = addSibling($1,$2);}
-   |  varDeclInit                                  { $$ = $1}
+varDeclList  :  varDeclList ',' varDeclInit        { $$ = addSibling($1,$3);}
+   |  varDeclInit                                  { $$ = $1;}
    ;
-varDeclInit  :  varDeclId                          { $$ = $1}
+varDeclInit  :  varDeclId                          { $$ = $1;}
    | varDeclId ':' simpleExp                       { $$ = addSibling($1, $3);}
    ;
 varDeclId  :  ID                                   { $$ = newDeclNode(VarK, Void, $1);}
