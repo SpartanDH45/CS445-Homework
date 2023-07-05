@@ -190,7 +190,7 @@ varDeclInit  :  varDeclId                          { $$ = $1;}
 varDeclId  :  ID                                   { $$ = newDeclNode(VarK, UndefinedType, $1);}
    |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1, $3);}
    ;
-typeSpec  :  INT                                   { $$ = Integer);}
+typeSpec  :  INT                                   { $$ = Integer;}
    |  BOOL                                         { $$ = Boolean;}
    |  CHAR                                         { $$ = Char;}
    ;
