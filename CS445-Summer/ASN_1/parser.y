@@ -185,10 +185,12 @@ varDeclList  :  varDeclList ',' varDeclInit        { $$ = addSibling($1,$3);}
    |  varDeclInit                                  { $$ = $1;}
    ;
 varDeclInit  :  varDeclId                          { $$ = $1;}
-   | varDeclId ':' simpleExp                       { $$ = addSibling($1, $3);}
+   | varDeclId ':' simpleExp                       { $$ = $1; $$->child[0] = $3;}
    ;
 varDeclId  :  ID                                   { $$ = newDeclNode(VarK, UndefinedType, $1);}
-   |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1);}
+   |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1); 
+                                                      $$->isArray = true; 
+                                                      $$->size = $3->nvalue; }
    ;
 typeSpec  :  INT                                   { $$ = Integer;}
    |  BOOL                                         { $$ = Boolean;}
@@ -200,16 +202,17 @@ funDecl  :  typeSpec ID '(' parms ')' stmt         { $$ = newDeclNode(FuncK, $1,
 parms  :  parmList                                 { $$ = $1;}
    |  /*empty*/                                    { $$ = NULL;}
    ;
-parmList  :  parmList ';' parmTypeList             
-   |  parmTypeList
+parmList  :  parmList ';' parmTypeList             { $$ = addSibling($1, $3);}
+   |  parmTypeList                                 { $$ = $1;}
    ;
-parmTypeList  :  typeSpec parmIdList
+parmTypeList  :  typeSpec parmIdList               { $$ = $2; setType( $2, $1, false); yyerrok; }
    ;
-parmIdList  :  parmIdList ',' parmId
-   |  parmId
+parmIdList  :  parmIdList ',' parmId               { $$ = addSibling($1, $3);}
+   |  parmId                                       { $$ = $1;}
    ;
-parmId  :  ID
-   | ID '['']'
+parmId  :  ID                                      { $$ = newDeclNode(ParamK, UndefinedType, $1);}
+   | ID '['']'                                     { $$ = newDeclNode(ParamK, UndefinedType, $1); 
+                                                      $$->isArray = true; }
    ;
 stmt  :  matched
    |  unmatched
