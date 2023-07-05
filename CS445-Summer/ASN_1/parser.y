@@ -17,7 +17,7 @@ int numWarnings;
 extern int line;
 extern int yylex();
 
-ExpType tData_toType(tokenData tData){
+ExpType tData_toType(TokenData tData){
    switch(tData){
       case INT:
          return Integer;
