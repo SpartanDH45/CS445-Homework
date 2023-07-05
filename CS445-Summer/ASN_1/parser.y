@@ -188,7 +188,7 @@ varDeclInit  :  varDeclId                          { $$ = $1;}
    | varDeclId ':' simpleExp                       { $$ = addSibling($1, $3);}
    ;
 varDeclId  :  ID                                   { $$ = newDeclNode(VarK, UndefinedType, $1);}
-   |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1, $3);}
+   |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1);}
    ;
 typeSpec  :  INT                                   { $$ = Integer;}
    |  BOOL                                         { $$ = Boolean;}
