@@ -214,39 +214,39 @@ parmId  :  ID                                      { $$ = newDeclNode(ParamK, Un
    | ID '['']'                                     { $$ = newDeclNode(ParamK, UndefinedType, $1); 
                                                       $$->isArray = true; }
    ;
-stmt  :  matched
-   |  unmatched
+stmt  :  matched                                   { $$ = $1;}
+   |  unmatched                                    { $$ = $1;}
    ;
 matched  :  IF simpleExp THEN matched ELSE matched       { $$ = newStmtNode(IfK, $1, $2, $4, $6);}
    |  WHILE simpleExp DO matched                         { $$ = newStmtNode(WhileK, $1, $2, $4);}
    |  FOR ID '=' iterRange DO matched                    { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
-   |  expstmt
-   |  compoundstmt
-   |  returnstmt
-   |  breakstmt
+   |  expstmt                                            { $$ = $1;}
+   |  compoundstmt                                       { $$ = $1;}
+   |  returnstmt                                         { $$ = $1;}
+   |  breakstmt                                          { $$ = $1;}
    ;
-iterRange  :  simpleExp TO simpleExp
-   |  simpleExp TO simpleExp BY simpleExp
+iterRange  :  simpleExp TO simpleExp                     { $$ = newStmtNode(RangeK, $1, $3);}
+   |  simpleExp TO simpleExp BY simpleExp                { $$ = newStmtNode(RangeK, $1, $3, $5);}
    ;
-unmatched  :  IF simpleExp THEN stmt
-   |  IF simpleExp THEN matched ELSE unmatched
-   | WHILE simpleExp DO unmatched
-   | FOR ID '=' iterRange DO unmatched
+unmatched  :  IF simpleExp THEN stmt                     { $$ = newStmtNode(IfK, $1, $2, $4);}
+   |  IF simpleExp THEN matched ELSE unmatched           { $$ = newStmtNode(IfK, $1, $2, $4, $6);}
+   | WHILE simpleExp DO unmatched                        { $$ = newStmtNode(WhileK, $1, $2, $4);}
+   | FOR ID '=' iterRange DO unmatched                   { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
    ;
 expstmt  :  exp ';'
    ;
 compoundstmt  :  '{' localDecls stmtList '}'    { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
-localDecls  :  localDecls scopedVarDecl
-   |  /*empty*/
+localDecls  :  localDecls scopedVarDecl         { $$ = addSibling( $1, $2);}
+   |  /*empty*/                                 { $$ = NULL}
    ;
-stmtList  :  stmtList stmt          { $$ = ($2==NULL ? $1 : addSibling($1, $2));}
-   | /*empty*/                      { $$ = NULL;}
+stmtList  :  stmtList stmt                      { $$ = ($2==NULL ? $1 : addSibling($1, $2));}
+   | /*empty*/                                  { $$ = NULL;}
    ;
-returnstmt  :  RETURN ';'
-   | RETURN exp ';'
+returnstmt  :  RETURN ';'                       { $$ = newStmtNode(ReturnK, $1);}
+   | RETURN exp ';'                             { $$ = newStmtNode(ReturnK, $1, $2);}
    ;
-breakstmt  :  BREAK ';'
+breakstmt  :  BREAK ';'                         { $$ = newStmtNode(BreakK, $1);}
    ;
 exp  :  mutable assignop exp
    |  mutable INC
