@@ -78,6 +78,10 @@ TreeNode *newStmtNode(StmtKind kind,
    return newNode;
 }
 TreeNode *newExpNode(ExpKind kind,
+                     TokenData *token,
+                     TreeNode *c0=NULL,
+                     TreeNode *c1=NULL,
+                     TreeNode *c2=NULL){
     TreeNode *newNode;
    int i;
 

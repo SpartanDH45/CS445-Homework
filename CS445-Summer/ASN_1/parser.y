@@ -233,7 +233,7 @@ unmatched  :  IF simpleExp THEN stmt                     { $$ = newStmtNode(IfK,
    | WHILE simpleExp DO unmatched                        { $$ = newStmtNode(WhileK, $1, $2, $4);}
    | FOR ID '=' iterRange DO unmatched                   { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
    ;
-expstmt  :  exp ';'
+expstmt  :  exp ';'                                { $$ = $1}
    ;
 compoundstmt  :  '{' localDecls stmtList '}'    { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
@@ -248,85 +248,85 @@ returnstmt  :  RETURN ';'                       { $$ = newStmtNode(ReturnK, $1);
    ;
 breakstmt  :  BREAK ';'                         { $$ = newStmtNode(BreakK, $1);}
    ;
-exp  :  mutable assignop exp
-   |  mutable INC
-   |  mutable DEC
-   |  simpleExp
-   |  mutable assignop error
+exp  :  mutable assignop exp                    { $$ = newExpNode(AssignK, $1, $2, $3);}
+   |  mutable INC                               { $$ = newExpNode(AssignK, $1, $2);}
+   |  mutable DEC                               { $$ = newExpNode(AssignK, $1, $2);}
+   |  simpleExp                                 { $$ = $1;}
+   |  mutable assignop error                    { $$ = newExpNode(AssignK, $1, $2, $3);}
    ;
-assignop  :  '='
-   |  ADDASS
-   |  SUBASS
-   |  MULASS
-   |  DIVASS
+assignop  :  '='                                { $$ = $1;}
+   |  ADDASS                                    { $$ = $1;}
+   |  SUBASS                                    { $$ = $1;}
+   |  MULASS                                    { $$ = $1;}
+   |  DIVASS                                    
    ;
-simpleExp  :  simpleExp OR andExp
-   |  andExp
+simpleExp  :  simpleExp OR andExp               { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  andExp                                    { $$ = $1;}
    ;
-andExp  :  andExp AND unaryRelExp
-   |  unaryRelExp
+andExp  :  andExp AND unaryRelExp               { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  unaryRelExp                               { $$ = $1;}
    ;
-unaryRelExp  :  NOT unaryRelExp
-   |  relExp
+unaryRelExp  :  NOT unaryRelExp                 { $$ = newExpNode(OpK, $1, $2);}
+   |  relExp                                    { $$ = $1;}
    ;
-relExp  :  minmaxExp relop minmaxExp
-   |  minmaxExp
+relExp  :  minmaxExp relop minmaxExp            { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  minmaxExp                                 { $$ = $1;}
    ;
-relop  :  LEQ
-   |  '<'
-   |  '>'
-   |  GEQ
-   |  EQ
-   |  NEQ
+relop  :  LEQ                                   { $$ = $1;}
+   |  '<'                                       { $$ = $1;}
+   |  '>'                                       { $$ = $1;}
+   |  GEQ                                       { $$ = $1;}
+   |  EQ                                        { $$ = $1;}
+   |  NEQ                                       { $$ = $1;}
    ;
-minmaxExp  :  minmaxExp minmaxop sumExp
-   |  sumExp
+minmaxExp  :  minmaxExp minmaxop sumExp         { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  sumExp                                    { $$ = $1;}
    ;
-minmaxop  :  MAX
-   |  MIN
+minmaxop  :  MAX                                { $$ = $1;}
+   |  MIN                                       { $$ = $1;}
    ;
-sumExp  :  sumExp sumop mulExp
-   |  mulExp
+sumExp  :  sumExp sumop mulExp                  { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  mulExp                                    { $$ = $1;}
    ;
-sumop  :  '+'
-   |  '-'
+sumop  :  '+'                                   { $$ = $1;}
+   |  '-'                                       { $$ = $1;}
    ;
-mulExp  :  mulExp mulop unaryExp
-   |  unaryExp
+mulExp  :  mulExp mulop unaryExp                { $$ = newExpNode(OpK, $2, $1, $3);}
+   |  unaryExp                                  { $$ = $1;}
    ;
-mulop  :  '*'
-   |  '/'
-   |  '%'
+mulop  :  '*'                                   { $$ = $1;}
+   |  '/'                                       { $$ = $1;}
+   |  '%'                                       { $$ = $1;}
    ;
-unaryExp  :  unaryop unaryExp
-   |  factor
+unaryExp  :  unaryop unaryExp                   { $$ = newExpNode(OpK, $1, $2);}
+   |  factor                                    { $$ = $1;}
    ;
-unaryop  :  '-'
-   |  '*'
-   |  '?'
+unaryop  :  '-'                           { $$ = newExpNode(OpK, $1);}
+   |  '*'                                 { $$ = newExpNode(OpK, $1);}
+   |  '?'                                 { $$ = newExpNode(OpK, $1);}
    ;
-factor  :  immutable
-   |  mutable
+factor  :  immutable                      { $$ = $1;}
+   |  mutable                             { $$ = $1;}
    ;
-mutable  :  ID
-   |  ID '[' exp ']'
+mutable  :  ID                            { $$ = newExpNode(IdK, $1);}
+   |  ID '[' exp ']'                      { $$ = newExpNode(IdK, $1, $2);}
    ;
-immutable  :  '(' exp ')'
-   |  call
-   |  constant
+immutable  :  '(' exp ')'                 { $$ = $1;}
+   |  call                                { $$ = $1;}
+   |  constant                            { $$ = $1;}
    ;
-call  :  ID '(' args ')'
+call  :  ID '(' args ')'                  { $$ = newExpNode(CallK, $1, $3);}
    ;
-args  :  argList
-   |  /*empty*/
+args  :  argList                          { $$ = $1;}
+   |  /*empty*/                           { $$ = NULL}
    ;
-argList  :  argList ',' exp
-   | exp
+argList  :  argList ',' exp               { $$ = addSibing($1, $3)}
+   | exp                                  { $$ = $1;}
    ;
-constant  :  NUMCONST
-   |  CHARCONST
-   |  STRINGCONST
-   |  BOOLCONST
+constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);}
+   |  CHARCONST                           { $$ = newExpNode(ConstantK, $1);}
+   |  STRINGCONST                         { $$ = newExpNode(ConstantK, $1);}
+   |  BOOLCONST                           { $$ = newExpNode(ConstantK, $1);}
    ;
 %%
 
