@@ -233,7 +233,7 @@ unmatched  :  IF simpleExp THEN stmt                     { $$ = newStmtNode(IfK,
    | WHILE simpleExp DO unmatched                        { $$ = newStmtNode(WhileK, $1, $2, $4);}
    | FOR ID '=' iterRange DO unmatched                   { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
    ;
-expstmt  :  exp ';'                                { $$ = $1}
+expstmt  :  exp ';'                                { $$ = $1;}
    ;
 compoundstmt  :  '{' localDecls stmtList '}'    { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
