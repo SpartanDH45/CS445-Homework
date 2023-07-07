@@ -6,10 +6,10 @@ TreeNode *cloneNode(TreeNode *currnode){
 
 TreeNode *newDeclNode(DeclKind kind,
                     ExpType type,
-                    TokenData *token=NULL,
-                    TreeNode *c0=NULL,
-                    TreeNode *c1=NULL,
-                    TreeNode *c2=NULL){  // save TokenData block!!
+                    TokenData *token,
+                    TreeNode *c0,
+                    TreeNode *c1,
+                    TreeNode *c2){  // save TokenData block!!
                         TreeNode *newNode;
    int i;
 
@@ -44,9 +44,9 @@ TreeNode *newDeclNode(DeclKind kind,
 }
 TreeNode *newStmtNode(StmtKind kind,
                     TokenData *token,
-                    TreeNode *c0=NULL,
-                    TreeNode *c1=NULL,
-                    TreeNode *c2=NULL){
+                    TreeNode *c0,
+                    TreeNode *c1,
+                    TreeNode *c2){
     TreeNode *newNode;
     int i;
 
@@ -77,11 +77,7 @@ TreeNode *newStmtNode(StmtKind kind,
    }
    return newNode;
 }
-TreeNode *newExpNode(ExpKind kind,
-                     TokenData *token,
-                     TreeNode *c0=NULL,
-                     TreeNode *c1=NULL,
-                     TreeNode *c2=NULL){
+TreeNode *newExpNode(ExpKind kind, TokenData *token, TreeNode *c0, TreeNode *c1, TreeNode *c2){
     TreeNode *newNode;
    int i;
 
@@ -195,50 +191,7 @@ char *expTypeToStr(ExpType type, bool isArray, bool isStatic)
     return strdup(expTypeToStrBuffer); // memory leak
 }
 
-char *largerTokens[LASTTERM+1];        // used in the utils.cpp file printing routines
 
-// create a mapping from token class enum to a printable name in a
-// way that makes it easy to keep the mapping straight.
-void initTokenStrings()
-{
-    largerTokens[ADDASS] = (char *)"+=";
-    largerTokens[AND] = (char *)"and";
-    largerTokens[BOOL] = (char *)"bool";
-    largerTokens[BOOLCONST] = (char *)"boolconst";
-    largerTokens[BREAK] = (char *)"break";
-    largerTokens[BY] = (char *)"by";
-    largerTokens[CHAR] = (char *)"char";
-    largerTokens[CHARCONST] = (char *)"charconst";
-    largerTokens[CHSIGN] = (char *)"chsign";
-    largerTokens[DEC] = (char *)"--";
-    largerTokens[DIVASS] = (char *)"/=";
-    largerTokens[DO] = (char *)"do";
-    largerTokens[ELSE] = (char *)"else";
-    largerTokens[EQ] = (char *)"==";
-    largerTokens[FOR] = (char *)"for";
-    largerTokens[GEQ] = (char *)">=";
-    largerTokens[ID] = (char *)"id";
-    largerTokens[IF] = (char *)"if";
-    largerTokens[INC] = (char *)"++";
-    largerTokens[INT] = (char *)"int";
-    largerTokens[LEQ] = (char *)"<=";
-    largerTokens[MAX] = (char *)":>:";
-    largerTokens[MIN] = (char *)":<:";
-    largerTokens[MULASS] = (char *)"*=";
-    largerTokens[NEQ] = (char *)"!=";
-    largerTokens[NOT] = (char *)"not";
-    largerTokens[NUMCONST] = (char *)"numconst";
-    largerTokens[OR] = (char *)"or";
-    largerTokens[RETURN] = (char *)"return";
-    largerTokens[SIZEOF] = (char *)"sizeof";
-    largerTokens[STATIC] = (char *)"static";
-    largerTokens[STRINGCONST] = (char *)"stringconst";
-    largerTokens[SUBASS] = (char *)"-=";
-    largerTokens[THEN] = (char *)"then";
-    largerTokens[TO] = (char *)"to";
-    largerTokens[WHILE] = (char *)"while";
-    largerTokens[LASTTERM] = (char *)"lastterm";
-}
 
 // print a node without a newline
 void printTreeNode(FILE *listing,
