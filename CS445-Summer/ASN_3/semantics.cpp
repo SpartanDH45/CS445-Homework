@@ -87,7 +87,7 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
 
 }
 void traverseExpK(TreeNode *current, SymbolTable *symtab){
-    
+
 }
 
 bool isNodeCompound(TreeNode *current) {
@@ -114,17 +114,48 @@ void treeTraverse(TreeNode *current, SymbolTable *symtab){
     }
     int temptoff = foffset;
     treeTraverse(current->child[0], symtab);
-    bool isCompound = false;
-    if(current == NULL) {return;}
+    if(current == NULL) return;
+        switch(current->nodekind){
+        case DeclK:
+            traverseDeclK(current, symtab);
+            break;
+        case StmtK:
+            traverseStmtK(current, symtab);
+            break;
+        case ExpK:
+            traverseExpK(current, symtab);
+            break;
+        default:
+            printf("unknown nodekind\n");
+            break;
+    }
+    if(current->nodekind == StmtK &&  current->kind.stmt == ForK) {
+        foffset -= 2;
+    }
 
-    isCompound = isNodeCompound(current);
+    treeTraverse(current->child[1], symtab);
+    treeTraverse(current->child[2], symtab);
+
+    if(current->nodekind == StmtK &&  current->kind.stmt == CompoundK) {
+        current->size = foffset;
+        foffset = temptoff;
+    }
+
+
+    if(current->nodekind == StmtK &&  current->kind.stmt == ForK) {
+        current->size = foffset;
+    }
 
     if(isCompound) {
-        char *id = strdup("{");
-        symtab->enter("NewScope from " + (std::string)id);
+        symtab->leave();
     }
-    int temptoff = foffset;
-    treeTraverse(current->child[0], symtab);
+
+    treeTraverse(current->sibling, symtab);
+
+    if(current->nodekind == StmtK &&  current->kind.stmt == ForK) {
+        foffset = temptoff;
+    }
+    return;
 }
 
 
