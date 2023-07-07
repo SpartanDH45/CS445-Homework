@@ -330,10 +330,26 @@ args  :  argList                          { $$ = $1;}
 argList  :  argList ',' exp               { $$ = addSibling($1, $3);}
    | exp                                  { $$ = $1;}
    ;
-constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);}
-   |  CHARCONST                           { $$ = newExpNode(ConstantK, $1);}
-   |  STRINGCONST                         { $$ = newExpNode(ConstantK, $1);}
-   |  BOOLCONST                           { $$ = newExpNode(ConstantK, $1);}
+constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);
+                                             $$->attr.value = $1->nvalue;
+                                             $$->type = Integer;
+                                             $$->isArray = false;
+                                             $$->size = 1;}
+   |  CHARCONST                           { $$ = newExpNode(ConstantK, $1);
+                                             $$->attr.cvalue = $1->cvalue;
+                                             $$->type = Char;
+                                             $$->isArray = false;
+                                             $$->size = 1;}
+   |  STRINGCONST                         { $$ = newExpNode(ConstantK, $1);
+                                             $$->attr.string = $1->svalue;
+                                             $$->type = Char;
+                                             $$->isArray = true;
+                                             $$->size = $1->nvalue + 1;}
+   |  BOOLCONST                           { $$ = newExpNode(ConstantK, $1);
+                                             $$->attr.value = $1->nvalue;
+                                             $$->type = Boolean;
+                                             $$->isArray = false;
+                                             $$->size = 1;}
    ;
 %%
 
