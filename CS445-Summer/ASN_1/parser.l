@@ -1,6 +1,7 @@
 %{
 #include "scanType.h"
-#include "parser.tab.h"
+#include "treeNodes.h"
+#include "parser.tab.h" //This has to be last
 
 using namespace std;
 
