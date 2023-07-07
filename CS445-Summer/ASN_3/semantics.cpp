@@ -83,7 +83,28 @@ TreeNode *loadIOLib(TreeNode *syntree)
 
 
 void treeTraverse(TreeNode *current, SymbolTable *symtab){
+    bool isCompound = false;
+    if(current == NULL) {return;}
 
+    isCompound = isNodeCompound(current);
+
+    if(isCompound) {
+        char *id = strdup("{");
+        symtab->enter("NewScope from " + (std::string)id);
+    }
+    int temptoff = foffset;
+    treeTraverse(current->child[0], symtab);
+    bool isCompound = false;
+    if(current == NULL) {return;}
+
+    isCompound = isNodeCompound(current);
+
+    if(isCompound) {
+        char *id = strdup("{");
+        symtab->enter("NewScope from " + (std::string)id);
+    }
+    int temptoff = foffset;
+    treeTraverse(current->child[0], symtab);
 }
 
 
