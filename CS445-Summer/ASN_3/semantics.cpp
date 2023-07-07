@@ -2,6 +2,9 @@
 #include "parser.tab.h"
 #include "symbolTable.h"
 
+static ExpectType expectType[LASTOP];
+static ReturnType returnType[LASTOP];
+
 TreeNode *loadIOLib(TreeNode *syntree)
 {
     TreeNode *input, *output, *param_output;
