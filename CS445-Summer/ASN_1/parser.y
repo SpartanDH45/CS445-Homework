@@ -30,10 +30,14 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s)
       return s;
    }
    // look down t’s sibling list until you fin with with sibblin = null (the end o f the lsit) and add s there.
-   while(t->sibling != NULL){
+   if(t != NULL){
       t = t->sibling;
+      TreeNode *tmp;
+      tmp = t;
+      while (tmp->sibling!=NULL){tmp = tmp->sibling;}
+      tmp->sibling = s;
+      return t;
    }
-   t->sibling = s;
    return s;
 }
 // pass the static and type attribute down the sibling list
