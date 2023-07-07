@@ -55,6 +55,19 @@ TreeNode *syntaxTree;
 
 void yyerror(const char *msg);
 
+
+
+
+void printToken(TokenData myData, string tokenName, int type = 0) {
+   cout << "Line: " << myData.linenum << " Type: " << tokenName;
+   if(type==0)
+     cout << " Token: " << myData.tokenstr;
+   if(type==1)
+     cout << " Token: " << myData.nvalue;
+   if(type==2)
+     cout << " Token: " << myData.cvalue;
+   cout << endl;
+}
 static char tokenBuffer[16];
 char *tokenToStr(int type){
    if(type>LASTTERM){
@@ -393,6 +406,23 @@ void yyerror (const char *msg)
 }
 
 char *largerTokens[LASTTERM+1];        // used in the utils.cpp file printing routines
+
+static char tokenBuffer[16];
+char *tokenToStr(int type){
+   if(type>LASTTERM){
+      return (char*)"UNKNOWN";
+   }
+   else if(type>256){
+      return largerTokens[type];
+   }
+   else if((type<32) || (type>127)){
+      sprintf(tokenBuffer,"Token#%d",type);
+   } else {
+      tokenBuffer[0] = type;
+      tokenBuffer[1] = '\0';
+   }
+   return tokenBuffer;
+}
 
 // create a mapping from token class enum to a printable name in a
 // way that makes it easy to keep the mapping straight.
