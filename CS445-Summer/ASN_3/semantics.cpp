@@ -81,6 +81,7 @@ TreeNode *loadIOLib(TreeNode *syntree)
 }
 
 void traverseDeclK(TreeNode *current, SymbolTable *symtab){
+    // Final state for ASN_3. No change needed
     static int varCounter = 0;
     char *id = strdup(current->attr.name);
     switch(current->kind.decl){
@@ -125,10 +126,42 @@ void traverseDeclK(TreeNode *current, SymbolTable *symtab){
     }
 }
 void traverseStmtK(TreeNode *current, SymbolTable *symtab){
-
+    // Completed state for ASN_3
+    switch(current->kind.stmt){
+        case CompoundK:
+            current->size=foffset;
+            break;
+    }
 }
 void traverseExpK(TreeNode *current, SymbolTable *symtab){
-
+    switch(current->kind.exp){
+        case AssignK:   //Add switch case for           switch(returnType[current->attr.op])
+            break;
+        case ConstantK:
+            // current->isConst = true;
+            //(if current->type == Char && current->isArray){It's a global and treat it as such}
+            break;
+        case OpK:       //Add switch case for           switch(returnType[current->attr.op])
+            break;
+        case CallK:     //Left without break on purpose
+        case IdK:
+            {
+                char *id = strdup(current->attr.name);
+                TreeNode *temp = (TreeNode*)symtab->lookup(id);
+                if(temp==NULL){
+                    // do something here
+                    printf("The tree is NULL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%s\n", id);
+                    return;
+                }
+                current->type = temp->type;
+                current->isArray = temp->isArray;
+                current->isStatic = temp->isStatic;
+                current->size = temp->size;
+                current->varKind = temp->varKind;
+                current->offset = temp->offset;
+            }
+            break;
+    }
 }
 
 bool isNodeCompound(TreeNode *current) {
