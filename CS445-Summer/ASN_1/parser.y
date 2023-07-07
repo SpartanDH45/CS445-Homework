@@ -211,16 +211,23 @@ parmTypeList  :  typeSpec parmIdList               { $$ = $2; setType( $2, $1, f
 parmIdList  :  parmIdList ',' parmId               { $$ = addSibling($1, $3);}
    |  parmId                                       { $$ = $1;}
    ;
-parmId  :  ID                                      { $$ = newDeclNode(ParamK, UndefinedType, $1);}
+parmId  :  ID                                      { $$ = newDeclNode(ParamK, UndefinedType, $1);
+                                                      $$->isArray = false;
+                                                      $$->Size = 1;}
    | ID '['']'                                     { $$ = newDeclNode(ParamK, UndefinedType, $1); 
-                                                      $$->isArray = true; }
+                                                      $$->isArray = true;
+                                                      $$->Size = 1;}
    ;
 stmt  :  matched                                   { $$ = $1;}
    |  unmatched                                    { $$ = $1;}
    ;
 matched  :  IF simpleExp THEN matched ELSE matched       { $$ = newStmtNode(IfK, $1, $2, $4, $6);}
    |  WHILE simpleExp DO matched                         { $$ = newStmtNode(WhileK, $1, $2, $4);}
-   |  FOR ID '=' iterRange DO matched                    { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
+   |  FOR ID '=' iterRange DO matched                    { $$ = newStmtNode(ForK, $1, NULL, $4, $6);
+                                                            $$->child[0] = newDeclNode(VarK, Integer, $2);
+                                                            $$->child[0]->attr.name = $2->svalue;
+                                                            $$->child[0]->isArray = false;
+                                                            $$->child[0]->size = 1;}
    |  expstmt                                            { $$ = $1;}
    |  compoundstmt                                       { $$ = $1;}
    |  returnstmt                                         { $$ = $1;}
@@ -232,7 +239,11 @@ iterRange  :  simpleExp TO simpleExp                     { $$ = newStmtNode(Rang
 unmatched  :  IF simpleExp THEN stmt                     { $$ = newStmtNode(IfK, $1, $2, $4);}
    |  IF simpleExp THEN matched ELSE unmatched           { $$ = newStmtNode(IfK, $1, $2, $4, $6);}
    | WHILE simpleExp DO unmatched                        { $$ = newStmtNode(WhileK, $1, $2, $4);}
-   | FOR ID '=' iterRange DO unmatched                   { $$ = newStmtNode(ForK, $1, NULL, $4, $6);}
+   | FOR ID '=' iterRange DO unmatched                   { $$ = newStmtNode(ForK, $1, NULL, $4, $6);
+                                                            $$->child[0] = newDeclNode(VarK, Integer, $2);
+                                                            $$->child[0]->attr.name = $2->svalue;
+                                                            $$->child[0]->isArray = false;
+                                                            $$->child[0]->size = 1;}
    ;
 expstmt  :  exp ';'                                { $$ = $1;}
    ;
