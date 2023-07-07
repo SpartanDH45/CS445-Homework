@@ -31,7 +31,6 @@ TreeNode *addSibling(TreeNode *t, TreeNode *s)
    }
    // look down t’s sibling list until you fin with with sibblin = null (the end o f the lsit) and add s there.
    if(t != NULL){
-      t = t->sibling;
       TreeNode *tmp;
       tmp = t;
       while (tmp->sibling!=NULL){tmp = tmp->sibling;}
@@ -377,9 +376,10 @@ void yyerror (const char *msg)
 char *largerTokens[LASTTERM+1];        // used in the utils.cpp file printing routines
 
 static char tokenBuffer[16];
-char *tokenToStr(int type){
+char *tokenToStr(int type)
+{
    if(type>LASTTERM){
-      return (char*)"UNKNOWN";
+      return (char *)"UNKNOWN";
    }
    else if(type>256){
       return largerTokens[type];
