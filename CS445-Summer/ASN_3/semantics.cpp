@@ -81,6 +81,7 @@ TreeNode *loadIOLib(TreeNode *syntree)
 }
 
 void traverseDeclK(TreeNode *current, SymbolTable *symtab){
+    static int varCounter = 0;
     char *id = strdup(current->attr.name);
     switch(current->kind.decl){
         case FuncK:
