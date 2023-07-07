@@ -118,9 +118,6 @@ TreeNode *newExpNode(ExpKind kind, TokenData *token, TreeNode *c0, TreeNode *c1,
    return newNode;
                     }
 
-char *tokenToStr(int type){
-
-}
 char expTypeToStrBuffer[80];
 char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
      char *typeName;
