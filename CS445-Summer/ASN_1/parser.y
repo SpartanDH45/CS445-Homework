@@ -252,7 +252,7 @@ exp  :  mutable assignop exp                    { $$ = newExpNode(AssignK, $2, $
    |  mutable INC                               { $$ = newExpNode(AssignK, $2, $1);}
    |  mutable DEC                               { $$ = newExpNode(AssignK, $2, $1);}
    |  simpleExp                                 { $$ = $1;}
-   |  mutable assignop error                    { $$ = newExpNode(AssignK, $1, $2);}
+   |  mutable assignop error                    { $$ = newExpNode(AssignK, $2, $1);}
    ;
 assignop  :  '='                                { $$ = $1;}
    |  ADDASS                                    { $$ = $1;}
