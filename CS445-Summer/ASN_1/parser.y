@@ -308,10 +308,16 @@ unaryop  :  '-'                           { $1->tokenclass=CHSIGN; $$ = $1;}
 factor  :  immutable                      { $$ = $1;}
    |  mutable                             { $$ = $1;}
    ;
-mutable  :  ID                            { $$ = newExpNode(IdK, $1);}
-   |  ID '[' exp ']'                      { $$ = newExpNode(IdK, $1, $2);}
+mutable  :  ID                            { $$ = newExpNode(IdK, $1);
+                                             $$->attr.name = $1->svalue;
+                                             $$->isArray = false;}
+   |  ID '[' exp ']'                      { $$ = newExpNode(OpK, $2, NULL, $3);
+                                             $$->child[0] = newExpNode(IdK, $1);
+                                             $$->child[0]->attr.name = $1->svalue;
+                                             // ?? $$->child[0]->isArray = false;
+                                             $$->isArray = false;}
    ;
-immutable  :  '(' exp ')'                 { $$ = $1;}
+immutable  :  '(' exp ')'                 { $$ = $2;}
    |  call                                { $$ = $1;}
    |  constant                            { $$ = $1;}
    ;
