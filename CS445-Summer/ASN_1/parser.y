@@ -249,6 +249,7 @@ unmatched  :  IF simpleExp THEN stmt                     { $$ = newStmtNode(IfK,
                                                             $$->child[0]->size = 1;}
    ;
 expstmt  :  exp ';'                                { $$ = $1;}
+   |  ';'                                          { $$ = NULL;}
    ;
 compoundstmt  :  '{' localDecls stmtList '}'    { $$ = newStmtNode(CompoundK, $1, $2, $3); yyerrok;}
    ;
