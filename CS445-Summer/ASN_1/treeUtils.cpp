@@ -159,8 +159,37 @@ char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
     return strdup(expTypeToStrBuffer); // memory leak
 }
 
+static void printSpaces(FILE *listing, int depth)
+{
+    for (int i=0; i<depth; i++) fprintf(listing, ".   ");
+}
+
+void printTreeFull(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showAllocation, int depth, int siblingCount){
+    if(syntaxTree == NULL){
+        return;
+    }
+    printTreeNode(out, syntaxTree, showExpType, showAllocation);
+    fprintf(out,"\n");
+    for(int childCount = 0; childCount < 3; childCount++){
+        if(syntaxTree->child[childCount]){
+            printSpaces(out,depth);
+            fprintf(out,"Child: %d  ", childCount);
+            printTreeFull(out, syntaxTree, showExpType, showAllocation, depth+1, 1);
+        }
+    }
+    syntaxTree = syntaxTree->sibling;
+    if(syntaxTree != NULL){
+        if(depth){
+            printSpaces(out, depth-1);
+            fprintf(out, "Sibling: %d  ", siblingCount);
+        }
+        printTreeFull(out, syntaxTree, showExpType, showAllocation, depth, siblingCount+1);
+    }
+    fflush(out);
+}
 
 void printTree(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showAllocation){
+    printTreeFull(out, syntaxTree, showExpType, showAllocation, 1, 1);
 
 }
 
