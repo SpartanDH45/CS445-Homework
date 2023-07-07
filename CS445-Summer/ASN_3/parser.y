@@ -472,7 +472,7 @@ int main(int argc, char **argv) {
    if (numErrors==0) {
       SymbolTable *symtab;
       symtab = new SymbolTable();
-      symtab->debug(debugSymTab);
+      symtab->debug(false);
       int globalOffset;
       syntaxTree = semanticAnalysis(syntaxTree, true, false, symtab, globalOffset);
       printTree(stdout, syntaxTree, true, true);
