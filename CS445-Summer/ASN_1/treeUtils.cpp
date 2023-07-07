@@ -174,7 +174,7 @@ void printTreeFull(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showA
         if(syntaxTree->child[childCount]){
             printSpaces(out,depth);
             fprintf(out,"Child: %d  ", childCount);
-            //printTreeFull(out, syntaxTree, showExpType, showAllocation, depth+1, 1);
+            printTreeFull(out, syntaxTree, showExpType, showAllocation, depth+1, 1);
         }
     }
     syntaxTree = syntaxTree->sibling;
@@ -183,7 +183,7 @@ void printTreeFull(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showA
             printSpaces(out, depth-1);
             fprintf(out, "Sibling: %d  ", siblingCount);
         }
-        //printTreeFull(out, syntaxTree, showExpType, showAllocation, depth, siblingCount+1);
+        printTreeFull(out, syntaxTree, showExpType, showAllocation, depth, siblingCount+1);
     }
     fflush(out);
 }
