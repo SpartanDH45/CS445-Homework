@@ -2,6 +2,7 @@
 
 static int nodeNum = 0;
 extern char *largerTokens[];
+extern void yyerror(const char *msg);
 
 TreeNode *cloneNode(TreeNode *currnode){
 
