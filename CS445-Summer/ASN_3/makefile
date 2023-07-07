@@ -11,16 +11,19 @@ $(PARSE).y\
 $(PARSE).l\
 main.cpp\
 treeUtils.cpp\
+semantics.cpp\
 
 HDRS =\
 scanType.h\
 treeNodes.h\
 treeUtils.h\
+semantics.h\
 
 OBJS = \
 $(PARSE).tab.o\
 lex.yy.o\
 treeUtils.o\
+semantics.o\
 
 LIBS = -lm 
 
