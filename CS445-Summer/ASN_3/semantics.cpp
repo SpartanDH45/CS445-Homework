@@ -80,7 +80,27 @@ TreeNode *loadIOLib(TreeNode *syntree)
     return input;
 }
 
+void traverseDeclK(TreeNode *current, SymbolTable *symtab){
 
+}
+void traverseStmtK(TreeNode *current, SymbolTable *symtab){
+
+}
+void traverseExpK(TreeNode *current, SymbolTable *symtab){
+    
+}
+
+bool isNodeCompound(TreeNode *current) {
+    if(current == NULL) {return false;}
+    if(current->nodekind == DeclK  && current->kind.decl == FuncK) { foffset = -2; return true;}
+    if(current->nodekind == StmtK) {
+        if( current->kind.stmt == CompoundK || current->kind.stmt == ForK)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 void treeTraverse(TreeNode *current, SymbolTable *symtab){
     bool isCompound = false;
