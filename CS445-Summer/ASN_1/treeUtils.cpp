@@ -1,3 +1,4 @@
+#include "treeNodes.h"
 #include "treeUtils.h"
 
 static int nodeNum = 0;
@@ -120,7 +121,7 @@ TreeNode *newExpNode(ExpKind kind, TokenData *token, TreeNode *c0, TreeNode *c1,
 char *tokenToStr(int type){
 
 }
-
+char expTypeToStrBuffer[80];
 char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
      char *typeName;
 
@@ -189,44 +190,6 @@ char *varKindToStr(int kind)
 
 // allocate a FIX BUFFER.  You must copy the string if you
 // are referencing the function twice in the same printf for example.
-char expTypeToStrBuffer[80];
-char *expTypeToStr(ExpType type, bool isArray, bool isStatic)
-{
-    char *typeName;
-
-    switch (type) {
-    case Void:
-       typeName = (char *)"type void";
-       break;
-    case Integer:
-       typeName = (char *)"type int";
-       break;
-    case Boolean:
-       typeName = (char *)"type bool";
-       break;
-    case Char:
-       typeName = (char *)"type char";
-       break;
-    case UndefinedType:
-       typeName = (char *)"undefined type";
-       break;
-    default:
-       char *buffer;
-       buffer = new char [80];
-       sprintf(buffer, "invalid expType: %d", (int)type);
-       return buffer;
-    }
-
-    // add static and array attributes
-    // static type int
-    // static array of type int
-    sprintf(expTypeToStrBuffer, "%s%s%s",
-            (isStatic ? "static " : ""),
-            (isArray ? "array of " : ""),
-            typeName);
-
-    return strdup(expTypeToStrBuffer); // memory leak
-}
 
 
 
