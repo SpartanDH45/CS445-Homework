@@ -81,7 +81,16 @@ TreeNode *loadIOLib(TreeNode *syntree)
 }
 
 void traverseDeclK(TreeNode *current, SymbolTable *symtab){
-
+    char *id = strdup(current->attr.name);
+    switch(current->kind.decl){
+        case FuncK:
+            if(!symtab->insertGlobal(id, (void*)current) && current->lineno != -1){
+                //If not true should have an error message
+            }
+            current->varKind = Global;
+            current->size = foffset;
+            break;
+    }
 }
 void traverseStmtK(TreeNode *current, SymbolTable *symtab){
 
