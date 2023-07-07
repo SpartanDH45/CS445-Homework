@@ -326,7 +326,7 @@ call  :  ID '(' args ')'                  { $$ = newExpNode(CallK, $1, $3);}
 args  :  argList                          { $$ = $1;}
    |  /*empty*/                           { $$ = NULL;}
    ;
-argList  :  argList ',' exp               { $$ = addSibling($1, $3)}
+argList  :  argList ',' exp               { $$ = addSibling($1, $3);}
    | exp                                  { $$ = $1;}
    ;
 constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);}
