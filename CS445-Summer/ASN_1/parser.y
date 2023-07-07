@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
+#include "treeNodes.h"
 #include "treeUtils.h"
 #include "scanType.h"
 #include "dot.h"
