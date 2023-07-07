@@ -21,6 +21,24 @@ int setValue(int linenum, int tokenClass, char *svalue) {
     //May cause an overflow error
     yylval.tokenData->nvalue = atoi(svalue);
     yylval.tokenData->svalue = strdup(svalue);
+    switch(tokenClass){
+        case STRINGCONST:
+            yylval.tokenData0>nvalue-strlen(svalue)-2;
+            for(int i = 0; i < strlen(svalue)-1; i++){
+                yylval.tokenData->svalue[i] = yylval.tokenData->svalue[i+1];
+            }
+            break;
+        case BOOLCONST:
+            if(svalue[0]=='t'){yylval.tokenData->nvalue = 1;}
+            else{yylval.tokenData->nvalue=0;}
+            break;
+        case CHARCONST:
+            yylval.tokenData->cvalue=svalue[1];
+            if(svalue[1]=='\\'){
+                if(svalue[2]=='n'){yylval.tokenData->cvalue='\n';}
+                if(svalue[2]=='0'){yylval.tokenData->cvalue='\0';}
+            }
+    }
     return tokenClass;
 }
 
