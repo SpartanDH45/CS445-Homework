@@ -1,4 +1,6 @@
 #include "semantics.h"
+#include "parser.tab.h"
+#include "symbolTable.h"
 
 TreeNode *loadIOLib(TreeNode *syntree)
 {
