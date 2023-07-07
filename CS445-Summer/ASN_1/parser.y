@@ -259,7 +259,7 @@ assignop  :  '='                                { $$ = $1;}
    |  ADDASS                                    { $$ = $1;}
    |  SUBASS                                    { $$ = $1;}
    |  MULASS                                    { $$ = $1;}
-   |  DIVASS                                    
+   |  DIVASS                                    { $$ = $1;}
    ;
 simpleExp  :  simpleExp OR andExp               { $$ = newExpNode(OpK, $2, $1, $3);}
    |  andExp                                    { $$ = $1;}
