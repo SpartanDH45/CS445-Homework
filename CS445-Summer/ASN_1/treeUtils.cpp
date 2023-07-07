@@ -1,5 +1,8 @@
 #include "treeUtils.h"
 
+static int nodeNum = 0;
+extern char *largerTokens[];
+
 TreeNode *cloneNode(TreeNode *currnode){
 
 }
