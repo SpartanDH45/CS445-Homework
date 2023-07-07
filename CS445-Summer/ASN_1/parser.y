@@ -301,9 +301,9 @@ mulop  :  '*'                                   { $$ = $1;}
 unaryExp  :  unaryop unaryExp                   { $$ = newExpNode(OpK, $1, $2);}
    |  factor                                    { $$ = $1;}
    ;
-unaryop  :  '-'                           { $$ = newExpNode(OpK, $1);}
-   |  '*'                                 { $$ = newExpNode(OpK, $1);}
-   |  '?'                                 { $$ = newExpNode(OpK, $1);}
+unaryop  :  '-'                           { $1->tokenclass=CHSIGN; $$ = $1;}
+   |  '*'                                 { $1->tokenclass=SIZEOF; $$ = $1;}
+   |  '?'                                 { $$ = $1;}
    ;
 factor  :  immutable                      { $$ = $1;}
    |  mutable                             { $$ = $1;}
