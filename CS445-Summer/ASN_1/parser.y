@@ -248,9 +248,9 @@ returnstmt  :  RETURN ';'                       { $$ = newStmtNode(ReturnK, $1);
    ;
 breakstmt  :  BREAK ';'                         { $$ = newStmtNode(BreakK, $1);}
    ;
-exp  :  mutable assignop exp                    { $$ = newExpNode(AssignK, $1, $2, $3);}
-   |  mutable INC                               { $$ = newExpNode(AssignK, $1, $2);}
-   |  mutable DEC                               { $$ = newExpNode(AssignK, $1, $2);}
+exp  :  mutable assignop exp                    { $$ = newExpNode(AssignK, $2, $1, $3);}
+   |  mutable INC                               { $$ = newExpNode(AssignK, $2, $1);}
+   |  mutable DEC                               { $$ = newExpNode(AssignK, $2, $1);}
    |  simpleExp                                 { $$ = $1;}
    |  mutable assignop error                    { $$ = newExpNode(AssignK, $1, $2);}
    ;
@@ -318,9 +318,9 @@ immutable  :  '(' exp ')'                 { $$ = $1;}
 call  :  ID '(' args ')'                  { $$ = newExpNode(CallK, $1, $3);}
    ;
 args  :  argList                          { $$ = $1;}
-   |  /*empty*/                           { $$ = NULL}
+   |  /*empty*/                           { $$ = NULL;}
    ;
-argList  :  argList ',' exp               { $$ = addSibing($1, $3)}
+argList  :  argList ',' exp               { $$ = addSibling($1, $3)}
    | exp                                  { $$ = $1;}
    ;
 constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);}
