@@ -121,7 +121,6 @@ char *tokenToStr(int type){
 
 }
 
-char expTypeToStrBuffer[80];
 char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
      char *typeName;
 
