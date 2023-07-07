@@ -213,10 +213,10 @@ parmIdList  :  parmIdList ',' parmId               { $$ = addSibling($1, $3);}
    ;
 parmId  :  ID                                      { $$ = newDeclNode(ParamK, UndefinedType, $1);
                                                       $$->isArray = false;
-                                                      $$->Size = 1;}
+                                                      $$->size = 1;}
    | ID '['']'                                     { $$ = newDeclNode(ParamK, UndefinedType, $1); 
                                                       $$->isArray = true;
-                                                      $$->Size = 1;}
+                                                      $$->size = 1;}
    ;
 stmt  :  matched                                   { $$ = $1;}
    |  unmatched                                    { $$ = $1;}
