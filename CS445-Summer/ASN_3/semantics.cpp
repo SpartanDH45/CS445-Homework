@@ -4,6 +4,8 @@
 
 static ExpectType expectType[LASTOP];
 static ReturnType returnType[LASTOP];
+static int goffset;     // top of global space
+static int foffset;     // top of local space
 
 TreeNode *loadIOLib(TreeNode *syntree)
 {
