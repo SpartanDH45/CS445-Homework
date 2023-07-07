@@ -23,7 +23,7 @@ int setValue(int linenum, int tokenClass, char *svalue) {
     yylval.tokenData->svalue = strdup(svalue);
     switch(tokenClass){
         case STRINGCONST:
-            yylval.tokenData0>nvalue-strlen(svalue)-2;
+            yylval.tokenData->nvalue-strlen(svalue)-2;
             for(int i = 0; i < strlen(svalue)-1; i++){
                 yylval.tokenData->svalue[i] = yylval.tokenData->svalue[i+1];
             }
