@@ -12,25 +12,28 @@ $(PARSE).l\
 main.cpp\
 treeUtils.cpp\
 semantics.cpp\
+symbolTable.cpp\
 
 HDRS =\
 scanType.h\
 treeNodes.h\
 treeUtils.h\
 semantics.h\
+symbolTable.h\
 
 OBJS = \
 $(PARSE).tab.o\
 lex.yy.o\
 treeUtils.o\
 semantics.o\
+symbolTable.o\
 
 LIBS = -lm 
 
 $(PARSE): $(OBJS)
 	$(CC) $(CPPFLAGS) $(OBJS) dot.o $(LIBS) -o bC
 
-$(PARSE).tab.h $(PARSE).tab.c: $(PARSE).y scanType.h treeUtils.h
+$(PARSE).tab.h $(PARSE).tab.c: $(PARSE).y scanType.h treeUtils.h 
 	bison -v -t -d $(PARSE).y  
 
 lex.yy.c: $(PARSE).l $(PARSE).tab.h scanType.h
