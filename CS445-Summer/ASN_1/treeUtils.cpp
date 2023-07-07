@@ -121,8 +121,42 @@ char *tokenToStr(int type){
 
 }
 
-char *expTypeToStr(ExpType type, bool isArray=false, bool isStatic=false){
+char expTypeToStrBuffer[80];
+char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
+     char *typeName;
 
+    switch (type) {
+    case Void:
+       typeName = (char *)"type void";
+       break;
+    case Integer:
+       typeName = (char *)"type int";
+       break;
+    case Boolean:
+       typeName = (char *)"type bool";
+       break;
+    case Char:
+       typeName = (char *)"type char";
+       break;
+    case UndefinedType:
+       typeName = (char *)"undefined type";
+       break;
+    default:
+       char *buffer;
+       buffer = new char [80];
+       sprintf(buffer, "invalid expType: %d", (int)type);
+       return buffer;
+    }
+
+    // add static and array attributes
+    // static type int
+    // static array of type int
+    sprintf(expTypeToStrBuffer, "%s%s%s",
+            (isStatic ? "static " : ""),
+            (isArray ? "array of " : ""),
+            typeName);
+
+    return strdup(expTypeToStrBuffer); // memory leak
 }
 
 void printTreeNode(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showAllocation){
