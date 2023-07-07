@@ -90,6 +90,37 @@ void traverseDeclK(TreeNode *current, SymbolTable *symtab){
             current->varKind = Global;
             current->size = foffset;
             break;
+        case VarK:
+            //No break on purpose
+        case ParamK:
+            if (!symtab->insert(id, (void*)current) && current->lineno != -1) {
+                //If not true should have an error message
+            }
+            if (symtab->depth()==1) {
+                current->varKind = Global;
+                current->offset = goffset;
+                goffset -= current->size;
+            }
+            else if (current->isStatic) {
+                current->varKind = LocalStatic;
+                current->offset = goffset;
+                goffset -= current->size;
+                {
+                    char *newName;
+                    newName = new char [strlen(current->attr.name)+10];
+                    sprintf(newName, "%s-%d", current->attr.name, ++varCounter);
+                    symtab->insertGlobal(newName, current);
+                    delete [] newName;
+                }
+            }
+            else {
+                current->varKind = Local;
+                current->offset = foffset;
+                foffset -= current->size;
+            }
+            if (current->kind.decl == ParamK) current->varKind = Parameter;
+            else if (current->isArray) current->offset--;
+            break;
     }
 }
 void traverseStmtK(TreeNode *current, SymbolTable *symtab){
