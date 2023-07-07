@@ -159,9 +159,6 @@ char *expTypeToStr(ExpType type, bool isArray, bool isStatic){
     return strdup(expTypeToStrBuffer); // memory leak
 }
 
-void printTreeNode(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showAllocation){
-
-}
 
 void printTree(FILE *out, TreeNode *syntaxTree, bool showExpType, bool showAllocation){
 
