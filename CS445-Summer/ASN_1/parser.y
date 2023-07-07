@@ -333,7 +333,8 @@ immutable  :  '(' exp ')'                 { $$ = $2;}
    |  call                                { $$ = $1;}
    |  constant                            { $$ = $1;}
    ;
-call  :  ID '(' args ')'                  { $$ = newExpNode(CallK, $1, $3);}
+call  :  ID '(' args ')'                  { $$ = newExpNode(CallK, $1, $3);
+                                             $$->attr.name = $1->svalue;}
    ;
 args  :  argList                          { $$ = $1;}
    |  /*empty*/                           { $$ = NULL;}
