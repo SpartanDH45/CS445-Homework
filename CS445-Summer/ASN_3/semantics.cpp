@@ -156,7 +156,7 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
             if (current->type == Char && current->isArray){
                 //It's a global and treat it as such
                 current->varKind = Global;
-                current->offset = goffset - 0; //-1
+                current->offset = goffset - 1;
                 goffset -= current->size;
             }
             break;
@@ -271,8 +271,9 @@ TreeNode *semanticAnalysis(TreeNode *syntree,          // pass in and return an 
                            SymbolTable *symtabX,       // pass in and return the symbol table
                            int &globalOffset)            // return the offset past the globals
 {
+    goffset = 0;
     //binary ops
-   for (int i=0; i<LASTOP; i++) returnType[i] = RetInt;
+    for (int i=0; i<LASTOP; i++) returnType[i] = RetInt;
    returnType[AND] = RetBool;
    returnType[OR] = RetBool;
    returnType[EQ] = RetBool;
