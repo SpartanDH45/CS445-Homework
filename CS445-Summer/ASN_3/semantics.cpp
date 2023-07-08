@@ -157,7 +157,7 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
                 //It's a global and treat it as such
                 current->varKind = Global;
                 current->offset = goffset - 1;
-                goffset = current->size;
+                goffset -= current->size;
             }
             break;
         case OpK:       //Add switch case for           switch(returnType[current->attr.op])
