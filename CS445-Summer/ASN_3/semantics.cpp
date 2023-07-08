@@ -156,7 +156,7 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
             if (current->type == Char && current->isArray){
                 //It's a global and treat it as such
                 current->varKind = Global;
-                current->offset = goffset - 1;
+                current->offset = goffset - 2; //-1
                 goffset -= current->size;
             }
             break;
