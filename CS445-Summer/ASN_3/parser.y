@@ -197,7 +197,7 @@ varDeclInit  :  varDeclId                          { $$ = $1;}
 varDeclId  :  ID                                   { $$ = newDeclNode(VarK, UndefinedType, $1);}
    |  ID '[' NUMCONST ']'                          { $$ = newDeclNode(VarK, UndefinedType, $1); 
                                                       $$->isArray = true; 
-                                                      $$->size = $3->nvalue; }
+                                                      $$->size = $3->nvalue+1; }
    ;
 typeSpec  :  INT                                   { $$ = Integer;}
    |  BOOL                                         { $$ = Boolean;}
