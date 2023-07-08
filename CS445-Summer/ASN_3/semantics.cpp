@@ -136,12 +136,38 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
 void traverseExpK(TreeNode *current, SymbolTable *symtab){
     switch(current->kind.exp){
         case AssignK:   //Add switch case for           switch(returnType[current->attr.op])
+            switch(returnType[current->attr.op]){
+                case RetInt:
+                    break;
+                case RetBool:
+                    break;
+                case RetLHS:
+                    break;
+            }
+            current->type = current->child[0]->type;
+            current->isArray = current->child[0]->isArray;
             break;
         case ConstantK:
-            // current->isConst = true;
-            //(if current->type == Char && current->isArray){It's a global and treat it as such}
+            current->isConst = true;
+            if (current->type == Char && current->isArray){
+                //It's a global and treat it as such
+                current->varKind = Global;
+                current->offset = goffset - 1;
+                goffset = current->size;
+
+            }
             break;
         case OpK:       //Add switch case for           switch(returnType[current->attr.op])
+            switch(returnType[current->attr.op]){
+                case RetInt:
+                    break;
+                case RetBool:
+                    break;
+                case RetLHS:
+                    break;
+                current->type = current->child[0]->type;
+                current->isArray = current->child[0]->isArray;
+            }
             break;
         case CallK:     //Left without break on purpose
         case IdK:
