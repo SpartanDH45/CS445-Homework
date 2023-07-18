@@ -475,7 +475,9 @@ int main(int argc, char **argv) {
       symtab->debug(false);
       int globalOffset;
       syntaxTree = semanticAnalysis(syntaxTree, true, false, symtab, globalOffset);
-      printTree(stdout, syntaxTree, true, true);
+      if(numErrors==0){
+         printTree(stdout, syntaxTree, true, true);
+      }
       if(dotAST) {
          printDotTree(stdout, syntaxTree, false, false);
       }

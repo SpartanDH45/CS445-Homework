@@ -6,6 +6,8 @@ static ExpectType expectType[LASTOP];
 static ReturnType returnType[LASTOP];
 static int goffset;     // top of global space
 static int foffset;     // top of local space
+extern int numErrors;
+extern int numWarnings;
 
 TreeNode *loadIOLib(TreeNode *syntree)
 {
@@ -145,6 +147,11 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
                     break;
                 case RetLHS:
                     current->type = current->child[0]->type;
+		    if(current->type != current->child[1]->type && current->child[1]->type != UndefinedType){
+		        printf("SEMANTIC ERROR(%d): '=' requires operands of the same type but lhs is %s and rhs is %s.\n",
+			current->lineno, expTypeToStr(current->type), expTypeToStr(current->child[1]->type));
+			numErrors++;
+		    }
                     if(current->attr.op == int('='))
                         {current->isArray = current->child[0]->isArray;}
                     break;
@@ -154,7 +161,7 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
         case ConstantK:
             current->isConst = true;
             if (current->type == Char && current->isArray){
-                //It's a global and treat it as such
+               //It's a global and treat it as such
                 current->varKind = Global;
                 current->offset = goffset - 1;
                 goffset -= current->size;
