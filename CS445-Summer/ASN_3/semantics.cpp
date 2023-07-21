@@ -190,7 +190,7 @@ void traverseExpK(TreeNode *current, SymbolTable *symtab){
                 if(temp==NULL){
                     // do something here
                     // printf("The tree is NULL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!%s\n", id);
-                    printf("SEMANTIC ERROR(%d): Symbol \'%s\' is not declared.", current->lineno, id);
+                    printf("SEMANTIC ERROR(%d): Symbol \'%s\' is not declared.\n", current->lineno, id);
                     numErrors++;
                     return;
                 }
