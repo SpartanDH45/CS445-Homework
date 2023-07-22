@@ -9,6 +9,7 @@
 #include "dot.h"
 #include "semantics.h"
 #include "symbolTable.h"
+#include "yyerror.h"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ void setType(TreeNode *t, ExpType type, bool isStatic)
 // the syntax tree goes here
 TreeNode *syntaxTree;
 
-void yyerror(const char *msg);
+//void yyerror(const char *msg);
 
 void printToken(TokenData myData, string tokenName, int type = 0) {
    cout << "Line: " << myData.linenum << " Type: " << tokenName;
@@ -372,10 +373,10 @@ constant  :  NUMCONST                     { $$ = newExpNode(ConstantK, $1);
    ;
 %%
 
-void yyerror (const char *msg)
+/*void yyerror (const char *msg)
 { 
    cout << "Error: " <<  msg << endl;
-}
+}*/
 
 char *largerTokens[LASTTERM+1];        // used in the utils.cpp file printing routines
 
@@ -448,6 +449,7 @@ int main(int argc, char **argv) {
    bool dotAST = false;             // make dot file of AST
    extern FILE *yyin;
    initTokenStrings();
+   initErrorProcessing();
    int ch;
 
    while ((ch = getopt(argc, argv, "d")) != -1) {
@@ -481,11 +483,6 @@ int main(int argc, char **argv) {
       if(dotAST) {
          printDotTree(stdout, syntaxTree, false, false);
       }
-   }
-   else {
-      printf("-----------\n");
-      printf("Errors: %d\n", numErrors);
-      printf("-----------\n");
    }
    // report the number of errors and warnings
    printf("Number of warnings: %d\n", numWarnings);

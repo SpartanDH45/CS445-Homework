@@ -16,8 +16,8 @@ int setValue(int linenum, int tokenClass, char *svalue) {
     yylval.tokenData = new TokenData;
     yylval.tokenData->tokenclass = tokenClass;
     yylval.tokenData->linenum = line;
-    yylval.tokenData->tokenstr = strdup(svalue);
-     yylval.tokenData->cvalue = svalue[0];
+    yylval.tokenData->tokenstr = lastToken = strdup(svalue);
+    yylval.tokenData->cvalue = svalue[0];
     //May cause an overflow error
     yylval.tokenData->nvalue = atoi(svalue);
     yylval.tokenData->svalue = strdup(svalue);
