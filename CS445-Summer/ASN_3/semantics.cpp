@@ -135,7 +135,7 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
             break;
         case IfK:
             if(current->child[0]->type != Boolean){
-                printf("SEMANTIC ERROR(%d): Expecting Boolean test condition in if statement but got type %s.\n",
+                printf("SEMANTIC ERROR(%d): Expecting Boolean test condition in if statement but got %s.\n",
                 current->lineno, expTypeToStr(current->child[0]->type));
                 numErrors++;
             }
