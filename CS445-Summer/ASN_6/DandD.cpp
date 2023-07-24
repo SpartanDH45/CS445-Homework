@@ -45,8 +45,8 @@ void printMap(char *map){
 int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
 int charMonStr[100], charMonDex[100], charMonCon[100];
 int charMonInt[100], charMonWis[100], charMonCha[100];
-int charMonAttackMDam[100], int charMonAttackRDam[100];
-int charMonAttackMRan[100], int charMonAttackRRan[100];
+int charMonAttackMDam[100], charMonAttackRDam[100];
+int charMonAttackMRan[100], charMonAttackRRan[100];
 //XY Positions given as a single integer XXYY
 int charMonXYPos[100];
 //
