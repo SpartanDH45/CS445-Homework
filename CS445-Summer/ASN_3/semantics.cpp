@@ -133,6 +133,10 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
         case CompoundK:
             current->size=foffset;
             break;
+        case ReturnK:
+            if(current->child[0]->isArray == true){
+                printf("SEMANTIC ERROR(%d): Cannot return an array.", current->lineno);
+            }
     }
 }
 void traverseExpK(TreeNode *current, SymbolTable *symtab){
