@@ -32,12 +32,12 @@ void printMap(char *map){
             if(i == -1 || i == mapWidth){
                 printf("X");
                 if(j != mapWidth-1){
-                    printf("X");
+                    //printf("X");
                 }
             } else {
                 printf("%c", map[(i*mapWidth)+j]);
                 if(j != mapWidth-1){
-                    printf(" ");
+                    //printf(" ");
                 }
             }
         }
