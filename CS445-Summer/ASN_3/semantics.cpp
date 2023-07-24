@@ -136,7 +136,9 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
         case ReturnK:
             if(current->child[0]->isArray == true){
                 printf("SEMANTIC ERROR(%d): Cannot return an array.", current->lineno);
+                numErrors++;
             }
+            break;
     }
 }
 void traverseExpK(TreeNode *current, SymbolTable *symtab){
