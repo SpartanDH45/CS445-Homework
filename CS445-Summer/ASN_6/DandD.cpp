@@ -57,5 +57,5 @@ char pathingMap[400];
 
 int main(){
     srand((unsigned) time(NULL));
-
+    printMap(mapBackground);
 }
