@@ -137,7 +137,9 @@ void traverseStmtK(TreeNode *current, SymbolTable *symtab){
             if(current->child[0]->type != Boolean){
                 printf("SEMANTIC ERROR(%d): Expecting Boolean test condition in if statement but got type %s.\n",
                 current->lineno, expTypeToStr(current->child[0]->type));
+                numErrors++;
             }
+            break;
         case ReturnK:
             if(current->child[0]->isArray == true){
                 printf("SEMANTIC ERROR(%d): Cannot return an array.\n", current->lineno);
