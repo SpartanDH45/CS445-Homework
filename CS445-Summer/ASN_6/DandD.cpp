@@ -81,7 +81,7 @@ void printMap(char *map){
 void printIntMap(int *map){
     for(int i = 0; i < mapHeight; i++){
         for(int j = 0; j < mapWidth; j++){
-            temp = map[calcXY(j, i)];
+            int temp = map[calcXY(j, i)];
             if(temp > -1){
                 printf("  ");
             } else {
