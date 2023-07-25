@@ -18,13 +18,25 @@ int checkTarget(int srcXY, int targXY, int range){
     int diffX = srcX-targX;
     int diffY = srcY-targY;
     int penalty = 0;
+    // If the attack is out of range
     if((diffX*diffX)+(diffY*diffY)>(range*range)){
-        penalty = -20;
+        if(!((diffX*diffX)+(diffY*diffY) == 2 && range == 1)){
+            penalty = -20;
+        }
+    } else if((diffX*diffX)+(diffY*diffY) == 2 && range > 1){
+        penalty -= 3; //Penalty for shooting into melee
     }
     return penalty;
 }
 int mapWidth = 20;
 int mapHeight = 20;
+
+int calcXY(int x, int y){
+    return ((y * mapWidth) + x);
+}
+
+
+
 void printMap(char *map){
     for(int i = -1; i <= mapHeight; i++){
         if( i == 2 || i == 9 || i == 10 || i == 17){
@@ -52,7 +64,7 @@ void printMap(char *map){
                     printf("X");
                 }
             } else {
-                printf("%c", map[(i*mapWidth)+j]);
+                printf("%c", map[calcXY(j, i)]);
                 if(j != mapWidth-1){
                     printf(" ");
                 }
@@ -69,10 +81,15 @@ void printMap(char *map){
 void printIntMap(int *map){
     for(int i = 0; i < mapHeight; i++){
         for(int j = 0; j < mapWidth; j++){
-            if(map[(i * mapWidth) + j] < 10){
-                printf("0%d", map[(i * mapWidth) + j]);
+            if(map[calcXY(j, i)] > -1){
+                printf("  ");
             } else {
-                printf("%d", map[(i * mapWidth) + j]);
+                printf(" ");
+            }
+            if(map[calcXY(j, i)] * map[calcXY(j, i)] < 100){
+                printf("0%d", map[calcXY(j, i)]);
+            } else {
+                printf("%d", map[calcXY(j, i)]);
             }
         }
         printf("\n");
@@ -134,12 +151,17 @@ void setCharMon(int idNum, int *stats, char marker, int x, int y){
 }
 int getLowestNeighbor(int x, int y){
     int lowest = 1000;
-    for(int i = -1; i < 2; i++){
-        for(int j = -1; j < 2; j++){
-            if(i != 0 && j != 0){
-                if(pathingMap[((y + i) * mapWidth) + x + j]<lowest){
-                    lowest = pathingMap[((y + i) * mapWidth) + x + j];
-                }
+    for(int i = -1; i < 2; i+=2){
+        if(y + i > -1 && y + i < mapHeight){
+            int temp = pathingMap[calcXY(x , y + i)];
+            if(temp<lowest){
+                lowest = temp;
+            }
+        }
+        if(x + i > -1 && x + i < mapWidth){
+            int temp = pathingMap[calcXY(x + i, y)];
+            if(temp<lowest){
+                lowest = temp;
             }
         }
     }
@@ -147,18 +169,27 @@ int getLowestNeighbor(int x, int y){
 }
 
 bool isOpenSpot(int x, int y){
-    if(idMap[(y * mapWidth) + x] != -2){
+    if(idMap[calcXY(x, y)] != -2){
         return false;
     } else {
         return true;
     }
 }
 
+void checkSetPath(int x, int y){
+    if( x > -1 && x < mapWidth && y > -1 && y < mapHeight){
+        if(isOpenSpot(x, y)){
+            pathingMap[calcXY(x, y)] = getLowestNeighbor(x, y);
+        }
+    }
+    
+}
+
 void setPathingMap(){
     if(pathingMap[0] == -1){
         for(int i = 0; i < mapHeight; i++){
             for(int j = 0; j < mapWidth; j++){
-                pathingMap[(i*mapWidth) + j] = 99;
+                pathingMap[calcXY(j, i)] = 99;
             }
         }
     }
@@ -168,11 +199,18 @@ void setPathingMap(){
         int currX = startX;
         int currY = startY;
         int radius = 1;
-        pathingMap[(startY * mapWidth) + startX] = 0;
+        pathingMap[calcXY(startX, startY)] = 0;
         //While there is a part of the map not seen by the scan
         while(currX - radius > -1 && currX + radius < 20 && currY - radius > -1 && currY + radius < 20){
             for(int circOffset = 0; circOffset <= radius; circOffset++){
-                
+                checkSetPath(startX-radius, startY+circOffset);
+                checkSetPath(startX-radius, startY-circOffset-1);
+                checkSetPath(startX+radius, startY+circOffset);
+                checkSetPath(startX+radius, startY-circOffset-1);
+                checkSetPath(startX+circOffset, startY-radius);
+                checkSetPath(startX-circOffset-1, startY-radius);
+                checkSetPath(startX+circOffset, startY+radius);
+                checkSetPath(startX-circOffset-1, startY+radius);
             }
         }
 
@@ -231,10 +269,12 @@ int main(){
     }
     setIDMap();
     setMapDisplay();
+    setPathingMap();
     printMap(mapBackground);
     printf("\n");
     printMap(mapDisplay);
     printf("\n");
     printIntMap(idMap);
-
+    printf("\n");
+    printIntMap(pathingMap);
 }
