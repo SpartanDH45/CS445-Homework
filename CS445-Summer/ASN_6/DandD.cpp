@@ -88,8 +88,8 @@ void printIntMap(int *map){
                 printf(" -");
             }
             //get absolute value of temp
-            if(temp != 0){
-                temp = (temp*temp)/temp;
+            if(temp < 0){
+                temp = temp*-1;
             }
 
             if(temp < 10){
@@ -267,7 +267,7 @@ void spawnMob(int idNum, int *stats, char marker){
 
 int main(){
     srand((unsigned) time(NULL));
-    setCharMon(0, dhulgenStats, 'D', 9, 18-5);
+    setCharMon(0, dhulgenStats, 'D', 9, 18);
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
     setCharMon(3, torbinStats, 'T', 10, 19);
