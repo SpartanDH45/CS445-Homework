@@ -81,15 +81,18 @@ void printMap(char *map){
 void printIntMap(int *map){
     for(int i = 0; i < mapHeight; i++){
         for(int j = 0; j < mapWidth; j++){
-            if(map[calcXY(j, i)] > -1){
+            temp = map[calcXY(j, i)];
+            if(temp > -1){
                 printf("  ");
             } else {
-                printf(" ");
+                printf(" -");
             }
-            if(map[calcXY(j, i)] * map[calcXY(j, i)] < 100){
-                printf("0%d", map[calcXY(j, i)]);
+            //get absolute value of temp
+            temp = (temp*temp)/temp;
+            if(temp < 10){
+                printf("0%d", temp);
             } else {
-                printf("%d", map[calcXY(j, i)]);
+                printf("%d", temp);
             }
         }
         printf("\n");
@@ -261,7 +264,7 @@ void spawnMob(int idNum, int *stats, char marker){
 
 int main(){
     srand((unsigned) time(NULL));
-    setCharMon(0, dhulgenStats, 'D', 9, 18);
+    setCharMon(0, dhulgenStats, 'D', 9, 18-5);
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
     setCharMon(3, torbinStats, 'T', 10, 19);
