@@ -88,7 +88,10 @@ void printIntMap(int *map){
                 printf(" -");
             }
             //get absolute value of temp
-            temp = (temp*temp)/temp;
+            if(temp != 0){
+                temp = (temp*temp)/temp;
+            }
+
             if(temp < 10){
                 printf("0%d", temp);
             } else {
