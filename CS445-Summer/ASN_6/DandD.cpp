@@ -185,7 +185,11 @@ bool isOpenSpot(int x, int y){
 void checkSetPath(int x, int y){
     if( x > -1 && x < mapWidth && y > -1 && y < mapHeight){
         if(isOpenSpot(x, y)){
-            pathingMap[calcXY(x, y)] = getLowestNeighbor(x, y) + 1;
+            int temp = getLowestNeighbor(x, y) + 1;
+            if(temp > 99){
+                temp = 99;
+            }
+            pathingMap[calcXY(x, y)] = temp;
         }
     }
     
