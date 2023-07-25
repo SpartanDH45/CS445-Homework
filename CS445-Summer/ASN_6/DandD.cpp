@@ -212,6 +212,7 @@ void setPathingMap(){
                 checkSetPath(startX+circOffset, startY+radius);
                 checkSetPath(startX-circOffset-1, startY+radius);
             }
+            radius++;
         }
 
     }
@@ -268,7 +269,9 @@ int main(){
         spawnMob(i, zombieDefault, 'Z');
     }
     setIDMap();
+    printf("Setting up map display...\n");
     setMapDisplay();
+    printf("Calculating paths...\n");
     setPathingMap();
     printMap(mapBackground);
     printf("\n");
