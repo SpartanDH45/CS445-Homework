@@ -235,5 +235,6 @@ int main(){
     printf("\n");
     printMap(mapDisplay);
     printf("\n");
+    printIntMap(idMap);
 
 }
