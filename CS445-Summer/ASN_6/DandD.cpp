@@ -179,7 +179,7 @@ bool isOpenSpot(int x, int y){
 void checkSetPath(int x, int y){
     if( x > -1 && x < mapWidth && y > -1 && y < mapHeight){
         if(isOpenSpot(x, y)){
-            pathingMap[calcXY(x, y)] = getLowestNeighbor(x, y);
+            pathingMap[calcXY(x, y)] = getLowestNeighbor(x, y) + 1;
         }
     }
     
@@ -201,7 +201,7 @@ void setPathingMap(){
         int radius = 1;
         pathingMap[calcXY(startX, startY)] = 0;
         //While there is a part of the map not seen by the scan
-        while(currX - radius > -1 && currX + radius < 20 && currY - radius > -1 && currY + radius < 20){
+        while(currX - radius > -1 || currX + radius < 20 || currY - radius > -1 || currY + radius < 20){
             for(int circOffset = 0; circOffset <= radius; circOffset++){
                 checkSetPath(startX-radius, startY+circOffset);
                 checkSetPath(startX-radius, startY-circOffset-1);
