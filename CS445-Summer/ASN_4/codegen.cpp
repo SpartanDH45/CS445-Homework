@@ -20,7 +20,7 @@ static SymbolTable *globals;    // the global symbol table
 
 
 void codegenHeader(char *srcFile){
-    emitComment((char *)"bC compilerversion bC-Su23");
+    emitComment((char *)"bC compiler version bC-Su23");
     emitComment((char *)"File compiled: ", srcFile);
 }
 
