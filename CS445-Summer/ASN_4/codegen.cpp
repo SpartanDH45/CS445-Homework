@@ -48,7 +48,7 @@ void codegenExpression(TreeNode *currnode){
     
 }
 
-void codegenDeclaration(TreeNode *currnode){
+void codegenDecl(TreeNode *currnode){
     commentLineNum(currnode);
     switch(currnode->kind.decl) {
         case VarK:
