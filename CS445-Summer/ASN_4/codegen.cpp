@@ -94,10 +94,10 @@ void codegenDecl(TreeNode *currnode){
             // You have a LOT to do here!!!!!
             if(currnode->isArray){
                 if(currnode->child[0]){
-                    if(currnode->varkind == local){
+                    //if(currnode->varKind == local){
                         //emitRM((char *)"LCD", 3, currnode->size-1, 6, (char *)"load size of array", currnode->attr.name);
                         //emitRM((char *)"ST", AC, -2, FP, (char *), )
-                    }
+                    //}
                 }
             }
             break;
