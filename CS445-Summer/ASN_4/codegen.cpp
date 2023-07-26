@@ -68,7 +68,7 @@ void codegenDecl(TreeNode *currnode){
     }
 }
 
-void codegenGeneral(TreeNode *syntaxTree){
+void codegenGeneral(TreeNode *currnode){
     while(currnode){
         switch(currnode->nodekind){
             case StmtK:
