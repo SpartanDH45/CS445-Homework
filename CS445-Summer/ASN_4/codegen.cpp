@@ -33,7 +33,46 @@ void commentLineNum(TreeNode *currnode){
 }
 
 void codegenLibraryFun(TreeNode *currnode){
+    emitComment((char *)"");
+    emitComment((char *)"** ** ** ** ** ** ** ** ** ** ** **");
+    emitComment((char *)"FUNCTION", currnode->attr.name);
+    // remember where this function is
+    currnode->offset = emitSkip(0);
+    // Store return address
+    emitRM((char *)"ST", AC, RETURNOFFSET, FP, (char *)"Store return address");
+// Next slides here
+    if (strcmp(currnode->attr.name, (char *)"input")==0) {
+        emitRO((char *)"IN", RT, RT, RT, (char *)"Grab int input");
+    }
+    else if (strcmp(currnode->attr.name, (char *)"inputb")==0) {
+        emitRO((char *)"INB", RT, RT, RT, (char *)"Grab bool input");
+    }
+    else if (strcmp(currnode->attr.name, (char *)"inputc")==0) {
+        emitRO((char *)"INC", RT, RT, RT, (char *)"Grab char input");
+    }
+    else if (strcmp(currnode->attr.name, (char *)"output")==0) {
+        emitRM((char *)"LD", AC, -2, FP, (char *)"Load parameter");
+        emitRO((char *)"OUT", AC, AC, AC, (char *)"Output integer");
+    }
+    else if (strcmp(currnode->attr.name, (char *)"outputb")==0) {
+        emitRM((char *)"LD", AC, -2, FP, (char *)"Load parameter");
+        emitRO((char *)"OUTB", AC, AC, AC, (char *)"Output bool");
+    }else if (strcmp(currnode->attr.name, (char *)"outputc")==0) {
+        emitRM((char *)"LD", AC, -2, FP, (char *)"Load parameter");
+        emitRO((char *)"OUTC", AC, AC, AC, (char *)"Output char");
+    }
+    else if (strcmp(currnode->attr.name, (char *)"outnl")==0) {
+        emitRO((char *)"OUTNL", AC, AC, AC, (char *)"Output a newline");
+    }
+    else {
+        emitComment((char *)"ERROR(LINKER): No support for special function");
+        emitComment(currnode->attr.name);
+    }
 
+    emitRM((char *)"LD", AC, RETURNOFFSET, FP, (char *)"Load return address");
+    emitRM((char *)"LD", FP, OFPOFF, FP, (char *)"Adjust fp");
+    emitGoto(0, AC, (char *)"Return");
+    emitComment((char *)"END FUNCTION", currnode->attr.name);
 }
 
 void codegenFun(TreeNode *currnode){
@@ -53,6 +92,14 @@ void codegenDecl(TreeNode *currnode){
     switch(currnode->kind.decl) {
         case VarK:
             // You have a LOT to do here!!!!!
+            if(currnode->isArray){
+                if(currnode->child[0]){
+                    if(currnode->varkind == local){
+                        //emitRM((char *)"LCD", 3, currnode->size-1, 6, (char *)"load size of array", currnode->attr.name);
+                        //emitRM((char *)"ST", AC, -2, FP, (char *), )
+                    }
+                }
+            }
             break;
         case FuncK:
             if (currnode->lineno == -1) { // These are the library functions we just added
