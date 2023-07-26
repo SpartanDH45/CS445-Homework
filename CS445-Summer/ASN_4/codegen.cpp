@@ -29,9 +29,6 @@ void commentLineNum(TreeNode *currnode){
     if(linenumFlag){
         sprintf(buf, "%d", currnode-lineno);
         emitComment((char *)"Line: ", buf);
-}
-}
-
     }
 }
 
