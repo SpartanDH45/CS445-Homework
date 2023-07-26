@@ -1,6 +1,5 @@
-
+#DRBC test of for loop
 main(){
-    int i;
     for i = 0 to 5 do {
         output(i);
     }
