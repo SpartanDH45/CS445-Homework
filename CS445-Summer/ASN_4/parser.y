@@ -10,6 +10,7 @@
 #include "semantics.h"
 #include "symbolTable.h"
 #include "yyerror.h"
+#include "codegen.h"
 
 using namespace std;
 
@@ -478,7 +479,8 @@ int main(int argc, char **argv) {
       int globalOffset;
       syntaxTree = semanticAnalysis(syntaxTree, true, false, symtab, globalOffset);
       if(numErrors==0){
-         printTree(stdout, syntaxTree, true, true);
+         //printTree(stdout, syntaxTree, true, true);
+         codegen(stdout, argv[1], syntaxTree, symtab, globalOffset, false);
       }
       if(dotAST) {
          printDotTree(stdout, syntaxTree, false, false);
