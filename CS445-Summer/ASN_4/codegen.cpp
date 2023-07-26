@@ -122,6 +122,22 @@ void codegenStatement(TreeNode *currnode){
             emitComment((char *)"END COMPOUND");
         }
         break;
+    case WhileK:
+        emitComment((char *)"WHILE");
+        currloc = emitSkip(0); // return to here to do the test
+        codegenExpression(currnode->child[0]); // test expression
+        emitRM((char *)"JNZ", AC, 1, PC, (char *)"Jump to while part");
+        emitComment((char *)"DO");
+        skiploc = breakloc; // save the old break statement return point
+        breakloc = emitSkip(1); // addr of instr that jumps to end of loop
+        // this is also the backpatch point
+        codegenGeneral(currnode->child[1]); // do body of loop
+        emitGotoAbs(currloc, (char *)"go to beginning of loop");
+        backPatchAJumpToHere(breakloc, (char *)"Jump past loop [backpatch]");
+        // backpatch jump to end of loop
+        breakloc = skiploc; // restore for break statement
+        emitComment((char *)"END WHILE");
+        break;
     default:
         break;
     }
