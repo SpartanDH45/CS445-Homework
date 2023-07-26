@@ -124,6 +124,7 @@ void codegenStatement(TreeNode *currnode){
         break;
     default:
         break;
+    }
 }
 
 void codegenExpression(TreeNode *currnode){
