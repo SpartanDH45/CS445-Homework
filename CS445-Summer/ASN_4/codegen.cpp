@@ -66,6 +66,7 @@ void codegenDeclaration(TreeNode *currnode){
                 // IMPORTANT: no instructions need to be allocated for parameters here
                 break;
     }
+}
 
 void codegenGeneral(TreeNode *syntaxTree){
     while(currnode){
