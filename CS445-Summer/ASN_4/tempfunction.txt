@@ -1,0 +1,11 @@
+int offsetRegister(VarKind v) {
+    switch (v) {
+    case Local:       return FP;
+    case Parameter:   return FP;
+    case Global:      return GP;
+    case LocalStatic: return GP;
+    default:
+        printf((char *)"ERROR(codegen): looking up offset register for a variable of type %d\n", v);
+        return 666;
+    }
+}
