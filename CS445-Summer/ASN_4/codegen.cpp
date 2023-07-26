@@ -27,7 +27,7 @@ void codegenHeader(char *srcFile){
 void commentLineNum(TreeNode *currnode){
     char buf[16];
     if(linenumFlag){
-        sprintf(buf, "%d", currnode-lineNo);)
+        sprintf(buf, "%d", currnode-lineno);
         emitComment((char *)"Line: ", buf);
 }
 }
