@@ -18,6 +18,7 @@ static bool linenumFlag;        // mark with line numbers
 static int breakloc;            // which while to break to
 static SymbolTable *globals;    // the global symbol table
 
+void codegenGeneral(TreeNode *currnode);
 
 void codegenHeader(char *srcFile){
     emitComment((char *)"bC compiler version bC-Su23");
@@ -76,11 +77,53 @@ void codegenLibraryFun(TreeNode *currnode){
 }
 
 void codegenFun(TreeNode *currnode){
-
+    emitComment((char *)"");
+    emitComment((char *)"** ** ** ** ** ** ** ** ** ** ** **");
+    emitComment((char *)"FUNCTION", currnode->attr.name);
+    toffset = currnode->size; // recover the end of activation record
+    emitComment((char *)"TOFF set:", toffset);
+    // IMPORTANT: For function nodes the offset is defined to be the position of the
+    // function in the code space! This is accessible via the symbol table.
+    // remember where this function is:
+    currnode->offset = emitSkip(0); // offset holds the instruction address!!
+    // Store return address
+    emitRM((char *)"ST", AC, RETURNOFFSET, FP, (char *)"Store return address");
+    // Generate code for the statements...
+    codegenGeneral(currnode->child[1]);
+    // In case there was no return statement
+    // set return register to 0 and return
+    emitComment((char *)"Add standard closing in case there is no return statement");
+    emitRM((char *)"LDC", RT, 0, 6, (char *)"Set return value to 0");
+    emitRM((char *)"LD", AC, RETURNOFFSET, FP, (char *)"Load return address");
+    emitRM((char *)"LD", FP, OFPOFF, FP, (char *)"Adjust fp");
+    emitGoto(0, AC, (char *)"Return");
+    emitComment((char *)"END FUNCTION", currnode->attr.name);
 }
 
 void codegenStatement(TreeNode *currnode){
-
+    // local state to remember stuff
+    int skiploc=0, skiploc2=0, currloc=0; // some temporary instuction addresses
+    TreeNode *loopindex=NULL; // a pointer to the index variable declaration node
+    commentLineNum(currnode);
+    switch (currnode->kind.stmt) {
+    /////////////////Other cases
+    case CompoundK:
+        { 
+            int savedToffset;
+            savedToffset = toffset;
+            toffset = currnode->size; // recover the end of activation record
+            emitComment((char *)"COMPOUND");
+            emitComment((char *)"TOFF set:", toffset);
+            codegenGeneral(currnode->child[0]); // process inits
+            emitComment((char *)"Compound Body");
+            codegenGeneral(currnode->child[1]); // process body
+            toffset = savedToffset;
+            emitComment((char *)"TOFF set:", toffset);
+            emitComment((char *)"END COMPOUND");
+        }
+        break;
+    default:
+        break;
 }
 
 void codegenExpression(TreeNode *currnode){
