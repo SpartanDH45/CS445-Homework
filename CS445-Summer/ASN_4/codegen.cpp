@@ -14,7 +14,7 @@ extern void initTokenStrings();
 int toffset; // next available temporary space
 
 FILE *code;                     // shared global code
-static book linenumFlag;        // mark with line numbers
+static bool linenumFlag;        // mark with line numbers
 static int breakloc;            // which while to break to
 static SymbolTable *globals;    // the global symbol table
 
@@ -30,7 +30,7 @@ void codegen(FILE *codeIn,          // where the code should be written
     globals = globalsIn;
     linenumFlag = linenumFlagIn;
     breakloc = 0;
-    
+
     initJump = emitSkip[1];
     codegenHeader(srcFile);
     codegenGeneral(syntaxTree);
