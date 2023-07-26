@@ -105,10 +105,10 @@ void printIntMap(int *map){
 //Order for storage: HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
 //                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav
 int zombieDefault[] = {22, 8, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0};
-int dhulgenStats[] = {50, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0};
-int ogrimStats[] = {50, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2};
-int kolgarStats[] = {50, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0};
-int torbinStats[] = {50, 16, 5, 3, 4, 2, 2, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0};
+int dhulgenStats[] = {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0};
+int ogrimStats[] = {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2};
+int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0};
+int torbinStats[] = {43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0};
 int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
 int charMonStr[100], charMonDex[100], charMonCon[100];
 int charMonInt[100], charMonWis[100], charMonCha[100];
@@ -269,6 +269,53 @@ void spawnMob(int idNum, int *stats, char marker){
     setCharMon(idNum, stats, marker, x, y);
 }
 
+void moveChar(int idNum, int x, int y){
+    int charX = charMonXYPos[idNum]/100;
+    mapDisplay[calcXY(charX, charMonXYPos[idNum]-(100 * charX))] = mapBackground[calcXY(charX, charMonXYPos[idNum]-(100 * charX))];
+    charMonXYPos[idNum] = (x * 100) + y;
+    mapDisplay[calcXY(x,y)] = charMonMapMarker[idNum];
+}
+
+void monsterTurn(int idNum){
+    int movePool = charMonSpd[idNum];
+    int targX = -1;
+    int targY = -1;
+    bool attacked = false;
+    while(movePool > 0 && targX != -1){
+        int lowest = 99;
+        int currX = charMonXYPos[i]/100;
+        int currY = charMonXYPos[i]-(currX*100);
+        for(int i = -1; i < 2; i++){
+            for(int j = -1; j < 2; j++){
+                if(!(i == 0 && j == 0)){
+                    if(pathingMap[calcXY(currX+j, currY+i)] == 0){
+                        targX = currX+j;
+                        targY = currY+i;
+                    } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
+                        moveChar(idNum, currX+j, currY+i);
+                    }
+                }
+            }
+        }
+    }
+     
+}
+
+void playerTurn(int idNum){
+    int movePool = charMonSpd[idNum];
+    bool actionUsed = false;
+    bool turnEnd = false;
+    char choice;
+    while(turnEnd == false){
+        if(movePool > 0 && actionUsed == false){
+            printf("Do you want to (a)ttack, (m)ove, or use (s)pecial?");
+            printf("You have d% squares of movement left.", movePool);
+            
+        }
+        
+    }
+}
+
 int main(){
     srand((unsigned) time(NULL));
     setCharMon(0, dhulgenStats, 'D', 9, 18);
@@ -290,4 +337,23 @@ int main(){
     printIntMap(idMap);
     printf("\n");
     printIntMap(pathingMap);
+    int initiative[100];
+    for(int i = 0; i < entityCount; i++){
+        initiative[i] = roll(20)+charMonDex[i];
+    }
+    int gameState = 0;
+    while(gameState == 0){
+        for(int i = 25; i > -5; i--){
+            for(int j = 0; j < entityCount; i++){
+                if(i == initiative[j]){
+                    //Take Turn
+                    if(j > 3){
+                        monsterTurn(j);
+                    } else {
+                        playerTurn(j);
+                    }
+                }
+            }
+        }
+    }
 }
