@@ -100,6 +100,10 @@ void codegenFun(TreeNode *currnode){
     emitComment((char *)"END FUNCTION", currnode->attr.name);
 }
 
+void codegenExpression(TreeNode *currnode){
+    
+}
+
 void codegenStatement(TreeNode *currnode){
     // local state to remember stuff
     int skiploc=0, skiploc2=0, currloc=0; // some temporary instuction addresses
@@ -143,9 +147,7 @@ void codegenStatement(TreeNode *currnode){
     }
 }
 
-void codegenExpression(TreeNode *currnode){
-    
-}
+
 
 void codegenDecl(TreeNode *currnode){
     commentLineNum(currnode);
