@@ -47,7 +47,7 @@ void codegen(FILE *codeIn,          // where the code should be written
     linenumFlag = linenumFlagIn;
     breakloc = 0;
 
-    initJump = emitSkip(1)_;
+    initJump = emitSkip(1);
     codegenHeader(srcFile);
     codegenGeneral(syntaxTree);
     codegenInit(initJump,globalOffset);   
