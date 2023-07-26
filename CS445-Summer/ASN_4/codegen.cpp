@@ -24,8 +24,68 @@ void codegenHeader(char *srcFile){
     emitComment((char *)"File compiled: ", srcFile);
 }
 
-void codegenGeneral(TreeNode *syntaxTree){
+void commentLineNum(TreeNode *currnode){
+    char buf[16];
+    if(linenumFlag){
+        sprintf(buf, "%d", currnode-lineNo);)
+        emitComment((char *)"Line: ", buf);
+}
+}
 
+    }
+}
+
+void codegenLibraryFun(TreeNode *currnode){
+
+}
+
+void codegenFun(TreeNode *currnode){
+
+}
+
+void codegenStatement(TreeNode *currnode){
+
+}
+
+void codegenExpression(TreeNode *currnode){
+    
+}
+
+void codegenDeclaration(TreeNode *currnode){
+    commentLineNum(currnode);
+    switch(currnode->kind.decl) {
+        case VarK:
+            // You have a LOT to do here!!!!!
+            break;
+        case FuncK:
+            if (currnode->lineno == -1) { // These are the library functions we just added
+                codegenLibraryFun(currnode);
+            }
+            else {
+                codegenFun(currnode);
+            }
+            break;
+            case ParamK:
+                // IMPORTANT: no instructions need to be allocated for parameters here
+                break;
+    }
+
+void codegenGeneral(TreeNode *syntaxTree){
+    while(currnode){
+        switch(currnode->nodekind){
+            case StmtK:
+                codegenStatement(currnode);
+                break;
+            case ExpK:
+                emitComment((char *)"EXPRESSION");
+                codegenExpression(currnode);
+                break;
+            case DeclK:
+                codegenDecl(currnode);
+                break;
+        }
+        currnode = currnode->sibling;
+    }
 }
 
 void codegenInit(int initJump, int globalOffset){
