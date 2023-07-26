@@ -18,6 +18,22 @@ static bool linenumFlag;        // mark with line numbers
 static int breakloc;            // which while to break to
 static SymbolTable *globals;    // the global symbol table
 
+
+void codegenHeader(char *srcFile){
+    emitComment((char *)"bC compilerversion bC-Su23");
+    emitComment((char *)"File compiled: ", srcFile);
+}
+
+void codegenGeneral(TreeNode *syntaxTree){
+
+}
+
+void codegenInit(int initJump, int globalOffset){
+
+}
+
+
+
 void codegen(FILE *codeIn,          // where the code should be written
             char *srcFile,         // name of file compiled
             TreeNode *syntaxTree,  // tree to process
@@ -31,7 +47,7 @@ void codegen(FILE *codeIn,          // where the code should be written
     linenumFlag = linenumFlagIn;
     breakloc = 0;
 
-    initJump = emitSkip[1];
+    initJump = emitSkip(1)_;
     codegenHeader(srcFile);
     codegenGeneral(syntaxTree);
     codegenInit(initJump,globalOffset);   
