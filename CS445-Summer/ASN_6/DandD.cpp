@@ -7,14 +7,19 @@ using namespace std;
 int roll(int faces){
     return (rand() % faces + 1);
 }
+
+int rollMult(int quant, int faces){
+    int sum = 0;
+    for(int i = 0; i < quant; i++){
+        sum += roll(faces);
+    }
+    return sum;
+}
+
 //Returns a modifier to attack rolls. If objects in the way there is a -2 penalty
 //If the target is out of range the penalty will be set to -200 and be considered
 //Not a valid target
-int checkTarget(int srcXY, int targXY, int range){
-    int srcX = srcXY/100;
-    int srcY = srcXY-(srcX*100);
-    int targX = targXY/100;
-    int targY = targXY-(targX*100);
+int checkTarget(int srcX, int srcY, int targX, int targY, int range){
     int diffX = srcX-targX;
     int diffY = srcY-targY;
     int penalty = 0;
@@ -103,21 +108,22 @@ void printIntMap(int *map){
 }
 
 //Order for storage: HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
-//                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav
-int zombieDefault[] = {22, 8, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0};
-int dhulgenStats[] = {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0};
-int ogrimStats[] = {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2};
-int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0};
-int torbinStats[] = {43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0};
+//                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav, AttackNum
+int zombieDefault[] = {22, 8, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0, 1};
+int dhulgenStats[] = {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
+int ogrimStats[] = {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
+int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 1};
+int torbinStats[] = {43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
 int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
 int charMonStr[100], charMonDex[100], charMonCon[100];
 int charMonInt[100], charMonWis[100], charMonCha[100];
 int charMonAttackMDam[100], charMonAttackMRan[100], charMonAttackMAbl[100];
 int charMonAttackRDam[100], charMonAttackRRan[100], charMonAttackRAbl[100];
-int charMonAttackRSav[100];
+int charMonAttackRSav[100], charMonAttackNum[100];
 char charMonMapMarker[100];
 //XY Positions given as a single integer XXYY
-int charMonXYPos[100];
+int charMonXPos[100];
+int charMonYPos[100];
 //
 char mapDisplay[500];
 char mapBackground[500] = "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
@@ -143,8 +149,10 @@ void setCharMon(int idNum, int *stats, char marker, int x, int y){
     charMonAttackRRan[idNum] = stats[14];
     charMonAttackRAbl[idNum] = stats[15];
     charMonAttackRSav[idNum] = stats[16];
+    charMonAttackNum[idNum] = stats[17];
     charMonMapMarker[idNum] = marker;
-    charMonXYPos[idNum] = (x*100)+y;
+    charMonXPos[idNum] = x;
+    charMonYPos[idNum] = y;
     if(x > 19 || x < 0 || y > 19 || y < 0){
         charMonHP[idNum] = 0;
     } else {
@@ -204,8 +212,8 @@ void setPathingMap(){
         }
     }
     for(int i = 0; i < 4; i++){
-        int startX = charMonXYPos[i]/100;
-        int startY = charMonXYPos[i]-(startX*100);
+        int startX = charMonXPos[i];
+        int startY = charMonYPos[i];
         int currX = startX;
         int currY = startY;
         int radius = 1;
@@ -239,8 +247,8 @@ void setIDMap(){
         }
     }
     for(int i = 0; i < entityCount; i++){
-        int x = charMonXYPos[i] / 100;
-        int y = charMonXYPos[i] - (x * 100);
+        int x = charMonXPos[i];
+        int y = charMonYPos[i];
         idMap[(y * mapWidth) + x] = i;
     }
 }
@@ -252,8 +260,8 @@ void setMapDisplay(){
         }
     }
     for(int i = 0; i < entityCount; i++){
-        int x = charMonXYPos[i] / 100;
-        int y = charMonXYPos[i] - (x * 100);
+        int x = charMonXPos[i];
+        int y = charMonYPos[i];
         mapDisplay[(y * mapWidth) + x] = charMonMapMarker[i];
     }
 }
@@ -270,10 +278,89 @@ void spawnMob(int idNum, int *stats, char marker){
 }
 
 void moveChar(int idNum, int x, int y){
-    int charX = charMonXYPos[idNum]/100;
-    mapDisplay[calcXY(charX, charMonXYPos[idNum]-(100 * charX))] = mapBackground[calcXY(charX, charMonXYPos[idNum]-(100 * charX))];
-    charMonXYPos[idNum] = (x * 100) + y;
+    mapDisplay[calcXY(charMonXPos[idNum], charMonYPos[idNum])] = mapBackground[calcXY(charMonXPos[idNum], charMonYPos[idNum])];
+    charMonXPos[idNum] = x;
+    charMonYPos[idNum] = y;
     mapDisplay[calcXY(x,y)] = charMonMapMarker[idNum];
+}
+
+void attack(int idNum, char type, int mod, int targX, int targY){
+    int attackBonus;
+    int targID = idMap[calcXY(targX,targY)];
+    int dieType;
+    int dieQuant;
+    int damMod = 0;
+    int save = 0;
+    bool hit = false;
+    int dieRoll = roll(20);
+    int rollTotal;
+    int damage;
+    if(type = 'm'){
+        attackBonus = charMonAttackMAbl[idNum];
+        dieType = charMonAttackMDam[idNum];
+    } else {
+        attackBonus = charMonAttackRAbl[idNum];
+        dieType = charMonAttackRDam[idNum];
+        save = charMonAttackRSav[idNum];
+    }
+    if(attackBonus == 1){
+        attackBonus = charMonStr[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 2){
+        attackBonus = charMonDex[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 3){
+        attackBonus = charMonCon[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 4){
+        attackBonus = charMonInt[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 5){
+        attackBonus = charMonWis[idNum] + charMonProf[idNum];
+    } else {
+        attackBonus = charMonCha[idNum] + charMonProf[idNum];
+    }
+    if(save == 0){
+        rollTotal = dieRoll + attackBonus;
+        if(rollTotal >= charMonAC[targID]){
+            hit = true;
+            printf("%c successfully hit %c for ", charMonMapMarker[idNum], charMonMapMarker[targID]);
+        } else {
+            printf("%c failed to hit %c.\n", charMonMapMarker[idNum], charMonMapMarker[targID]);
+        }
+    } else {
+
+        if(attackBonus == 1){
+            rollTotal = roll(20) + charMonStr[targID];
+            damMod = charMonStr[targID];
+        } else if(attackBonus == 2){
+            rollTotal = roll(20) + charMonDex[targID];
+            damMod = charMonDex[targID];
+        } else if(attackBonus == 3){
+            rollTotal = roll(20) + charMonCon[targID];
+        } else if(attackBonus == 4){
+            rollTotal = roll(20) + charMonInt[targID];
+        } else if(attackBonus == 5){
+            rollTotal = roll(20) + charMonWis[targID];
+        } else {
+            rollTotal = roll(20) + charMonCha[targID];
+        }
+        if(rollTotal < (8 + attackBonus)){
+            hit = true;
+            printf("%c could not resist %c's spell and took ", charMonMapMarker[targID], charMonMapMarker[idNum]);
+        } else {
+            printf("%c was able to resist %c's spell.\n", charMonMapMarker[targID], charMonMapMarker[idNum]);
+        }
+    }
+    if(hit == true){
+        if(dieType > 1000){
+            dieQuant = dieType/1000;
+            dieType = dieType - (dieQuant * 1000);
+        } else {
+            dieQuant = dieType/100;
+            dieType = dieType - (dieQuant * 1000);
+        }
+        damage = rollMult(dieQuant, dieType) + damMod;
+        printf("%d damage!\n", damage);
+        
+    }
+    
 }
 
 void monsterTurn(int idNum){
@@ -283,8 +370,8 @@ void monsterTurn(int idNum){
     bool attacked = false;
     while(movePool > 0 && targX != -1){
         int lowest = 99;
-        int currX = charMonXYPos[i]/100;
-        int currY = charMonXYPos[i]-(currX*100);
+        int currX = charMonXPos[idNum];
+        int currY = charMonYPos[idNum];
         for(int i = -1; i < 2; i++){
             for(int j = -1; j < 2; j++){
                 if(!(i == 0 && j == 0)){
@@ -303,13 +390,30 @@ void monsterTurn(int idNum){
 
 void playerTurn(int idNum){
     int movePool = charMonSpd[idNum];
+    int attackPool = charMonAttackNum[idNum];
     bool actionUsed = false;
     bool turnEnd = false;
-    char choice;
+    int choice = 0;
     while(turnEnd == false){
         if(movePool > 0 && actionUsed == false){
-            printf("Do you want to (a)ttack, (m)ove, or use (s)pecial?");
-            printf("You have d% squares of movement left.", movePool);
+            while(choice == 0){
+                printf("Choose: 1-attack, 2-move, 3-use special, or 4-end turn?\n");
+                printf("You have d% squares of movement left.\n", movePool);
+                if(choice < 1 || choice > 4){
+                    printf("Invalid Choice.\n");
+                    choice = 0;
+                }
+            }
+            
+        } else if(movePool > 0 && actionUsed == true){
+            while(choice == 0){
+                printf("Choose: 2-move or 4-end turn?\n");
+                printf("You have d% squares of movement left.\n", movePool);
+                if(choice < 1 || choice > 4){
+                    printf("Invalid Choice.\n");
+                    choice = 0;
+                }
+            }
             
         }
         
