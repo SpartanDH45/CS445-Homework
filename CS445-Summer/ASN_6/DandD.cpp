@@ -304,11 +304,13 @@ void moveChar(int idNum, int x, int y){
     charMonXPos[idNum] = x;
     charMonYPos[idNum] = y;
     setMapDisplay();
+    setIDMap();
 }
 
 void attack(int idNum, int type, int mod, int targX, int targY){
     int attackBonus;
     int targID = idMap[calcXY(targX,targY)];
+    //printf("Target, %d\n", targID);
     int dieType;
     int dieQuant;
     int damMod = 0;
