@@ -352,7 +352,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         if(rollTotal >= charMonAC[targID]){
             hit = true;
             printName(idNum);
-            printf("rolled a %d for a total of %d and successfully hit ", dieRoll, rollTotal);
+            printf(" rolled a %d for a total of %d and successfully hit ", dieRoll, rollTotal);
             printName(targID);
             printf(" for ");
         } else {
