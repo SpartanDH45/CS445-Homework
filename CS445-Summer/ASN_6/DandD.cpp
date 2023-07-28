@@ -487,7 +487,6 @@ void monsterTurn(int idNum){
             }
             if(targX == -1){
                 moveChar(idNum, lowX, lowY);
-                printMap(mapDisplay);
                 movePool--;
             }
         }
