@@ -444,7 +444,7 @@ void monsterTurn(int idNum){
     int targY = -1;
     bool attacked = false;
     while(attackPool > 0 || movePool > 0){
-        printf("Looptestout\n");
+        //printf("Looptestout\n");
         while(movePool > 0 && targX != -1){
             printf("LooptestIn\n");
             int lowest = 99;
