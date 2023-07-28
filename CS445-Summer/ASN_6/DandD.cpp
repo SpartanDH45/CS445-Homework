@@ -119,7 +119,7 @@ void printIntMap(int *map){
 int zombieDefault[] = {22, 8, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0, 1};
 int dhulgenStats[] = {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
 int ogrimStats[] = {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
-int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 1};
+int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 1, 1};
 int torbinStats[] = {43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
 int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
 int charMonStr[100], charMonDex[100], charMonCon[100];
