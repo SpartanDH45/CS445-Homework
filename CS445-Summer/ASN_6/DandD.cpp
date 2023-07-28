@@ -5,7 +5,6 @@
 using namespace std;
 
 int roll(int faces){
-    srand((unsigned) time(NULL));
     int temp = (rand() % faces) + 1;
     printf("Rolled a %d\n", temp);
     return (rand() % faces + 1);
@@ -588,6 +587,7 @@ void playerTurn(int idNum){
 }
 
 int main(){
+    srand((unsigned) time(NULL));
     setCharMon(0, dhulgenStats, 'D', 9, 18);
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
@@ -645,8 +645,7 @@ int main(){
                 }
             }
         }
-        
-        
+        srand((unsigned) time(NULL));
     }
     if(gameState == 1){
         printf("You have successfully cleansed your temple of the monsters!\n");
