@@ -38,7 +38,7 @@ void printMap(char *map){
         if( i == 2 || i == 9 || i == 10 || i == 17){
             printf("|");
         } else if( i == -1){
-            printf(" X");
+            printf("  X");
         } else if( i > -1) {
             printf("X");
         } else {
@@ -136,7 +136,7 @@ int pathingMap[500] = {-1};
 int pcCount = 4;
 int entityCount = 0;
 
-char printName(int idNum){
+void printName(int idNum){
     if(charMonMapMarker[idNum] == 'D'){
         printf("Dhulgen");
     } else if(charMonMapMarker[idNum] == 'O'){
@@ -148,7 +148,6 @@ char printName(int idNum){
     } else if(charMonMapMarker[idNum] == 'Z'){
         printf("Zombie");
     }
-    return ' ';
 }
 
 void setCharMon(int idNum, int *stats, char marker, int x, int y){
@@ -340,9 +339,15 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         rollTotal = dieRoll + attackBonus + mod;
         if(rollTotal >= charMonAC[targID]){
             hit = true;
-            printf("%csuccessfully hit %cfor ", printName(idNum), printName(targID));
+            printName(idNum);
+            printf(" successfully hit ");
+            printName(targID);
+            printf(" for ");
         } else {
-            printf("%cfailed to hit %c.\n", printName(idNum), printName(targID));
+            printName(idNum);
+            printf(" failed to hit ");
+            printName(targID);
+            printf(".\n");
         }
     } else {
         if(attackBonus == 1){
@@ -362,9 +367,15 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         }
         if(rollTotal < (8 + attackBonus)){
             hit = true;
-            printf("%ccould not resist %c's spell and took ", printName(targID), printName(idNum));
+            printName(targID);
+            printf(" could not resist ");
+            printName(idNum);
+            printf("'s spell and took ");
         } else {
-            printf("%cwas able to resist %c's spell.\n", printName(targID), printName(idNum));
+            printName(targID);
+            printf(" was able to resist ");
+            printName(idNum);
+            printf("'s spell.\n");
         }
     }
     if(hit == true){
@@ -373,7 +384,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             dieType = dieType - (dieQuant * 1000);
         } else {
             dieQuant = dieType/100;
-            dieType = dieType - (dieQuant * 1000);
+            dieType = dieType - (dieQuant * 100);
         }
         damage = rollMult(dieQuant, dieType) + damMod;
         printf("%d damage!\n", damage);
@@ -390,11 +401,14 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                 }
             }
             if(targID > pcCount-1){
-                printf("The %csuccumbs to its wounds and perishes.\n", printName(targID));
+                printf("The ");
+                printName(targID);
+                printf(" succumbs to its wounds and perishes.\n");
                 charMonMapMarker[targID] = '_';
 
             } else {
-                printf("%c falls unconscious!\n", printName(targID));
+                printName(targID);
+                printf(" falls unconscious!\n");
                 setPathingMap();
             }
         }
