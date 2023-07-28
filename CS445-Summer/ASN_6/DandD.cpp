@@ -6,16 +6,23 @@ using namespace std;
 
 int roll(int faces){
     int temp = (rand() % faces) + 1;
-    printf("Rolled a %d\n", temp);
+    //printf("Rolled a %d\n", temp);
     return temp;
     
 }
 
 int rollMult(int quant, int faces){
     int sum = 0;
+    printf("%dd%d: ", quant, faces);
     for(int i = 0; i < quant; i++){
-        sum += roll(faces);
+        int temp = roll(faces);
+        printf("%d ", temp);
+        sum += temp;
+        if(i != quant - 1){
+            printf("+ ");
+        }
     }
+    printf("= %d\n", sum);
     return sum;
 }
 
@@ -345,22 +352,22 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         if(rollTotal >= charMonAC[targID]){
             hit = true;
             printName(idNum);
-            printf(" successfully hit ");
+            printf("rolled a %d for a total of %d and successfully hit ", dieRoll, rollTotal);
             printName(targID);
             printf(" for ");
         } else {
             printName(idNum);
-            printf(" failed to hit ");
+            printf(" rolled a %d for a total of %d and failed to hit ", dieRoll, rollTotal);
             printName(targID);
             printf(".\n");
         }
     } else {
         if(attackBonus == 1){
             rollTotal = roll(20) + charMonStr[targID];
-            damMod = charMonStr[targID];
+            damMod = charMonStr[idNum];
         } else if(attackBonus == 2){
             rollTotal = roll(20) + charMonDex[targID];
-            damMod = charMonDex[targID];
+            damMod = charMonDex[idNum];
         } else if(attackBonus == 3){
             rollTotal = roll(20) + charMonCon[targID];
         } else if(attackBonus == 4){
@@ -373,12 +380,12 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         if(rollTotal < (8 + attackBonus)){
             hit = true;
             printName(targID);
-            printf(" could not resist ");
+            printf(" rolled a %d for a total of %d and could not resist ", dieRoll, rollTotal);
             printName(idNum);
             printf("'s spell and took ");
         } else {
             printName(targID);
-            printf(" was able to resist ");
+            printf(" rolled a %d for a total of %d and was able to resist ", dieRoll, rollTotal);
             printName(idNum);
             printf("'s spell.\n");
         }
@@ -412,6 +419,10 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                 printName(targID);
                 printf(" succumbs to its wounds and perishes.\n");
                 charMonMapMarker[targID] = '_';
+                charMonXPos[25];
+                charMonYPos[25];
+                setIDMap();
+                setMapDisplay();
 
             } else {
                 printName(targID);
