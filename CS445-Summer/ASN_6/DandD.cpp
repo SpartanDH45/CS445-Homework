@@ -336,8 +336,10 @@ void attack(int idNum, int type, int mod, int targX, int targY){
     }
     if(attackBonus == 1){
         attackBonus = charMonStr[idNum] + charMonProf[idNum];
+        damMod = charMonStr[idNum];
     } else if(attackBonus == 2){
         attackBonus = charMonDex[idNum] + charMonProf[idNum];
+        damMod = charMonDex[idNum];
     } else if(attackBonus == 3){
         attackBonus = charMonCon[idNum] + charMonProf[idNum];
     } else if(attackBonus == 4){
@@ -398,7 +400,8 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             dieQuant = dieType/100;
             dieType = dieType - (dieQuant * 100);
         }
-        damage = rollMult(dieQuant, dieType) + damMod;
+        damage = rollMult(dieQuant, dieType);
+        damage += damMod;
         printf("%d damage!\n", damage);
         charMonHP[targID] -= damage;
         if(charMonHP[targID] < 0){
