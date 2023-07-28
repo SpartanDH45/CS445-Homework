@@ -622,7 +622,7 @@ int main(){
                     //Take Turn
                     printMap(mapDisplay);
                     if(j > pcCount-1 && charMonHP[j] > 0){
-                        printf("Monster turn. Initiative: %d.\n", i);
+                        printf("Monster turn. Initiative: %d Location: (%d, %d).\n", i, charMonXPos[j], charMonYPos[j]);
                         monsterTurn(j);
                     } else {
                         printName(j);
