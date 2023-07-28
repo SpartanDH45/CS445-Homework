@@ -580,7 +580,7 @@ void playerTurn(int idNum){
                 }
             }
             if(choice == 3){
-                turnEnd == true;
+                turnEnd = true;
             }
         }
     }
