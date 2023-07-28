@@ -42,7 +42,7 @@ void printMap(char *map){
         } else if( i > -1) {
             printf("X");
         } else {
-            printf("  ");
+            printf("   ");
         }
         for(int j = 0; j < mapWidth; j++){
             if(i == -2){
