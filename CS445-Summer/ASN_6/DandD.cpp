@@ -455,7 +455,7 @@ void monsterTurn(int idNum){
             int currY = charMonYPos[idNum];
             for(int i = -1; i < 2; i++){
                 for(int j = -1; j < 2; j++){
-                    if(!(i == 0 && j == 0)){
+                    if(!(i == 0 && j == 0) && (currX + j > -1 && currX + j < 20 && currY + i > -1 && currY + i < 20)){
                         if(pathingMap[calcXY(currX+j, currY+i)] == 0){
                             targX = currX+j;
                             targY = currY+i;
