@@ -38,9 +38,9 @@ void printMap(char *map){
         if( i == 2 || i == 9 || i == 10 || i == 17){
             printf("|");
         } else if( i > -2) {
-            printf("X");
+            printf(" X");
         } else {
-            printf(" ");
+            printf("  ");
         }
         for(int j = 0; j < mapWidth; j++){
             if(i == -2){
@@ -70,7 +70,7 @@ void printMap(char *map){
                 }
             } else {
                 printf("%c", map[calcXY(j, i)]);
-                if(j != mapWidth-1){
+                if(j != mapWidth-1 && i != -2){
                     printf(" ");
                 }
             }
@@ -598,8 +598,10 @@ int main(){
                     //Take Turn
                     printMap(mapDisplay);
                     if(j > pcCount-1 && charMonHP[j] > 0){
+                        printf("Monster turn. Iniative:%d.\n", i);
                         monsterTurn(j);
                     } else {
+                        printf("Player turn. Iniative:%d.\n", i);
                         playerTurn(j);
                     }
                     setPathingMap();
