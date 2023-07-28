@@ -395,7 +395,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         printf("%d damage!\n", damage);
         charMonHP[targID] -= damage;
         if(charMonHP[targID] < 0){
-            charMonHP[targID] == 0;
+            charMonHP[targID] = 0;
         }
         printName(targID);
         printf("'s HP: %d\n", charMonHP[targID]);
