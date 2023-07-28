@@ -6,7 +6,7 @@ using namespace std;
 
 int roll(int faces){
     srand((unsigned) time(NULL));
-    int temp = (rand() % faces) + 1
+    int temp = (rand() % faces) + 1;
     printf("Rolled a %d\n", temp);
     return (rand() % faces + 1);
     
