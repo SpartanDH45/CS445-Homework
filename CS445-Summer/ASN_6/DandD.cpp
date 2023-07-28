@@ -396,7 +396,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             charMonHP[targID] == 0;
         }
         printName(targID);
-        printf("'s HP: %d", charMonHP[targID]);
+        printf("'s HP: %d\n", charMonHP[targID]);
         //If the target is a zombie, was dropped to 0, and it wasn't from a crit/spell
         if(charMonHP[targID] == 0){
             if(charMonMapMarker[targID] == 'Z' && (dieRoll == 20 || save != 0)){
