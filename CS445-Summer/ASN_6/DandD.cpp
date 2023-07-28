@@ -616,8 +616,8 @@ int main(){
     int gameState = 0;
     while(gameState == 0){
         for(int i = 25; i > -5; i--){
-            for(int j = 0; j < entityCount; i++){
-                printf("%d : %d", i, initiative[j]);
+            for(int j = 0; j < entityCount; j++){
+                //printf("%d : %d"\n, i, initiative[j]);
                 if(i == initiative[j]){
                     //Take Turn
                     printMap(mapDisplay);
