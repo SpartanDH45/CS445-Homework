@@ -5,7 +5,11 @@
 using namespace std;
 
 int roll(int faces){
+    srand((unsigned) time(NULL));
+    int temp = (rand() % faces) + 1
+    printf("Rolled a %d\n", temp);
     return (rand() % faces + 1);
+    
 }
 
 int rollMult(int quant, int faces){
@@ -573,7 +577,7 @@ void playerTurn(int idNum){
                 } else if(attackChoice == 3){
                     choice = 0;
                 } else {
-                    printf("Invalid choice. Try again.");
+                    printf("Invalid choice. Try again.\n");
                 }
             }
             if(choice == 3){
@@ -584,7 +588,6 @@ void playerTurn(int idNum){
 }
 
 int main(){
-    srand((unsigned) time(NULL));
     setCharMon(0, dhulgenStats, 'D', 9, 18);
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
@@ -607,6 +610,8 @@ int main(){
     int initiative[100];
     for(int i = 0; i < entityCount; i++){
         initiative[i] = roll(20)+charMonDex[i];
+        printName(i);
+        printf(": ID(%d), Initiative(%d)\n", i, initiative[i]);
     }
     int gameState = 0;
     while(gameState == 0){
