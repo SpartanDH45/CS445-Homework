@@ -16,23 +16,7 @@ int rollMult(int quant, int faces){
     return sum;
 }
 
-//Returns a modifier to attack rolls. If objects in the way there is a -2 penalty
-//If the target is out of range the penalty will be set to -200 and be considered
-//Not a valid target
-int checkTarget(int srcX, int srcY, int targX, int targY, int range){
-    int diffX = srcX-targX;
-    int diffY = srcY-targY;
-    int penalty = 0;
-    // If the attack is out of range
-    if((diffX*diffX)+(diffY*diffY)>(range*range)){
-        if(!((diffX*diffX)+(diffY*diffY) == 2 && range == 1)){
-            penalty = -20;
-        }
-    } else if((diffX*diffX)+(diffY*diffY) == 2 && range > 1){
-        penalty -= 3; //Penalty for shooting into melee
-    }
-    return penalty;
-}
+
 int mapWidth = 20;
 int mapHeight = 20;
 
@@ -43,13 +27,29 @@ int calcXY(int x, int y){
 
 
 void printMap(char *map){
-    for(int i = -1; i <= mapHeight; i++){
+    for(int i = -2; i <= mapHeight; i++){
+        if( i > -1){
+            if( i < 9 ){
+                printf(" %d", i+1);
+            } else {
+                printf("%d", i+1);
+            }
+        }
         if( i == 2 || i == 9 || i == 10 || i == 17){
             printf("|");
-        } else {
+        } else if( i > -2) {
             printf("X");
+        } else {
+            printf(" ");
         }
         for(int j = 0; j < mapWidth; j++){
+            if(i == -2){
+                if( j < 9 ){
+                    printf("%d ", j+1);
+                } else {
+                    printf("%d", j+1);
+                }
+            }
             if(i == -1 && (j == 2 || j == 6 || j == 7 || j == 12 || j == 13 || j == 17)){
                 if(j == 6 || j == 12){
                     printf("==");
@@ -129,7 +129,23 @@ char mapDisplay[500];
 char mapBackground[500] = "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
 int idMap[500];
 int pathingMap[500] = {-1};
+int pcCount = 4;
 int entityCount = 0;
+
+char printName(int idNum){
+    if(charMonMapMarker[idNum] == 'D'){
+        printf("Dhulgen");
+    } else if(charMonMapMarker[idNum] == 'O'){
+        printf("Ogrim");
+    } else if(charMonMapMarker[idNum] == 'K'){
+        printf("Kolgar");
+    } else if(charMonMapMarker[idNum] == 'T'){
+        printf("Torbin");
+    } else if(charMonMapMarker[idNum] == 'Z'){
+        printf("Zombie");
+    }
+    return ' ';
+}
 
 void setCharMon(int idNum, int *stats, char marker, int x, int y){
     charMonHP[idNum] = stats[0];
@@ -212,27 +228,28 @@ void setPathingMap(){
         }
     }
     for(int i = 0; i < 4; i++){
-        int startX = charMonXPos[i];
-        int startY = charMonYPos[i];
-        int currX = startX;
-        int currY = startY;
-        int radius = 1;
-        pathingMap[calcXY(startX, startY)] = 0;
-        //While there is a part of the map not seen by the scan
-        while(currX - radius > -1 || currX + radius < 20 || currY - radius > -1 || currY + radius < 20){
-            for(int circOffset = 0; circOffset <= radius; circOffset++){
-                checkSetPath(startX-radius, startY+circOffset);
-                checkSetPath(startX-radius, startY-circOffset-1);
-                checkSetPath(startX+radius, startY+circOffset);
-                checkSetPath(startX+radius, startY-circOffset-1);
-                checkSetPath(startX+circOffset, startY-radius);
-                checkSetPath(startX-circOffset-1, startY-radius);
-                checkSetPath(startX+circOffset, startY+radius);
-                checkSetPath(startX-circOffset-1, startY+radius);
+        if(charMonHP[i] != 0){
+            int startX = charMonXPos[i];
+            int startY = charMonYPos[i];
+            int currX = startX;
+            int currY = startY;
+            int radius = 1;
+            pathingMap[calcXY(startX, startY)] = 0;
+            //While there is a part of the map not seen by the scan
+            while(currX - radius > -1 || currX + radius < 20 || currY - radius > -1 || currY + radius < 20){
+                for(int circOffset = 0; circOffset <= radius; circOffset++){
+                    checkSetPath(startX-radius, startY+circOffset);
+                    checkSetPath(startX-radius, startY-circOffset-1);
+                    checkSetPath(startX+radius, startY+circOffset);
+                    checkSetPath(startX+radius, startY-circOffset-1);
+                    checkSetPath(startX+circOffset, startY-radius);
+                    checkSetPath(startX-circOffset-1, startY-radius);
+                    checkSetPath(startX+circOffset, startY+radius);
+                    checkSetPath(startX-circOffset-1, startY+radius);
+                }
+                radius++;
             }
-            radius++;
         }
-
     }
 }
 
@@ -278,13 +295,12 @@ void spawnMob(int idNum, int *stats, char marker){
 }
 
 void moveChar(int idNum, int x, int y){
-    mapDisplay[calcXY(charMonXPos[idNum], charMonYPos[idNum])] = mapBackground[calcXY(charMonXPos[idNum], charMonYPos[idNum])];
     charMonXPos[idNum] = x;
     charMonYPos[idNum] = y;
-    mapDisplay[calcXY(x,y)] = charMonMapMarker[idNum];
+    setMapDisplay();
 }
 
-void attack(int idNum, char type, int mod, int targX, int targY){
+void attack(int idNum, int type, int mod, int targX, int targY){
     int attackBonus;
     int targID = idMap[calcXY(targX,targY)];
     int dieType;
@@ -295,7 +311,7 @@ void attack(int idNum, char type, int mod, int targX, int targY){
     int dieRoll = roll(20);
     int rollTotal;
     int damage;
-    if(type = 'm'){
+    if(type = 1){
         attackBonus = charMonAttackMAbl[idNum];
         dieType = charMonAttackMDam[idNum];
     } else {
@@ -317,15 +333,14 @@ void attack(int idNum, char type, int mod, int targX, int targY){
         attackBonus = charMonCha[idNum] + charMonProf[idNum];
     }
     if(save == 0){
-        rollTotal = dieRoll + attackBonus;
+        rollTotal = dieRoll + attackBonus + mod;
         if(rollTotal >= charMonAC[targID]){
             hit = true;
-            printf("%c successfully hit %c for ", charMonMapMarker[idNum], charMonMapMarker[targID]);
+            printf("%csuccessfully hit %cfor ", printName(idNum), printName(targID));
         } else {
-            printf("%c failed to hit %c.\n", charMonMapMarker[idNum], charMonMapMarker[targID]);
+            printf("%cfailed to hit %c.\n", printName(idNum), printName(targID));
         }
     } else {
-
         if(attackBonus == 1){
             rollTotal = roll(20) + charMonStr[targID];
             damMod = charMonStr[targID];
@@ -343,9 +358,9 @@ void attack(int idNum, char type, int mod, int targX, int targY){
         }
         if(rollTotal < (8 + attackBonus)){
             hit = true;
-            printf("%c could not resist %c's spell and took ", charMonMapMarker[targID], charMonMapMarker[idNum]);
+            printf("%ccould not resist %c's spell and took ", printName(targID), printName(idNum));
         } else {
-            printf("%c was able to resist %c's spell.\n", charMonMapMarker[targID], charMonMapMarker[idNum]);
+            printf("%cwas able to resist %c's spell.\n", printName(targID), printName(idNum));
         }
     }
     if(hit == true){
@@ -358,34 +373,100 @@ void attack(int idNum, char type, int mod, int targX, int targY){
         }
         damage = rollMult(dieQuant, dieType) + damMod;
         printf("%d damage!\n", damage);
-        
+        charMonHP[targID] -= damage;
+        if(charMonHP[targID] < 0){
+            charMonHP[targID] == 0;
+        }
+        //If the target is a zombie, was dropped to 0, and it wasn't from a crit/spell
+        if(charMonHP[targID] == 0){
+            if(charMonMapMarker[targID] == 'Z' && (dieRoll == 20 || save != 0)){
+                if(roll(20) + charMonCon[targID] > 5 + damage){
+                    charMonHP[targID] = 1;
+                    printf("Using its undead fortitude, the zombie won't stay down!\n");
+                }
+            }
+            if(targID > pcCount-1){
+                printf("The %csuccumbs to its wounds and perishes.\n", printName(targID));
+                charMonMapMarker[targID] = '_';
+
+            } else {
+                printf("%c falls unconscious!\n", printName(targID));
+                setPathingMap();
+            }
+        }
     }
     
 }
 
+//Returns a modifier to attack rolls. If objects in the way there is a -2 penalty
+//If the target is out of range the penalty will be set to -20 and be considered
+//Not a valid target
+int checkTarget(int idNum, int targX, int targY, int range){
+    int diffX = charMonXPos[idNum]-targX;
+    int diffY = charMonYPos[idNum]-targY;
+    int penalty = 0;
+    // If the attack is out of range
+    if((diffX*diffX)+(diffY*diffY)>(range*range)){
+        if(!((diffX*diffX)+(diffY*diffY) == 2 && range == 1)){
+            penalty = -20;
+        }
+    } else if((diffX*diffX)+(diffY*diffY) == 2 && range > 1){
+        penalty -= 3; //Penalty for shooting into melee
+    }
+    return penalty;
+}
+
 void monsterTurn(int idNum){
     int movePool = charMonSpd[idNum];
+    int attackPool = charMonAttackNum[idNum];
     int targX = -1;
     int targY = -1;
     bool attacked = false;
-    while(movePool > 0 && targX != -1){
-        int lowest = 99;
-        int currX = charMonXPos[idNum];
-        int currY = charMonYPos[idNum];
-        for(int i = -1; i < 2; i++){
-            for(int j = -1; j < 2; j++){
-                if(!(i == 0 && j == 0)){
-                    if(pathingMap[calcXY(currX+j, currY+i)] == 0){
-                        targX = currX+j;
-                        targY = currY+i;
-                    } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
-                        moveChar(idNum, currX+j, currY+i);
+    while(attackPool > 0 || movePool > 0){
+        while(movePool > 0 && targX != -1){
+            int lowest = 99;
+            int lowX;
+            int lowY;
+            int currX = charMonXPos[idNum];
+            int currY = charMonYPos[idNum];
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    if(!(i == 0 && j == 0)){
+                        if(pathingMap[calcXY(currX+j, currY+i)] == 0){
+                            targX = currX+j;
+                            targY = currY+i;
+                        } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
+                            lowest = pathingMap[calcXY(currX+j, currY+i)];
+                            lowX = currX + j;
+                            lowY = currY + i;
+                        }
                     }
                 }
             }
+            if(targX == -1){
+                moveChar(idNum, lowX, lowY);
+                printMap(mapDisplay);
+                movePool--;
+            }
+        }
+        for(int i = -1; i < 2; i++){
+            for(int j = -1; j < 2; j++){
+                if(!(i == 0 && j == 0)){
+                    if(pathingMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] == 0){
+                        targX = charMonXPos[idNum]+j;
+                        targY = charMonYPos[idNum]+i;
+                    }
+                }
+            }
+            
+        }
+        if(targX == -1){
+            attackPool = 0;
+        } else {
+            attack(idNum, 1, 0, targX, targY);
+            attackPool--;
         }
     }
-     
 }
 
 void playerTurn(int idNum){
@@ -395,28 +476,92 @@ void playerTurn(int idNum){
     bool turnEnd = false;
     int choice = 0;
     while(turnEnd == false){
-        if(movePool > 0 && actionUsed == false){
-            while(choice == 0){
-                printf("Choose: 1-attack, 2-move, 3-use special, or 4-end turn?\n");
-                printf("You have d% squares of movement left.\n", movePool);
-                if(choice < 1 || choice > 4){
-                    printf("Invalid Choice.\n");
-                    choice = 0;
-                }
-            }
-            
-        } else if(movePool > 0 && actionUsed == true){
-            while(choice == 0){
-                printf("Choose: 2-move or 4-end turn?\n");
-                printf("You have d% squares of movement left.\n", movePool);
-                if(choice < 1 || choice > 4){
-                    printf("Invalid Choice.\n");
-                    choice = 0;
-                }
-            }
-            
+        printf("Choose: ");
+        if(movePool > 0){
+            printf("1 (move), ");
         }
-        
+        if(attackPool > 0){
+            printf("2 (attack), ");
+        }
+        printf("3 (end turn).\n");
+        printf("You have %d square(s) of movement and %d attack(s)", movePool, attackPool);
+        cin >> choice;
+        if(choice < 0 || choice > 3){
+            printf("Invalid choice. Try again.\n");
+        } else {
+            while(choice == 1 && movePool > 0){
+                int moveChoice = 0;
+                int currX = charMonXPos[idNum];
+                int currY = charMonYPos[idNum];
+                printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)\n");
+                cin >> moveChoice;
+                if(moveChoice == 1 && mapDisplay[calcXY(currX, currY-1)] == '_'){
+                    moveChar(idNum, currX, currY-1);
+                    movePool--;
+                } else if(moveChoice == 2 && mapDisplay[calcXY(currX-1, currY)] == '_'){
+                    moveChar(idNum, currX-1, currY);
+                    movePool--;
+                } else if(moveChoice == 3 && mapDisplay[calcXY(currX+1, currY)] == '_'){
+                    moveChar(idNum, currX+1, currY);
+                    movePool--;
+                } else if(moveChoice == 4 && mapDisplay[calcXY(currX, currY+1)] == '_'){
+                    moveChar(idNum, currX, currY+1);
+                    movePool--;
+                } else if(moveChoice == 5){
+                    choice = 0;
+                } else {
+                    printf("Invalid input or the space was occupied. Try again.\n");
+                }
+                printMap(mapDisplay);
+            }
+            while(choice == 2 && attackPool > 0){
+                int attackChoice = 0;
+                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).\n");
+                cin >> attackChoice;
+                if(attackChoice == 1 || attackChoice == 2){
+                    int range = charMonAttackMRan[idNum];
+                    if(attackChoice == 2){
+                        range = charMonAttackRRan[idNum];
+                    }
+                    int targX = -1;
+                    int targY = -1;
+                    while(targX == -1){
+                        printMap(mapDisplay);
+                        printf("Attack range: %d squares.\n", range);
+                        printf("What is the x value of the target? (Enter 0 to cancel attack)\n");
+                        cin >> targX;
+                        if(targX != 0){
+                            printf("What is the y value of the target?\n");
+                            cin >> targY;
+                            if(targX > 0 && targX < 21 && targY > 0 && targY < 21){
+                                targX--;
+                                targY--;
+                                int mod = checkTarget(idNum, targX, targY, range);
+                                if(mod < -19){
+                                    printf("Target is out of range. Choose another option or set x to 0 to cancel.\n");
+                                    targX == -1;
+                                    targY == -1;
+                                } else {
+                                    attack(idNum, attackChoice, mod, targX, targY);
+                                    attackPool--;
+                                }
+                            } else {
+                                printf("Target is not on the map. What are you aiming at?\n");
+                            }
+                        } else {
+                            choice = 0;
+                        }
+                    }
+                } else if(attackChoice == 3){
+                    choice = 0;
+                } else {
+                    printf("Invalid choice. Try again.");
+                }
+            }
+            if(choice == 3){
+                turnEnd == true;
+            }
+        }
     }
 }
 
@@ -451,13 +596,36 @@ int main(){
             for(int j = 0; j < entityCount; i++){
                 if(i == initiative[j]){
                     //Take Turn
-                    if(j > 3){
+                    printMap(mapDisplay);
+                    if(j > pcCount-1 && charMonHP[j] > 0){
                         monsterTurn(j);
                     } else {
                         playerTurn(j);
                     }
+                    setPathingMap();
                 }
             }
         }
+        gameState = -1;
+        for(int i = 0; i < pcCount; i++){
+            if(charMonHP[i] > 0){
+                gameState = 0;
+            }
+        }
+        if(gameState == 0){
+            gameState = 1;
+            for(int i = pcCount; i < entityCount; i++){
+                if(charMonHP[i] > 0){
+                    gameState = 0;
+                }
+            }
+        }
+        
+        
+    }
+    if(gameState == 1){
+        printf("You have successfully cleansed your temple of the monsters!\n");
+    } else {
+        printf("Sadly, your party has fallen at the hands of the monsters...\n");
     }
 }
