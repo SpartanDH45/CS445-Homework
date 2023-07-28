@@ -469,6 +469,9 @@ void monsterTurn(int idNum){
                     }
                 }
             }
+            if(lowest > 90){
+                movePool = 0;
+            }
             if(targX == -1){
                 moveChar(idNum, lowX, lowY);
                 printMap(mapDisplay);
