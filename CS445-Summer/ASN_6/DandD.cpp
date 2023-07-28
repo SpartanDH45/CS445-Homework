@@ -624,7 +624,8 @@ int main(){
                         printf("Monster turn. Initiative: %d.\n", i);
                         monsterTurn(j);
                     } else {
-                        printf("Player turn. Initiative: %d.\n", i);
+                        printName(j);
+                        printf("'s turn. Initiative: %d.\n", i);
                         playerTurn(j);
                     }
                     setPathingMap();
