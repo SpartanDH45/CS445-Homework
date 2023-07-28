@@ -317,7 +317,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
     int dieRoll = roll(20);
     int rollTotal;
     int damage;
-    if(type = 1){
+    if(type == 1){
         attackBonus = charMonAttackMAbl[idNum];
         dieType = charMonAttackMDam[idNum];
     } else {
@@ -444,7 +444,9 @@ void monsterTurn(int idNum){
     int targY = -1;
     bool attacked = false;
     while(attackPool > 0 || movePool > 0){
+        printf("Looptestout\n");
         while(movePool > 0 && targX != -1){
+            printf("LooptestIn\n");
             int lowest = 99;
             int lowX;
             int lowY;
@@ -456,10 +458,12 @@ void monsterTurn(int idNum){
                         if(pathingMap[calcXY(currX+j, currY+i)] == 0){
                             targX = currX+j;
                             targY = currY+i;
+                            printf("Found target.\n");
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
                             lowY = currY + i;
+                            printf("New lowest: %d at (%d,%d)\n", lowest, lowX, lowY);
                         }
                     }
                 }
