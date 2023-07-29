@@ -727,7 +727,7 @@ int main(){
                         if(charMonHP[j] == 0){
                             if(deathSavesSuccFail[j] % 10 != 3){
                                 printName(j);
-                                printf(" needs to make a death saving throw. Press enter to roll.\n");
+                                printf(" needs to make a death saving throw. Enter anything to roll.\n");
                                 char temp;
                                 cin >> temp;
                                 int deathSave = roll(20);
@@ -737,7 +737,7 @@ int main(){
                                     deathSavesSuccFail[j] += 10;
                                 } else {
                                     printf("Failure...\n");
-                                    deathSavesSuccFail[j] += 10;
+                                    deathSavesSuccFail[j] += 1;
                                 }
                                 printName(j);
                                 if(deathSavesSuccFail[j] % 10 == 3){
@@ -753,8 +753,10 @@ int main(){
                                 }
                             } else {
                                 printName(j);
-                                printf("'s body lies motionless on the ground.\n");
-                                
+                                printf("'s body lies motionless on the ground.\n...\n...\n");
+                                printf("Enter anything to pass the turn.\n");
+                                char temp;
+                                cin >> temp;
                             }
                         } else {
                             playerTurn(j);
