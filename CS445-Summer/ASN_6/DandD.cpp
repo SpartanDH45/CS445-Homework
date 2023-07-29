@@ -294,7 +294,7 @@ void setMapDisplay(){
         }
     }
     for(int i = 0; i < entityCount; i++){
-        if(charMonHP[i] > 0 || i < pcCount){
+        if(charMonHP[i] > 0){
             int x = charMonXPos[i];
             int y = charMonYPos[i];
             mapDisplay[calcXY(x,y)] = charMonMapMarker[i];
@@ -463,6 +463,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             } else {
                 printName(targID);
                 printf(" falls unconscious!\n");
+                setIDMap();
                 setPathingMap();
             }
         }
@@ -541,7 +542,7 @@ void monsterTurn(int idNum){
         }
         if(targX == -1){
             attackPool = 0;
-        } else {
+        } else if(attackPool > 0){
             attack(idNum, 1, 0, targX, targY);
             //printf("Attackpool: %d\n", attackPool);
             attackPool--;
@@ -549,6 +550,9 @@ void monsterTurn(int idNum){
                 targX = -1;
                 movePool = 0;
             }
+        } else if(attackPool < 0){
+            printf("Error, aborting turn.\n");
+            movePool = 0;
         }
     }
 }
