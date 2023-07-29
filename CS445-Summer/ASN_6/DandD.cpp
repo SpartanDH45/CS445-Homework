@@ -533,12 +533,12 @@ void monsterTurn(int idNum){
                         if(idMap[calcXY(currX+j, currY+i)] < pcCount && idMap[calcXY(currX+j, currY+i)] > -1 && charMonHP[idMap[calcXY(currX + j,currY + i)]] > 0){
                             targX = currX+j;
                             targY = currY+i;
-                            printf("Found target: (%d, %d)\n", targX+1, targY+1);
+                            //printf("Found target: (%d, %d)\n", targX+1, targY+1);
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest && (i != j && i != j * -1)){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
                             lowY = currY + i;
-                            printf("New lowest: %d at (%d,%d)\n", lowest, lowX+1, lowY+1);
+                            //printf("New lowest: %d at (%d,%d)\n", lowest, lowX+1, lowY+1);
                         }
                     }
                 }
@@ -569,7 +569,7 @@ void monsterTurn(int idNum){
         } else if(attackPool > 0){
             attack(idNum, 1, 0, targX, targY);
             attackPool--;
-            printf("Attackpool: %d\n", attackPool);
+            //printf("Attackpool: %d\n", attackPool);
             if(charMonHP[idMap[calcXY(targX,targY)]] != 0 && attackPool == 0){
                 movePool = 0;
             }
