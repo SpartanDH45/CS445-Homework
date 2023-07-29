@@ -229,6 +229,8 @@ void checkSetPath(int x, int y){
                 temp = 99;
             }
             pathingMap[calcXY(x, y)] = temp;
+        } else {
+            pathingMap[calcXY(x, y)] = 99;
         }
     }
     
@@ -243,7 +245,7 @@ void setPathingMap(){
         }
     }
     for(int i = 0; i < 4; i++){
-        if(charMonHP[i] != 0){
+        if(charMonHP[i] > 0){
             int startX = charMonXPos[i];
             int startY = charMonYPos[i];
             int currX = startX;
@@ -521,7 +523,7 @@ void monsterTurn(int idNum){
             }
             if(lowest > 90){
                 movePool = 0;
-            } else if(targX == -1){
+            } else if(targX == -1 && mapDisplay[lowX]){
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
                 printf(" moves to (%d, %d)\n", lowX+1, lowY+1);
