@@ -229,7 +229,7 @@ void checkSetPath(int x, int y){
                 temp = 99;
             }
             pathingMap[calcXY(x, y)] = temp;
-        } else {
+        } else if(idMap[calcXY(x,y)] > pcCount-1 || idMap[calcXY(x,y)] < 0){
             pathingMap[calcXY(x, y)] = 99;
         }
     }
