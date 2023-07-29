@@ -237,11 +237,9 @@ void checkSetPath(int x, int y){
 }
 
 void setPathingMap(){
-    if(pathingMap[0] == -1){
-        for(int i = 0; i < mapHeight; i++){
-            for(int j = 0; j < mapWidth; j++){
-                pathingMap[calcXY(j, i)] = 99;
-            }
+    for(int i = 0; i < mapHeight; i++){
+        for(int j = 0; j < mapWidth; j++){
+            pathingMap[calcXY(j, i)] = 99;
         }
     }
     for(int i = 0; i < 4; i++){
