@@ -728,7 +728,7 @@ int main(){
                             if(deathSavesSuccFail[j] % 10 != 3){
                                 printName(j);
                                 printf(" needs to make a death saving throw. Press enter to roll.\n");
-                                int temp;
+                                char temp;
                                 cin >> temp;
                                 int deathSave = roll(20);
                                 printf("Death save: %d. ", deathSave);
