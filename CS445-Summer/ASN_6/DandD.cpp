@@ -643,6 +643,7 @@ int main(){
         printName(i);
         printf(": ID(%d), Initiative(%d)\n", i, initiative[i]);
     }
+    int deathSavesSuccFail[4] = {0,0,0,0};
     int gameState = 0;
     while(gameState == 0){
         for(int i = 25; i > -5; i--){
@@ -654,10 +655,39 @@ int main(){
                     if(j > pcCount-1 && charMonHP[j] > 0){
                         printf("Monster turn. Initiative: %d Location: (%d, %d).\n", i, charMonXPos[j], charMonYPos[j]);
                         monsterTurn(j);
-                    } else {
+                    } else  if(j < pcCount){
                         printName(j);
                         printf("'s turn. Initiative: %d.\n", i);
-                        playerTurn(j);
+                        if(charMonHP[j] == 0){
+                            if(deathSavesSuccFail[j] % 10 != 3){
+                                int deathSave = roll(20);
+                                printf("Death save: %d. ", deathSave);
+                                if(deathSave > 10){
+                                    printf("Success!\n");
+                                    deathSavesSuccFail[j] += 10;
+                                } else {
+                                    printf("Failure...\n");
+                                    deathSavesSuccFail[j] += 10;
+                                }
+                                printName(j);
+                                if(deathSavesSuccFail[j] % 10 == 3){
+                                    printf(" succumbs to his injuries and dies.\n");
+                                } else if(deathSavesSuccFail[j] / 10){
+                                    printf(" stablizes and returns to consciousness.\n");
+                                    deathSavesSuccFail[j] = 0;
+                                    charMonHP[j] = 1;
+                                } else {
+                                    printf(" has %d successes and %d failures.\n", )
+                                }
+                            } else {
+                                printName(j);
+                                printf("'s body lies motionless on the ground.\n",deathSavesSuccFail[j] / 10, deathSavesSuccFail[j] % 10);
+                                printf("He will stabilize after % more successes. \nHe will die after %d more failures.\n",
+                                3 - (deathSavesSuccFail[j] / 10), 3 - (deathSavesSuccFail[j] % 10));
+                            }
+                        } else {
+                            playerTurn(j);
+                        }
                     }
                     setPathingMap();
                 }
