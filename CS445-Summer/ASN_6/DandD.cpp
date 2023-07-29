@@ -744,7 +744,7 @@ int main(){
                                     charMonHP[j] = 1;
                                 } else {
                                     printf(" has %d successes and %d failures.\n", deathSavesSuccFail[j] / 10, deathSavesSuccFail[j] % 10);
-                                    printf("He will stabilize after % more successes. \nHe will die after %d more failures.\n",
+                                    printf("He will stabilize after %d more successes. \nHe will die after %d more failures.\n",
                                     3 - (deathSavesSuccFail[j] / 10), 3 - (deathSavesSuccFail[j] % 10));
                                 }
                             } else {
