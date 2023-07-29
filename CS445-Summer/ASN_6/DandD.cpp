@@ -622,7 +622,7 @@ int main(){
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
     setCharMon(3, torbinStats, 'T', 10, 19);
-    for(int i = 4; i < 24; i++){
+    for(int i = 4; i < 14; i++){
         spawnMob(i, zombieDefault, 'Z');
     }
     setIDMap();
