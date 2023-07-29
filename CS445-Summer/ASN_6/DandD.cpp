@@ -404,7 +404,8 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             dieType = dieType - (dieQuant * 100);
         }
         damage = rollMult(dieQuant, dieType);
-        if(rogueSkAtkUsed == false && getLowestNeighbor(targX, targY) == 0){
+        if(rogueSkAtkUsed == false && getLowestNeighbor(targX, targY) == 0 && idNum == 3){
+            printf("Sneak attack: ");
             damage += rollMult(3, 6);
         }
         if(save == 0 && dieRoll == 20){
@@ -656,6 +657,7 @@ int main(){
     while(gameState == 0){
         for(int i = 25; i > -5; i--){
             for(int j = 0; j < entityCount; j++){
+                rogueSkAtkUsed = false;
                 //printf("%d : %d"\n, i, initiative[j]);
                 if(i == initiative[j]){
                     //Take Turn
