@@ -596,14 +596,18 @@ void playerTurn(int idNum){
                             if(targX > 0 && targX < 21 && targY > 0 && targY < 21){
                                 targX--;
                                 targY--;
-                                int mod = checkTarget(idNum, targX, targY, range);
-                                if(mod < -19){
-                                    printf("Target is out of range. Choose another option or set x to 0 to cancel.\n");
-                                    targX == -1;
-                                    targY == -1;
+                                if(idMap[calcXY(targX, targY)] > -1){
+                                    int mod = checkTarget(idNum, targX, targY, range);
+                                    if(mod < -19){
+                                        printf("Target is out of range. Choose another option or set x to 0 to cancel.\n");
+                                        targX == -1;
+                                        targY == -1;
+                                    } else {
+                                        attack(idNum, attackChoice, mod, targX, targY);
+                                        attackPool--;
+                                    }
                                 } else {
-                                    attack(idNum, attackChoice, mod, targX, targY);
-                                    attackPool--;
+                                    printf("There isn't anyone in that spot.\n");
                                 }
                             } else {
                                 printf("Target is not on the map. What are you aiming at?\n");
