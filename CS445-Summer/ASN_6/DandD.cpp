@@ -411,6 +411,10 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                     if(!(i == 0 && j == 0) && (targX + j > -1 && targX + j < 20 && targY + i > -1 && targY + i < 20)){
                         if(pathingMap[calcXY(targX+j, targY+i)] == 0){
                             allyAdj == true;
+                        }
+                    }
+                }
+            }
             if(allyAdj == true){
                 printf("Sneak attack: ");
                 damage += rollMult(3, 6);
