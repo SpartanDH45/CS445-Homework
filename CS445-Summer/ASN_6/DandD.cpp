@@ -474,7 +474,7 @@ void monsterTurn(int idNum){
     bool attacked = false;
     while(attackPool > 0 || movePool > 0){
         while(movePool > 0 && targX == -1){
-            printf("LooptestIn\n");
+            //printf("LooptestIn\n");
             int lowest = 99;
             int lowX;
             int lowY;
@@ -486,12 +486,12 @@ void monsterTurn(int idNum){
                         if(pathingMap[calcXY(currX+j, currY+i)] == 0){
                             targX = currX+j;
                             targY = currY+i;
-                            printf("Found target.\n");
+                            //printf("Found target.\n");
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
                             lowY = currY + i;
-                            printf("New lowest: %d at (%d,%d)\n", lowest, lowX, lowY);
+                            //printf("New lowest: %d at (%d,%d)\n", lowest, lowX, lowY);
                         }
                     }
                 }
@@ -501,6 +501,8 @@ void monsterTurn(int idNum){
             }
             if(targX == -1){
                 moveChar(idNum, lowX, lowY);
+                printName(idNum);
+                printf(" moves to (%d, %d)", lowX+1, lowY+1);
                 movePool--;
             }
         }
