@@ -230,7 +230,7 @@ void checkSetPath(int x, int y){
                 temp = 99;
             }
             pathingMap[calcXY(x, y)] = temp;
-        } else if(idMap[calcXY(x,y)] > pcCount-1 || idMap[calcXY(x,y)] < 0){
+        } else if((idMap[calcXY(x,y)] > pcCount-1 || idMap[calcXY(x,y)] < 0) || charMonHP[idMap[calcXY(x,y)]] == 0){
             pathingMap[calcXY(x, y)] = 99;
         }
     }
@@ -530,7 +530,7 @@ void monsterTurn(int idNum){
             for(int i = -1; i < 2; i++){
                 for(int j = -1; j < 2; j++){
                     if(!(i == 0 && j == 0) && (currX + j > -1 && currX + j < 20 && currY + i > -1 && currY + i < 20)){
-                        if(idMap[calcXY(currX+j, currY+i)] < pcCount && idMap[calcXY(currX+j, currY+i)] > -1){
+                        if(idMap[calcXY(currX+j, currY+i)] < pcCount && idMap[calcXY(currX+j, currY+i)] > -1 && charMonHP[idMap[calcXY(currX + j,currY + i)]] > 0){
                             targX = currX+j;
                             targY = currY+i;
                             printf("Found target: (%d, %d)\n", targX+1, targY+1);
@@ -742,6 +742,8 @@ int main(){
                                 printName(j);
                                 if(deathSavesSuccFail[j] % 10 == 3){
                                     printf(" succumbs to his injuries and dies.\n");
+                                    charMonXPos[j] = 25;
+                                    charMonYPos[j] = 25;
                                 } else if(deathSavesSuccFail[j] / 10 == 3){
                                     printf(" stablizes and returns to consciousness.\n");
                                     deathSavesSuccFail[j] = 0;
@@ -753,7 +755,7 @@ int main(){
                                 }
                             } else {
                                 printName(j);
-                                printf("'s body lies motionless on the ground.\n...\n...\n");
+                                printf("'s body lies motionless on the ground.\n.\n.\n");
                                 printf("Enter anything to pass the turn.\n");
                                 char temp;
                                 cin >> temp;
