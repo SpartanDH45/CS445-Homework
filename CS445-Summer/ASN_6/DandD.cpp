@@ -675,7 +675,7 @@ int main(){
     while(gameState == 0){
         for(int i = 25; i > -5; i--){
             for(int j = 0; j < entityCount; j++){
-                rogueSkAtkUsed = false;
+                rogueSnkAtkUsed = false;
                 //printf("%d : %d"\n, i, initiative[j]);
                 if(i == initiative[j]){
                     //Take Turn
