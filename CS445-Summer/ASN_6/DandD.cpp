@@ -574,8 +574,8 @@ void monsterTurn(int idNum){
                 movePool = 0;
             }
             targX = -1;
-        } else if(attackPool < 0){
-            printf("Error, aborting turn.\n");
+        } else if(attackPool < 1){
+            //printf("Error, aborting turn.\n");
             movePool = 0;
         }
     }
