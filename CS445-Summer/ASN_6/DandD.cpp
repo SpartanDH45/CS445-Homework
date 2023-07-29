@@ -146,6 +146,7 @@ int idMap[500];
 int pathingMap[500] = {-1};
 int pcCount = 4;
 int entityCount = 0;
+bool rogueSkAtkUsed = false;
 
 void printName(int idNum){
     if(charMonMapMarker[idNum] == 'D'){
@@ -313,6 +314,7 @@ void moveChar(int idNum, int x, int y){
     charMonYPos[idNum] = y;
     setMapDisplay();
     setIDMap();
+    setPathingMap();
 }
 
 void attack(int idNum, int type, int mod, int targX, int targY){
@@ -402,6 +404,12 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             dieType = dieType - (dieQuant * 100);
         }
         damage = rollMult(dieQuant, dieType);
+        if(rogueSkAtkUsed == false && getLowestNeighbor(targX, targY) == 0){
+            damage += rollMult(3, 6);
+        }
+        if(save == 0 && dieRoll == 20){
+            damage = damage*2;
+        }
         damage += damMod;
         printf("%d damage!\n", damage);
         charMonHP[targID] -= damage;
