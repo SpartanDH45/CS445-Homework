@@ -508,7 +508,7 @@ void monsterTurn(int idNum){
             for(int i = -1; i < 2; i++){
                 for(int j = -1; j < 2; j++){
                     if(!(i == 0 && j == 0) && (currX + j > -1 && currX + j < 20 && currY + i > -1 && currY + i < 20)){
-                        if(pathingMap[calcXY(currX+j, currY+i)] == 0){
+                        if(idMap[calcXY(currX+j, currY+i)] < pcCount && idMap[calcXY(currX+j, currY+i)] > -1){
                             targX = currX+j;
                             targY = currY+i;
                             printf("Found target.\n");
@@ -533,7 +533,7 @@ void monsterTurn(int idNum){
         for(int i = -1; i < 2; i++){
             for(int j = -1; j < 2; j++){
                 if(!(i == 0 && j == 0)){
-                    if(pathingMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] == 0){
+                    if(idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] < pcCount && idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] > -1){
                         targX = charMonXPos[idNum]+j;
                         targY = charMonYPos[idNum]+i;
                     }
