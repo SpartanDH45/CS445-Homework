@@ -511,7 +511,7 @@ void monsterTurn(int idNum){
                         if(idMap[calcXY(currX+j, currY+i)] < pcCount && idMap[calcXY(currX+j, currY+i)] > -1){
                             targX = currX+j;
                             targY = currY+i;
-                            printf("Found target.\n");
+                            printf("Found target: (%d, %d)\n", targX, targY);
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
@@ -573,7 +573,7 @@ void playerTurn(int idNum){
             printf("2 (attack), ");
         }
         printf("3 (end turn).\n");
-        printf("You have %d square(s) of movement and %d attack(s)", movePool, attackPool);
+        printf("You have %d square(s) of movement and %d attack(s)\n", movePool, attackPool);
         cin >> choice;
         if(choice < 0 || choice > 3){
             printf("Invalid choice. Try again.\n");
