@@ -410,7 +410,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                 for(int j = -1; j < 2; j++){
                     if(!(i == 0 && j == 0) && (targX + j > -1 && targX + j < 20 && targY + i > -1 && targY + i < 20)){
                         if(pathingMap[calcXY(targX+j, targY+i)] == 0){
-                            allyAdj == true;
+                            allyAdj = true;
                         }
                     }
                 }
@@ -433,7 +433,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         printf("'s HP: %d\n", charMonHP[targID]);
         //If the target is a zombie, was dropped to 0, and it wasn't from a crit/spell
         if(charMonHP[targID] == 0){
-            if(charMonMapMarker[targID] == 'Z' && (dieRoll == 20 || save != 0)){
+            if(charMonMapMarker[targID] == 'Z' && (dieRoll != 20 && save != 0)){
                 if(roll(20) + charMonCon[targID] > 5 + damage){
                     charMonHP[targID] = 1;
                     printf("Using its undead fortitude, the zombie won't stay down!\n");
@@ -514,7 +514,7 @@ void monsterTurn(int idNum){
             if(targX == -1){
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
-                printf(" moves to (%d, %d)", lowX+1, lowY+1);
+                printf(" moves to (%d, %d)\n", lowX+1, lowY+1);
                 movePool--;
             }
         }
@@ -681,7 +681,7 @@ int main(){
                     //Take Turn
                     printMap(mapDisplay);
                     if(j > pcCount-1 && charMonHP[j] > 0){
-                        printf("Monster turn. Initiative: %d Location: (%d, %d).\n", i, charMonXPos[j], charMonYPos[j]);
+                        printf("Monster turn. Initiative: %d Location: (%d, %d).\n", i, charMonXPos[j]+1, charMonYPos[j]+1);
                         monsterTurn(j);
                     } else  if(j < pcCount){
                         printName(j);
