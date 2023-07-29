@@ -302,6 +302,29 @@ void setMapDisplay(){
     }
 }
 
+void printPaths(int idNum){
+    int x = charMonXPos[idNum];
+    int y = charMonYPos[idNum];
+    for(int i = -1; i < 2; i++){
+        for(int j = -1; j < 2; j++){
+            if(x + j > -1 && x + j < 20 && y + i > -1 && y + i < 20){
+                if(!(i == 0 && j == 0)){
+                    if(pathingMap[calcXY(x + j,y + i)] < 10){
+                        printf("0");
+                    }
+                    printf("%d ", pathingMap[calcXY(x + j,y + i)]);
+                } else {
+                    printf("Zo ");
+                }
+                if(j == 1){
+                    printf("\n");
+                }
+
+            }
+        }
+    }
+}
+
 void spawnMob(int idNum, int *stats, char marker){
     int x = roll(20)-1;
     int y = roll(20)-1;
@@ -519,6 +542,7 @@ void monsterTurn(int idNum){
                     }
                 }
             }
+            printPaths(idNum);
             if(lowest > 90){
                 movePool = 0;
             } else if(targX == -1 && mapDisplay[lowX]){
