@@ -511,7 +511,7 @@ void monsterTurn(int idNum){
                         if(pathingMap[calcXY(currX+j, currY+i)] == 0){
                             targX = currX+j;
                             targY = currY+i;
-                            //printf("Found target.\n");
+                            printf("Found target.\n");
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
