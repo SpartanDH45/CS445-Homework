@@ -196,17 +196,18 @@ void setCharMon(int idNum, int *stats, char marker, int x, int y){
 }
 int getLowestNeighbor(int x, int y){
     int lowest = 1000;
-    for(int i = -1; i < 2; i+=2){
-        if(y + i > -1 && y + i < mapHeight){
-            int temp = pathingMap[calcXY(x , y + i)];
-            if(temp<lowest){
-                lowest = temp;
-            }
-        }
-        if(x + i > -1 && x + i < mapWidth){
-            int temp = pathingMap[calcXY(x + i, y)];
-            if(temp<lowest){
-                lowest = temp;
+    for(int i = -1; i < 2; i++){
+        for(int j = -1; j < 2; j++){
+            if(x + j > -1 && x + j < mapWidth && y + i > -1 && y + i < mapHeight){
+                if(!(i == 0 && j == 0)){
+                    int temp = pathingMap[calcXY(x + j, y + i)];
+                    if(i != 0 && j != 0){
+                        temp++;
+                    }
+                    if(temp<lowest){
+                        lowest = temp;
+                    }
+                }
             }
         }
     }
@@ -307,7 +308,7 @@ void printPaths(int idNum){
     int y = charMonYPos[idNum];
     for(int i = -1; i < 2; i++){
         for(int j = -1; j < 2; j++){
-            if(x + j > -1 && x + j < 20 && y + i > -1 && y + i < 20){
+            if(x + j > -1 && x + j < mapWidth && y + i > -1 && y + i < mapHeight){
                 if(!(i == 0 && j == 0)){
                     if(pathingMap[calcXY(x + j,y + i)] < 10){
                         printf("0");
