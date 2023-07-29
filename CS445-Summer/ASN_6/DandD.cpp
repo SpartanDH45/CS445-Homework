@@ -571,9 +571,9 @@ void monsterTurn(int idNum){
             attackPool--;
             printf("Attackpool: %d\n", attackPool);
             if(charMonHP[idMap[calcXY(targX,targY)]] != 0 && attackPool == 0){
-                targX = -1;
                 movePool = 0;
             }
+            targX = -1;
         } else if(attackPool < 0){
             printf("Error, aborting turn.\n");
             movePool = 0;
