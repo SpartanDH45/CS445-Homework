@@ -521,8 +521,7 @@ void monsterTurn(int idNum){
             }
             if(lowest > 90){
                 movePool = 0;
-            }
-            if(targX == -1){
+            } else if(targX == -1){
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
                 printf(" moves to (%d, %d)\n", lowX+1, lowY+1);
