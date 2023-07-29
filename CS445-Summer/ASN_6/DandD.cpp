@@ -368,19 +368,19 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         }
     } else {
         if(attackBonus == 1){
-            rollTotal = roll(20) + charMonStr[targID];
+            rollTotal = dieRoll + charMonStr[targID];
             damMod = charMonStr[idNum];
         } else if(attackBonus == 2){
-            rollTotal = roll(20) + charMonDex[targID];
+            rollTotal = dieRoll + charMonDex[targID];
             damMod = charMonDex[idNum];
         } else if(attackBonus == 3){
-            rollTotal = roll(20) + charMonCon[targID];
+            rollTotal = dieRoll + charMonCon[targID];
         } else if(attackBonus == 4){
-            rollTotal = roll(20) + charMonInt[targID];
+            rollTotal = dieRoll + charMonInt[targID];
         } else if(attackBonus == 5){
-            rollTotal = roll(20) + charMonWis[targID];
+            rollTotal = dieRoll + charMonWis[targID];
         } else {
-            rollTotal = roll(20) + charMonCha[targID];
+            rollTotal = dieRoll + charMonCha[targID];
         }
         if(rollTotal < (8 + attackBonus)){
             hit = true;
