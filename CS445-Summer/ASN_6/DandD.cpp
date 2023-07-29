@@ -726,7 +726,7 @@ int main(){
                         printf("'s turn. Initiative: %d.\n", i);
                         if(charMonHP[j] == 0){
                             if(deathSavesSuccFail[j] % 10 != 3){
-                                printName(j)
+                                printName(j);
                                 printf(" needs to make a death saving throw. Press enter to roll.\n");
                                 int temp;
                                 cin >> temp;
