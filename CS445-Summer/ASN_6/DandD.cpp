@@ -568,8 +568,8 @@ void monsterTurn(int idNum){
             attackPool = 0;
         } else if(attackPool > 0){
             attack(idNum, 1, 0, targX, targY);
-            printf("Attackpool: %d\n", attackPool);
             attackPool--;
+            printf("Attackpool: %d\n", attackPool);
             if(charMonHP[idMap[calcXY(targX,targY)]] != 0 && attackPool == 0){
                 targX = -1;
                 movePool = 0;
@@ -738,18 +738,19 @@ int main(){
                                 printName(j);
                                 if(deathSavesSuccFail[j] % 10 == 3){
                                     printf(" succumbs to his injuries and dies.\n");
-                                } else if(deathSavesSuccFail[j] / 10){
+                                } else if(deathSavesSuccFail[j] / 10 == 3){
                                     printf(" stablizes and returns to consciousness.\n");
                                     deathSavesSuccFail[j] = 0;
                                     charMonHP[j] = 1;
                                 } else {
                                     printf(" has %d successes and %d failures.\n", deathSavesSuccFail[j] / 10, deathSavesSuccFail[j] % 10);
+                                    printf("He will stabilize after % more successes. \nHe will die after %d more failures.\n",
+                                    3 - (deathSavesSuccFail[j] / 10), 3 - (deathSavesSuccFail[j] % 10));
                                 }
                             } else {
                                 printName(j);
                                 printf("'s body lies motionless on the ground.\n");
-                                printf("He will stabilize after % more successes. \nHe will die after %d more failures.\n",
-                                3 - (deathSavesSuccFail[j] / 10), 3 - (deathSavesSuccFail[j] % 10));
+                                
                             }
                         } else {
                             playerTurn(j);
