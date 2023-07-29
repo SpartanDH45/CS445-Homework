@@ -123,7 +123,7 @@ void printIntMap(int *map){
 
 //Order for storage: HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
 //                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav, AttackNum
-int zombieDefault[] = {22, 8, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0, 1};
+int zombieDefault[] = {22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0, 1};
 int dhulgenStats[] = {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
 int ogrimStats[] = {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
 int kolgarStats[] = {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1};
@@ -279,9 +279,11 @@ void setIDMap(){
         }
     }
     for(int i = 0; i < entityCount; i++){
-        int x = charMonXPos[i];
-        int y = charMonYPos[i];
-        idMap[(y * mapWidth) + x] = i;
+        if(charMonHP[i] > 0){
+            int x = charMonXPos[i];
+            int y = charMonYPos[i];
+            idMap[calcXY(x, y)] = i;
+    }
     }
 }
 
@@ -292,9 +294,11 @@ void setMapDisplay(){
         }
     }
     for(int i = 0; i < entityCount; i++){
-        int x = charMonXPos[i];
-        int y = charMonYPos[i];
-        mapDisplay[(y * mapWidth) + x] = charMonMapMarker[i];
+        if(charMonHP[i] > 0 || i < pcCount){
+            int x = charMonXPos[i];
+            int y = charMonYPos[i];
+            mapDisplay[calcXY(x,y)] = charMonMapMarker[i];
+        }
     }
 }
 
@@ -354,12 +358,17 @@ void attack(int idNum, int type, int mod, int targX, int targY){
     }
     if(save == 0){
         rollTotal = dieRoll + attackBonus + mod;
-        if(rollTotal >= charMonAC[targID]){
+        if(rollTotal >= charMonAC[targID] && dieRoll != 1){
             hit = true;
             printName(idNum);
             printf(" rolled a %d for a total of %d and successfully hit ", dieRoll, rollTotal);
             printName(targID);
             printf(" for ");
+        } else if(dieRoll == 1){
+            printName(idNum);
+            printf(" rolled a %d and got a critical miss against ", dieRoll, rollTotal);
+            printName(targID);
+            printf(".\n");
         } else {
             printName(idNum);
             printf(" rolled a %d for a total of %d and failed to hit ", dieRoll, rollTotal);
@@ -421,6 +430,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             }
         }
         if(save == 0 && dieRoll == 20){
+            printf("Critical Hit!\n");
             damage = damage*2;
         }
         damage += damMod;
@@ -533,7 +543,7 @@ void monsterTurn(int idNum){
             attackPool = 0;
         } else {
             attack(idNum, 1, 0, targX, targY);
-            printf("Attackpool: %d", attackPool);
+            //printf("Attackpool: %d\n", attackPool);
             attackPool--;
             if(charMonHP[idMap[calcXY(targX,targY)]] != 0 && attackPool == 0){
                 targX = -1;
