@@ -135,6 +135,7 @@ int charMonAttackMDam[100], charMonAttackMRan[100], charMonAttackMAbl[100];
 int charMonAttackRDam[100], charMonAttackRRan[100], charMonAttackRAbl[100];
 int charMonAttackRSav[100], charMonAttackNum[100];
 char charMonMapMarker[100];
+int initiative[100];
 //XY Positions given as a single integer XXYY
 int charMonXPos[100];
 int charMonYPos[100];
@@ -424,6 +425,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                 charMonMapMarker[targID] = '_';
                 charMonXPos[25];
                 charMonYPos[25];
+                initiative[targID] = -10;
                 setIDMap();
                 setMapDisplay();
 
@@ -635,7 +637,7 @@ int main(){
     printIntMap(idMap);
     printf("\n");
     printIntMap(pathingMap);
-    int initiative[100];
+    
     for(int i = 0; i < entityCount; i++){
         initiative[i] = roll(20)+charMonDex[i];
         printName(i);
