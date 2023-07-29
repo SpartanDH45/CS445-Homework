@@ -146,7 +146,7 @@ int idMap[500];
 int pathingMap[500] = {-1};
 int pcCount = 4;
 int entityCount = 0;
-bool rogueSkAtkUsed = false;
+bool rogueSnkAtkUsed = false;
 
 void printName(int idNum){
     if(charMonMapMarker[idNum] == 'D'){
@@ -404,9 +404,17 @@ void attack(int idNum, int type, int mod, int targX, int targY){
             dieType = dieType - (dieQuant * 100);
         }
         damage = rollMult(dieQuant, dieType);
-        if(rogueSkAtkUsed == false && getLowestNeighbor(targX, targY) == 0 && idNum == 3){
-            printf("Sneak attack: ");
-            damage += rollMult(3, 6);
+        if(rogueSnkAtkUsed == false && idNum == 3){
+            bool allyAdj = false;
+            for(int i = -1; i < 2; i++){
+                for(int j = -1; j < 2; j++){
+                    if(!(i == 0 && j == 0) && (targX + j > -1 && targX + j < 20 && targY + i > -1 && targY + i < 20)){
+                        if(pathingMap[calcXY(targX+j, targY+i)] == 0){
+                            allyAdj == true;
+            if(allyAdj == true){
+                printf("Sneak attack: ");
+                damage += rollMult(3, 6);
+            }
         }
         if(save == 0 && dieRoll == 20){
             damage = damage*2;
