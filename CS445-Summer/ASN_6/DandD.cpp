@@ -512,11 +512,11 @@ void monsterTurn(int idNum){
                             targX = currX+j;
                             targY = currY+i;
                             printf("Found target: (%d, %d)\n", targX, targY);
-                        } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest){
+                        } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest && (i != j && i != j * -1)){
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
                             lowY = currY + i;
-                            //printf("New lowest: %d at (%d,%d)\n", lowest, lowX, lowY);
+                            printf("New lowest: %d at (%d,%d)\n", lowest, lowX, lowY);
                         }
                     }
                 }
