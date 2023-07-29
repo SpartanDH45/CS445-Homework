@@ -556,7 +556,7 @@ void monsterTurn(int idNum){
         for(int i = -1; i < 2; i++){
             for(int j = -1; j < 2; j++){
                 if(!(i == 0 && j == 0)){
-                    if(idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] < pcCount && idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] > -1){
+                    if(idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] < pcCount && idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] > -1 charMonHP[idMap[calcXY(currX + j,currY + i)]] > 0){
                         targX = charMonXPos[idNum]+j;
                         targY = charMonYPos[idNum]+i;
                     }
