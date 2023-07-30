@@ -1,0 +1,27 @@
+printf(char stringIn[], int in1, in2, in3){
+    int i:0;
+    int intCount:0;
+    while(i < *stringIn){
+        if(stringIn[i] == '%' && stringIn[i+1] == 'd') then {
+            intCount++;
+            if(intCount == 1) then {
+                output(in1);
+            } else if(intCount == 2) then {
+                output(in2);
+            } else if(intCount == 3){
+                output(in3);
+            }
+            i++;
+        } else if(stringIn[i] == '\n') then {
+            outnl();
+        } else {
+            outputc(stringIn[i]);
+        }
+        i++;
+    }
+    
+}
+
+main(){
+    printf("Test %d.\n Test %d\n Test %d\n", 1, 2, 3);
+}
