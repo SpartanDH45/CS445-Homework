@@ -1,4 +1,4 @@
-printf(char stringIn[], int in1, in2, in3){
+printf(char stringIn[]; int in1, in2, in3){
     int i:0;
     int intCount:0;
     while(i < *stringIn){
