@@ -8,7 +8,7 @@ printf(char stringIn[]; int in1, in2, in3){
                 output(in1);
             } else if(intCount == 2) then {
                 output(in2);
-            } else if(intCount == 3){
+            } else if(intCount == 3) then {
                 output(in3);
             }
             i++;
