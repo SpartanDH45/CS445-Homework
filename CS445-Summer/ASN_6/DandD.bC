@@ -862,11 +862,11 @@ main(){
                         printf("'s turn. Initiative: %d.", setIntPrint(i, 0, 0));
                         outnl();
                         if(charMonHP[j] == 0) then {
-                            if(deathSavesSuccFail[j] % 10 != 3){
+                            if(deathSavesSuccFail[j] % 10 != 3)then {
+                                char temp;
                                 printName(j);
                                 printf(" needs to make a death saving throw. Enter anything to roll.", 0);
                                 outnl();
-                                char temp;
                                 temp = input();
                                 int deathSave : roll(20);
                                 printf("Death save: %d. ", setIntPrint(deathSave, 0, 0));
