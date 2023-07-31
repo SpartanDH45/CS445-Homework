@@ -410,8 +410,10 @@ setMapDisplay(){
 }
 
 printPaths(int idNum){
-    int x : charMonXPos[idNum];
-    int y : charMonYPos[idNum];
+    int x;
+    int y;
+    x = charMonXPos[idNum];
+    y = charMonYPos[idNum];
     for i = -1 to 2 do {
         for j = -1 to 2 do {
             if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
@@ -468,7 +470,7 @@ attack(int idNum, type, mod, targX, targY){
     //printf("Target, %d", setIntPrint(targID, 0, 0));
     //outnl();
     dieRoll = roll(20);
-    
+
     if(type == 1) then {
         attackBonus = charMonAttackMAbl[idNum];
         dieType = charMonAttackMDam[idNum];
@@ -619,9 +621,11 @@ attack(int idNum, type, mod, targX, targY){
 //If the target is out of range the penalty will be set to -20 and be considered
 //Not a valid target
 int checkTarget(int idNum, targX, targY, range){
-    int diffX : charMonXPos[idNum]-targX;
-    int diffY : charMonYPos[idNum]-targY;
+    int diffX;
+    int diffY;
     int penalty : 0;
+    diffX = charMonXPos[idNum]-targX;
+    diffY = charMonYPos[idNum]-targY;
     // If the attack is out of range
     if((diffX*diffX)+(diffY*diffY)>(range*range)) then {
         if(not ((diffX*diffX)+(diffY*diffY) == 2 and range == 1)) then {
@@ -634,11 +638,13 @@ int checkTarget(int idNum, targX, targY, range){
 }
 
 monsterTurn(int idNum){
-    int movePool : charMonSpd[idNum];
-    int attackPool : charMonAttackNum[idNum];
+    int movePool;
+    int attackPool;
     int targX : -1;
     int targY : -1;
     bool attacked : false;
+    movePool = charMonSpd[idNum];
+    attackPool = charMonAttackNum[idNum];
     while(attackPool > 0 or movePool > 0) do {
         while(movePool > 0 and targX == -1) do {
             //printf("LooptestIn", 0);
@@ -734,8 +740,10 @@ playerTurn(int idNum){
         } else {
             while(choice == 1 and movePool > 0) do {
                 int moveChoice : 0;
-                int currX : charMonXPos[idNum];
-                int currY : charMonYPos[idNum];
+                int currX;
+                int currY;
+                currX = charMonXPos[idNum];
+                currY = charMonYPos[idNum];
                 printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)", 0);
                 outnl();
                 moveChoice = input();
@@ -767,7 +775,8 @@ playerTurn(int idNum){
                 outnl();
                 attackChoice = input();
                 if(attackChoice == 1 or attackChoice == 2) then {
-                    int range : charMonAttackMRan[idNum];
+                    int range;
+                    range = charMonAttackMRan[idNum];
                     if(attackChoice == 2) then {
                         range = charMonAttackRRan[idNum];
                     }
@@ -788,7 +797,8 @@ playerTurn(int idNum){
                                 targX--;
                                 targY--;
                                 if(idMap[calcXY(targX, targY)] > -1) then {
-                                    int mod : checkTarget(idNum, targX, targY, range);
+                                    int mod;
+                                    mod = checkTarget(idNum, targX, targY, range);
                                     if(mod < -19) then {
                                         printf("Target is out of range. Choose another option or set x to 0 to cancel.", 0);
                                         outnl();
