@@ -25,5 +25,5 @@ printf(char stringIn[]; int in1, in2, in3){
 }
 
 main(){
-    //printf("Test %d.\n Test %d\n Test %d\n", 1, 2, 3);
+    printf("Test %d.\n Test %d\n Test %d\n", 1, 2, 3);
 }
