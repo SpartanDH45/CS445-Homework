@@ -54,11 +54,11 @@ int mapHeight : 20;
 
 //Order for storage : HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
 //                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav, AttackNum
-int zombieDefault[] : {22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1,  0, 0, 1, 0, 1};
-int dhulgenStats[] : {49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
-int ogrimStats[] : {43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
-int kolgarStats[] : {37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1};
-int torbinStats[] : {43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
+int zombieDefault[18]; //{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1};
+int dhulgenStats[18]; //{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
+int ogrimStats[18]; //{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
+int kolgarStats[18]; //{37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1};
+int torbinStats[18]; //{43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
 int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
 int charMonStr[100], charMonDex[100], charMonCon[100];
 int charMonInt[100], charMonWis[100], charMonCha[100];
@@ -78,6 +78,68 @@ int pathingMap[500] : {-1};
 int pcCount : 4;
 int entityCount : 0;
 bool rogueSnkAtkUsed : false;
+
+int charToInt(char input){
+    if(input == '0') then {
+        return 0;
+    } else if(input == '1') then {
+        return 1;
+    } else if(input == '2') then {
+        return 2;
+    } else if(input == '3') then {
+        return 3;
+    } else if(input == '4') then {
+        return 4;
+    } else if(input == '5') then {
+        return 5;
+    } else if(input == '6') then {
+        return 6;
+    } else if(input == '7') then {
+        return 7;
+    } else if(input == '8') then {
+        return 8;
+    } else if(input == '9') then {
+        return 9;
+    } else {
+        return -1;
+    }
+}
+//Input strings will be in the form of "{1, 2, 3, 4}"
+setStatArray(char inArray[], targ){
+    int input : 0;
+    int i : *inArray-2;
+    int statIndex : 17;
+    int orderOfM : 1;
+    while(statIndex > -1) do {
+        while(inArray[i] != ',' and inArray[i] != '{') do {
+            if(inArray[i] == '-') then {
+                input *= -1;
+            } else if(inArray[i] == ' ') then {
+
+            } else {
+                input += (charToInt(inArray[i]) * orderOfM);
+                orderOfM *= 10;
+            }
+            i--;
+        }
+        if(targ == 'D') then {
+            dhulgenStats[statIndex] = input;
+        } else if(targ == 'O') then {
+            ogrimStats[statIndex] = input;
+        } else if(targ == 'K') then {
+            kolgarStats[statIndex] = input;
+        } else if(targ == 'T') then {
+            torbinStats[statIndex] = input;
+        } else if(targ == 'Z') then {
+            zombieDefault[statIndex] = input;
+        }
+        i--;
+        statIndex--;
+        input = 0;
+        orderOfM = 1;
+    }
+
+}
 
 //Returns an integer value to represent a two dimensional coordinate in a map array
 int calcXY(int x, int y) {
@@ -645,7 +707,7 @@ void playerTurn(int idNum){
         outnl();
         printf("You have %d square(s) of movement and %d attack(s)", setIntPrint(movePool, attackPool, 0));
         outnl();
-        cin >> choice;
+        choice = input();
         if(choice < 0 or choice > 3) then {
             printf("Invalid choice. Try again.", 0);
             outnl();
@@ -656,7 +718,7 @@ void playerTurn(int idNum){
                 int currY : charMonYPos[idNum];
                 printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)", 0);
                 outnl();
-                cin >> moveChoice;
+                moveChoice = input();
                 if(moveChoice == 1 and mapDisplay[calcXY(currX, currY-1)] == '_') then {
                     moveChar(idNum, currX, currY-1);
                     movePool--;
@@ -681,7 +743,7 @@ void playerTurn(int idNum){
                 int attackChoice : 0;
                 printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
                 outnl();
-                cin >> attackChoice;
+                attackChoice = input();
                 if(attackChoice == 1 or attackChoice == 2) then {
                     int range : charMonAttackMRan[idNum];
                     if(attackChoice == 2) then {
@@ -695,11 +757,11 @@ void playerTurn(int idNum){
                         outnl();
                         printf("What is the x value of the target? (Enter 0 to cancel attack)", 0);
                         outnl();
-                        cin >> targX;
+                        targX = input();
                         if(targX != 0) then {
                             printf("What is the y value of the target?", 0);
                             outnl();
-                            cin >> targY;
+                            targY = input();
                             if(targX > 0 and targX < 21 and targY > 0 and targY < 21) then {
                                 targX--;
                                 targY--;
@@ -741,6 +803,11 @@ void playerTurn(int idNum){
 }
 
 main(){
+    setStatArray("{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1}", 'Z');
+    setStatArray("{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2}", 'D');
+    setStatArray("{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1}", 'O');
+    setStatArray("{37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1}", 'K');
+    setStatArray("{43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2}", 'T');
     setCharMon(0, dhulgenStats, 'D', 9, 18);
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
@@ -794,7 +861,7 @@ main(){
                                 printf(" needs to make a death saving throw. Enter anything to roll.", 0);
                                 outnl();
                                 char temp;
-                                cin >> temp;
+                                temp = input();
                                 int deathSave : roll(20);
                                 printf("Death save: %d. ", setIntPrint(deathSave, 0, 0));
                                 if(deathSave > 10) then {
@@ -836,7 +903,7 @@ main(){
                                 printf("Enter anything to pass the turn.", 0);
                                 outnl();
                                 char temp;
-                                cin >> temp;
+                                temp = input();
                             }
                         } else {
                             playerTurn(j);
