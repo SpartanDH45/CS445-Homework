@@ -147,7 +147,7 @@ int calcXY(int x, y) {
 }
 
 
-Prints character based maps with included coordinate numberings
+//Prints character based maps with included coordinate numberings
 printMap(char map[]){
     for i = -2 to mapHeight do {
         if(i > -1) then {
