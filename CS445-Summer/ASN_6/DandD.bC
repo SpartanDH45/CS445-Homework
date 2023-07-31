@@ -25,7 +25,8 @@ printf(char stringIn[]; int in1){
 
 //Roll a die
 int roll(int faces){
-    int temp : ((?faces) + 1);
+    int temp;
+    temp = ((?faces) + 1);
     return temp;
 }
 
@@ -35,14 +36,15 @@ int rollMult(int quant, faces){
     printf("%dd%d: ", setIntPrint(quant, faces, 0));
     //Sums up rolls to return
     for i = 0 to quant do{
-        int temp : roll(faces);
+        int temp;
+        temp = roll(faces);
         printf("%d ", setIntPrint(temp, 0, 0));
         sum += temp;
         if(i != quant - 1) then {
             printf("+ ", 0);
         }
     }
-    printf1("= %d", setIntPrint(sum, 0, 0));
+    printf("= %d", setIntPrint(sum, 0, 0));
     outnl();
     return sum;
 }
@@ -107,7 +109,8 @@ int charToInt(char input){
 //Input strings will be in the form of "{1, 2, 3, 4}"
 setStatArray(char inArray[], targ){
     int input : 0;
-    int i : *inArray-2;
+    int i;
+    i = *inArray-2;
     int statIndex : 17;
     int orderOfM : 1;
     while(statIndex > -1) do {
@@ -215,7 +218,8 @@ printMap(char map[]){
 printIntMap(int map[]){
     for i = 0 to mapHeight do {
         for j = 0 to mapWidth do {
-            int temp : map[calcXY(j, i)];
+            int temp;
+            temp = map[calcXY(j, i)];
             if(temp > -1) then {
                 printf("  ", 0);
             } else {
@@ -290,7 +294,8 @@ int getLowestNeighbor(int x, y){
         for j = -1 to 2 do {
             if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
                 if(not (i == 0 and j == 0)) then {
-                    int temp : pathingMap[calcXY(x + j, y + i)];
+                    int temp
+                    temp = pathingMap[calcXY(x + j, y + i)];
                     if(i != 0 and j != 0) then {
                         temp++;
                     }
@@ -317,7 +322,8 @@ bool isOpenSpot(int x, y){
 checkSetPath(int x, y){
     if( x > -1 and x < mapWidth and y > -1 and y < mapHeight) then {
         if(isOpenSpot(x, y)) then {
-            int temp : getLowestNeighbor(x, y) + 1;
+            int temp;
+            temp = getLowestNeighbor(x, y) + 1;
             if(temp > 99) then {
                 temp = 99;
             }
@@ -336,10 +342,14 @@ setPathingMap(){
     }
     for i = 0 to 4 do {
         if(charMonHP[i] > 0) then {
-            int startX : charMonXPos[i];
-            int startY : charMonYPos[i];
-            int currX : startX;
-            int currY : startY;
+            int startX;
+            startX = charMonXPos[i];
+            int startY;
+            startY = charMonYPos[i];
+            int currX;
+            currX = startX;
+            int currY;
+            currY = startY;
             int radius : 1;
             pathingMap[calcXY(startX, startY)] = 0;
             //While there is a part of the map not seen by the scan
