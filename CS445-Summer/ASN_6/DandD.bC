@@ -642,7 +642,6 @@ monsterTurn(int idNum){
     int attackPool;
     int targX : -1;
     int targY : -1;
-    bool attacked : false;
     movePool = charMonSpd[idNum];
     attackPool = charMonAttackNum[idNum];
     while(attackPool > 0 or movePool > 0) do {
@@ -652,8 +651,10 @@ monsterTurn(int idNum){
             int lowest : 99;
             int lowX;
             int lowY;
-            int currX : charMonXPos[idNum];
-            int currY : charMonYPos[idNum];
+            int currX;
+            int currY;
+            currX = charMonXPos[idNum];
+            currY = charMonYPos[idNum];
             for i = -1 to 2 do {
                 for j = -1 to 2 do {
                     if(not (i == 0 and j == 0) and (currX + j > -1 and currX + j < 20 and currY + i > -1 and currY + i < 20)) then {
@@ -675,7 +676,7 @@ monsterTurn(int idNum){
             //printPaths(idNum);
             if(lowest > 90) then {
                 movePool = 0;
-            } else if(targX == -1 and mapDisplay[lowX]) then {
+            } else if(targX == -1 and mapDisplay[lowX] > -1) then {
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
                 printf(" moves to (%d, %d)", setIntPrint(lowX+1, lowY+1, 0));
@@ -716,11 +717,12 @@ monsterTurn(int idNum){
 }
 
 playerTurn(int idNum){
-    int movePool : charMonSpd[idNum];
-    int attackPool : charMonAttackNum[idNum];
-    bool actionUsed : false;
+    int movePool; 
+    int attackPool; 
     bool turnEnd : false;
     int choice : 0;
+    movePool = charMonSpd[idNum];
+    attackPool = charMonAttackNum[idNum];
     while(turnEnd == false) do {
         printf("Choose: ", 0);
         if(movePool > 0) then {
