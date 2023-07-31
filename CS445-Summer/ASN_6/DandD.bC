@@ -2,24 +2,21 @@ printf(char stringIn[]; int in1, in2, in3){
     //int i:0;
     int intCount:0;
     bool offset:false;
-    //while(i < *stringIn) do 
-    for i = 0 to 30 do {
-        //if(stringIn[i] == '%' and stringIn[i+1] == 'd') then {
-        //    intCount++;
-        //    if(intCount == 1) then {
-        //        output(in1);
-        //    } else if(intCount == 2) then {
-        //        output(in2);
-        //    } else if(intCount == 3) then {
-        //        output(in3);
-        //    }
-        //    i++;
-        //} else if(stringIn[i] == '\n') then {
-        //    outnl();
-        //} else {
+    while(i < *stringIn) do {
+        if(stringIn[i] == '%' and stringIn[i+1] == 'd') then {
+            intCount++;
+            if(intCount == 1) then {
+                output(in1);
+            } else if(intCount == 2) then {
+                output(in2);
+            } else if(intCount == 3) then {
+                output(in3);
+            }
+            i++;
+        } else {
             outputc(stringIn[i]);
-        //}
-        //i++;
+        }
+        i++;
     }
     
 }
