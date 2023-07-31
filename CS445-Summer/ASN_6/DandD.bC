@@ -142,7 +142,7 @@ setStatArray(char inArray[], targ){
 }
 
 //Returns an integer value to represent a two dimensional coordinate in a map array
-int calcXY(int x, int y) {
+int calcXY(int x, y) {
     return ((y * mapWidth) + x);
 }
 
