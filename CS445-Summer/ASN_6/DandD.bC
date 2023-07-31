@@ -1,51 +1,26 @@
-printf(char stringIn[]; int in1, in2, in3){
-    int i : 0;
-    while(i < *stringIn) do {
-            outputc(stringIn[i]);
-        i++;
-    }
+int printfiArr[4];
+int setIntPrint(int in1, in2, in3){
+    printfiArr[0] = 1;
+    printfiArr[1] = in1;
+    printfiArr[2] = in2;
+    printfiArr[3] = in3;
+    return 1;
 }
 
-printf1(char stringIn[]; int in1){
+printf(char stringIn[], int in1){
     int i : 0;
     int intCount : 0;
     while(i < *stringIn) do {
-        if(stringIn[i] == '%' and stringIn[i+1] == 'd') then {
+        if(stringIn[i] == '%' and stringIn[i+1] == 'd' and printfiArr[0] > 0 and in1 > 0) then {
             intCount++;
-            if(intCount == 1) then {
-                output(in1);
-            } else if(intCount == 2) then {
-                output(in2);
-            } else if(intCount == 3) then {
-                output(in3);
-            }
+            output(printfiArr[intCount]);
             i++;
         } else {
             outputc(stringIn[i]);
         }
         i++;
     }
-}
-
-printf2(char stringIn[]; int in1, in2){
-    int i : 0;
-    int intCount : 0;
-    while(i < *stringIn) do {
-        if(stringIn[i] == '%' and stringIn[i+1] == 'd') then {
-            intCount++;
-            if(intCount == 1) then {
-                output(in1);
-            } else if(intCount == 2) then {
-                output(in2);
-            } else if(intCount == 3) then {
-                output(in3);
-            }
-            i++;
-        } else {
-            outputc(stringIn[i]);
-        }
-        i++;
-    }
+    printfiArr[0] = 0;
 }
 
 //Roll a die
@@ -57,17 +32,17 @@ int roll(int faces){
 //Roll multiple dice (mostly for damage)
 int rollMult(int quant, int faces){
     int sum : 0;
-    printf2("%dd%d: ", quant, faces);
+    printf("%dd%d: ", setIntPrint(quant, faces, 0));
     //Sums up rolls to return
     for i = 0 to quant do{
         int temp : roll(faces);
-        printf1("%d ", temp);
+        printf("%d ", setIntPrint(temp, 0, 0));
         sum += temp;
         if(i != quant - 1) then {
-            printf("+ ");
+            printf("+ ", 0);
         }
     }
-    printf1("= %d", sum);
+    printf1("= %d", setIntPrint(sum, 0, 0));
     outnl();
     return sum;
 }
@@ -115,39 +90,39 @@ void printMap(char *map){
     for i = -2 to mapHeight do {
         if(i > -1) then {
             if( i < 9 ) then {
-                printf(" %d", i+1);
+                printf(" %d", setIntPrint(i+1, 0, 0));
             } else {
-                printf("%d", i+1);
+                printf("%d", setIntPrint(i+1, 0, 0));
             }
         }
         if( i == 2 or i == 9 or i == 10 or i == 17) then {
-            printf("|");
+            printf("|", 0);
         } else if( i == -1) then {
-            printf("  X");
+            printf("  X", 0);
         } else if( i > -1) then {
-            printf("X");
+            outputc('X');
         } else {
-            printf("   ");
+            printf("   ", 0);
         }
         for j = 0 to mapWidth do {
             if(i == -2) then {
                 if( j < 9 ) then {
-                    printf("%d ", j+1);
+                    printf("%d ", setIntPrint(j+1, 0, 0));
                 } else {
-                    printf("%d", j+1);
+                    printf("%d", setIntPrint(j+1, 0, 0));
                 }
             }
             if(i == -1 and (j == 2 or j == 6 or j == 7 or j == 12 or j == 13 or j == 17)) then {
                 if(j == 6 or j == 12) then {
-                    printf("==");
+                    printf("==", 0);
                 } else {
-                    printf("=X");
+                    printf("=X", 0);
                 }
             } else if(i == mapHeight and (j == 2 or j == 9 or j == 10 or j == 17)) then {
                 if(j == 9) then {
-                    printf("==");
+                    printf("==", 0);
                 } else {
-                    printf("=X");
+                    printf("=X", 0);
                 }
             }
             else if(i == -1 or i == mapHeight) then {
@@ -180,18 +155,18 @@ void printIntMap(int *map){
         for j = 0 to mapWidth do {
             int temp : map[calcXY(j, i)];
             if(temp > -1) then {
-                printf("  ");
+                printf("  ", 0);
             } else {
-                printf(" -");
+                printf(" -", 0);
             }
             //get absolute value of temp
             if(temp < 0) then {
                 temp = temp*-1;
             }
             if(temp < 10) then {
-                printf("0%d", temp);
+                printf("0%d", setIntPrint(temp, 0, 0));
             } else {
-                printf("%d", temp);
+                printf("%d", setIntPrint(temp, 0, 0));
             }
         }
         outnl();
@@ -201,15 +176,15 @@ void printIntMap(int *map){
 //Print the name of the character/monster based off of their token
 void printName(int idNum){
     if(charMonMapMarker[idNum] == 'D') then {
-        printf("Dhulgen");
+        printf("Dhulgen", 0);
     } else if(charMonMapMarker[idNum] == 'O') then {
-        printf("Ogrim");
+        printf("Ogrim", 0);
     } else if(charMonMapMarker[idNum] == 'K') then {
-        printf("Kolgar");
+        printf("Kolgar", 0);
     } else if(charMonMapMarker[idNum] == 'T') then {
-        printf("Torbin");
+        printf("Torbin", 0);
     } else if(charMonMapMarker[idNum] == 'Z') then {
-        printf("Zombie");
+        printf("Zombie", 0);
     }
 }
 
@@ -365,11 +340,11 @@ void printPaths(int idNum){
             if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
                 if(not (i == 0 and j == 0)) then {
                     if(pathingMap[calcXY(x + j,y + i)] < 10) then {
-                        printf("0");
+                        outputc('0');
                     }
-                    printf("%d ", pathingMap[calcXY(x + j,y + i)]);
+                    printf("%d ", setIntPrint(pathingMap[calcXY(x + j,y + i)], 0, 0));
                 } else {
-                    printf("Zo ");
+                    printf("Zo ", 0);
                 }
                 if(j == 1) then {
                     outnl();
@@ -402,7 +377,7 @@ void moveChar(int idNum, int x, int y){
 void attack(int idNum, int type, int mod, int targX, int targY){
     int attackBonus;
     int targID : idMap[calcXY(targX,targY)];
-    //printf("Target, %d", targID);
+    //printf("Target, %d", setIntPrint(targID, 0, 0));
     //outnl();
     int dieType;
     int dieQuant;
@@ -440,18 +415,18 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         if(rollTotal >= charMonAC[targID] and dieRoll != 1) then {
             hit = true;
             printName(idNum);
-            printf(" rolled a %d for a total of %d and successfully hit ", dieRoll, rollTotal);
+            printf(" rolled a %d for a total of %d and successfully hit ", setIntPrint(dieRoll, rollTotal, 0));
             printName(targID);
-            printf(" for ");
+            printf(" for ", 0);
         } else if(dieRoll == 1) then {
             printName(idNum);
-            printf(" rolled a %d and got a critical miss against ", dieRoll, rollTotal);
+            printf(" rolled a %d and got a critical miss against ", setIntPrint(dieRoll, rollTotal, 0));
             printName(targID);
             outputc('.');
             outnl();
         } else {
             printName(idNum);
-            printf(" rolled a %d for a total of %d and failed to hit ", dieRoll, rollTotal);
+            printf(" rolled a %d for a total of %d and failed to hit ", setIntPrint(dieRoll, rollTotal, 0));
             outputc('.');
             outnl();
         }
@@ -474,14 +449,14 @@ void attack(int idNum, int type, int mod, int targX, int targY){
         if(rollTotal < (8 + attackBonus)) then {
             hit = true;
             printName(targID);
-            printf(" rolled a %d for a total of %d and could not resist ", dieRoll, rollTotal);
+            printf(" rolled a %d for a total of %d and could not resist ", setIntPrint(dieRoll, rollTotal, 0));
             printName(idNum);
             printf("'s spell and took ");
         } else {
             printName(targID);
-            printf(" rolled a %d for a total of %d and was able to resist ", dieRoll, rollTotal);
+            printf(" rolled a %d for a total of %d and was able to resist ", setIntPrint(dieRoll, rollTotal, 0));
             printName(idNum);
-            printf("'s spell.");
+            printf("'s spell.", 0);
             outnl();
         }
     }
@@ -506,38 +481,38 @@ void attack(int idNum, int type, int mod, int targX, int targY){
                 }
             }
             if(allyAdj == true) then {
-                printf("Sneak attack: ");
+                printf("Sneak attack: ", 0);
                 damage += rollMult(3, 6);
             }
         }
         if(save == 0 and dieRoll == 20) then {
-            printf("Critical Hit!");
+            printf("Critical Hit!", 0);
             outnl();
             damage = damage*2;
         }
         damage += damMod;
-        printf("%d damage!", damage);
+        printf("%d damage!", setIntPrint(damage, 0, 0));
         outnl();
         charMonHP[targID] -= damage;
         if(charMonHP[targID] < 0) then {
             charMonHP[targID] = 0;
         }
         printName(targID);
-        printf("'s HP: %d", charMonHP[targID]);
+        printf("'s HP: %d", setIntPrint(charMonHP[targID], 0, 0));
         outnl();
         //If the target is a zombie, was dropped to 0, and it wasn't from a crit/spell
         if(charMonHP[targID] == 0) then {
             if(charMonMapMarker[targID] == 'Z' and not(dieRoll == 20 or save != 0)) then {
                 if(roll(20) + charMonCon[targID] > 5 + damage) then {
                     charMonHP[targID] = 1;
-                    printf("Using its undead fortitude, the zombie won't stay down!");
+                    printf("Using its undead fortitude, the zombie won't stay down!", 0);
                     outnl();
                 }
             }
             if(targID > pcCount-1) then {
-                printf("The ");
+                printf("The ", 0);
                 printName(targID);
-                printf(" succumbs to its wounds and perishes.");
+                printf(" succumbs to its wounds and perishes.", 0);
                 outnl();
                 charMonMapMarker[targID] = '_';
                 charMonXPos[25];
@@ -548,7 +523,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
 
             } else {
                 printName(targID);
-                printf(" falls unconscious!");
+                printf(" falls unconscious!", 0);
                 outnl();
                 setIDMap();
                 setPathingMap();
@@ -584,7 +559,7 @@ void monsterTurn(int idNum){
     bool attacked : false;
     while(attackPool > 0 or movePool > 0) do {
         while(movePool > 0 and targX == -1) do {
-            //printf("LooptestIn");
+            //printf("LooptestIn", 0);
             //outnl();
             int lowest : 99;
             int lowX;
@@ -597,13 +572,13 @@ void monsterTurn(int idNum){
                         if(idMap[calcXY(currX+j, currY+i)] < pcCount and idMap[calcXY(currX+j, currY+i)] > -1 and charMonHP[idMap[calcXY(currX + j,currY + i)]] > 0) then {
                             targX = currX+j;
                             targY = currY+i;
-                            //printf("Found target: (%d, %d)", targX+1, targY+1);
+                            //printf("Found target: (%d, %d)", setIntPrint(targX+1, targY+1, 0));
                             //outnl();
                         } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest and (i != j and i != j * -1)) then {
                             lowest = pathingMap[calcXY(currX+j, currY+i)];
                             lowX = currX + j;
                             lowY = currY + i;
-                            //printf("New lowest: %d at (%d,%d)", lowest, lowX+1, lowY+1);
+                            //printf("New lowest: %d at (%d,%d)", setIntPrint(lowest, lowX+1, lowY+1));
                             //outnl();
                         }
                     }
@@ -615,7 +590,7 @@ void monsterTurn(int idNum){
             } else if(targX == -1 and mapDisplay[lowX]) then {
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
-                printf(" moves to (%d, %d)", lowX+1, lowY+1);
+                printf(" moves to (%d, %d)", setIntPrint(lowX+1, lowY+1, 0));
                 outnl();
                 movePool--;
             }
@@ -638,14 +613,14 @@ void monsterTurn(int idNum){
         } else if(attackPool > 0) then {
             attack(idNum, 1, 0, targX, targY);
             attackPool--;
-            //printf("Attackpool: %d", attackPool);
+            //printf("Attackpool: %d", setIntPrint(attackPool, 0, 0));
             //outnl();
             if(charMonHP[idMap[calcXY(targX,targY)]] != 0 and attackPool == 0) then {
                 movePool = 0;
             }
             targX = -1;
         } else if(attackPool < 1) then {
-            //printf("Error, aborting turn.");
+            //printf("Error, aborting turn., 0");
             //outnl();
             movePool = 0;
         }
@@ -659,27 +634,27 @@ void playerTurn(int idNum){
     bool turnEnd : false;
     int choice : 0;
     while(turnEnd == false) do {
-        printf("Choose: ");
+        printf("Choose: ", 0);
         if(movePool > 0) then {
-            printf("1 (move), ");
+            printf("1 (move), ", 0);
         }
         if(attackPool > 0) then {
-            printf("2 (attack), ");
+            printf("2 (attack), ", 0);
         }
-        printf("3 (end turn).");
+        printf("3 (end turn).", 0);
         outnl();
-        printf("You have %d square(s) of movement and %d attack(s)", movePool, attackPool);
+        printf("You have %d square(s) of movement and %d attack(s)", setIntPrint(movePool, attackPool, 0));
         outnl();
         cin >> choice;
         if(choice < 0 or choice > 3) then {
-            printf("Invalid choice. Try again.");
+            printf("Invalid choice. Try again.", 0);
             outnl();
         } else {
             while(choice == 1 and movePool > 0) do {
                 int moveChoice : 0;
                 int currX : charMonXPos[idNum];
                 int currY : charMonYPos[idNum];
-                printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)");
+                printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)", 0);
                 outnl();
                 cin >> moveChoice;
                 if(moveChoice == 1 and mapDisplay[calcXY(currX, currY-1)] == '_') then {
@@ -697,14 +672,14 @@ void playerTurn(int idNum){
                 } else if(moveChoice == 5) then {
                     choice = 0;
                 } else {
-                    printf("Invalid input or the space was occupied. Try again.");
+                    printf("Invalid input or the space was occupied. Try again.", 0);
                     outnl();
                 }
                 printMap(mapDisplay);
             }
             while(choice == 2 and attackPool > 0) do {
                 int attackChoice : 0;
-                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).");
+                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
                 outnl();
                 cin >> attackChoice;
                 if(attackChoice == 1 or attackChoice == 2) then {
@@ -716,13 +691,13 @@ void playerTurn(int idNum){
                     int targY : -1;
                     while(targX == -1) do {
                         printMap(mapDisplay);
-                        printf("Attack range: %d squares.", range);
+                        printf("Attack range: %d squares.", setIntPrint(range, 0, 0));
                         outnl();
-                        printf("What is the x value of the target? (Enter 0 to cancel attack)");
+                        printf("What is the x value of the target? (Enter 0 to cancel attack)", 0);
                         outnl();
                         cin >> targX;
                         if(targX != 0) then {
-                            printf("What is the y value of the target?");
+                            printf("What is the y value of the target?", 0);
                             outnl();
                             cin >> targY;
                             if(targX > 0 and targX < 21 and targY > 0 and targY < 21) then {
@@ -731,7 +706,7 @@ void playerTurn(int idNum){
                                 if(idMap[calcXY(targX, targY)] > -1) then {
                                     int mod : checkTarget(idNum, targX, targY, range);
                                     if(mod < -19) then {
-                                        printf("Target is out of range. Choose another option or set x to 0 to cancel.");
+                                        printf("Target is out of range. Choose another option or set x to 0 to cancel.", 0);
                                         outnl();
                                         targX == -1;
                                         targY == -1;
@@ -740,11 +715,11 @@ void playerTurn(int idNum){
                                         attackPool--;
                                     }
                                 } else {
-                                    printf("There isn't anyone in that spot.");
+                                    printf("There isn't anyone in that spot.", 0);
                                     outnl();
                                 }
                             } else {
-                                printf("Target is not on the map. What are you aiming at?");
+                                printf("Target is not on the map. What are you aiming at?", 0);
                                 outnl();
                             }
                         } else {
@@ -754,7 +729,7 @@ void playerTurn(int idNum){
                 } else if(attackChoice == 3) then {
                     choice = 0;
                 } else {
-                    printf("Invalid choice. Try again.");
+                    printf("Invalid choice. Try again.", 0);
                     outnl();
                 }
             }
@@ -774,10 +749,10 @@ main(){
         spawnMob(i, zombieDefault, 'Z');
     }
     setIDMap();
-    printf("Setting up map display...");
+    printf("Setting up map display...", 0);
     outnl();
     setMapDisplay();
-    printf("Calculating paths...");
+    printf("Calculating paths...", 0);
     outnl();
     setPathingMap();
     printMap(mapBackground);
@@ -791,7 +766,7 @@ main(){
     for i = 0 to entityCount do {
         initiative[i] = roll(20)+charMonDex[i];
         printName(i);
-        printf(": ID(%d), Initiative(%d)", i, initiative[i]);
+        printf(": ID(%d), Initiative(%d)", setIntPrint(i, initiative[i], 0));
         outnl();
     }
     int deathSavesSuccFail[4] : {0,0,0,0};
@@ -800,65 +775,65 @@ main(){
         for i = 25 to -5 by -1 do {
             for j = 0 to entityCount do {
                 rogueSnkAtkUsed = false;
-                //printf("%d : %d", i, initiative[j]);
+                //printf("%d : %d", setIntPrint(i, initiative[i], 0));
                 //outnl();
                 if(i == initiative[j]) then {
                     //Take Turn
                     printMap(mapDisplay);
                     if(j > pcCount-1 and charMonHP[j] > 0) then {
-                        printf("Monster turn. Initiative: %d Location: (%d, %d).", i, charMonXPos[j]+1, charMonYPos[j]+1);
+                        printf("Monster turn. Initiative: %d Location: (%d, %d).", setIntPrint(i, charMonXPos[j]+1, charMonYPos[j]+1));
                         outnl();
                         monsterTurn(j);
                     } else if(j < pcCount) then {
                         printName(j);
-                        printf("'s turn. Initiative: %d.", i);
+                        printf("'s turn. Initiative: %d.", setIntPrint(i, 0, 0));
                         outnl();
                         if(charMonHP[j] == 0) then {
                             if(deathSavesSuccFail[j] % 10 != 3){
                                 printName(j);
-                                printf(" needs to make a death saving throw. Enter anything to roll.");
+                                printf(" needs to make a death saving throw. Enter anything to roll.", 0);
                                 outnl();
                                 char temp;
                                 cin >> temp;
                                 int deathSave : roll(20);
-                                printf("Death save: %d. ", deathSave);
+                                printf("Death save: %d. ", setIntPrint(deathSave, 0, 0));
                                 if(deathSave > 10) then {
-                                    printf("Success!");
+                                    printf("Success!", 0);
                                     outnl();
                                     deathSavesSuccFail[j] += 10;
                                 } else {
-                                    printf("Failure...");
+                                    printf("Failure...", 0);
                                     outnl();
                                     deathSavesSuccFail[j] += 1;
                                 }
                                 printName(j);
                                 if(deathSavesSuccFail[j] % 10 == 3) then {
-                                    printf(" succumbs to his injuries and dies.");
+                                    printf(" succumbs to his injuries and dies.", 0);
                                     outnl();
                                     charMonXPos[j] = 25;
                                     charMonYPos[j] = 25;
                                 } else if(deathSavesSuccFail[j] / 10 == 3) then {
-                                    printf(" stablizes and returns to consciousness.");
+                                    printf(" stablizes and returns to consciousness.", 0);
                                     outnl();
                                     deathSavesSuccFail[j] = 0;
                                     charMonHP[j] = 1;
                                 } else {
-                                    printf(" has %d successes and %d failures.", deathSavesSuccFail[j] / 10, deathSavesSuccFail[j] % 10);
+                                    printf(" has %d successes and %d failures.", setIntPrint(deathSavesSuccFail[j] / 10, deathSavesSuccFail[j] % 10, 0));
                                     outnl();
-                                    printf("He will stabilize after %d more successes.", 3 - (deathSavesSuccFail[j] / 10));
+                                    printf("He will stabilize after %d more successes.", setIntPrint(3 - (deathSavesSuccFail[j] / 10), 0, 0));
                                     outnl();
-                                    printf("He will die after %d more failures.", 3 - (deathSavesSuccFail[j] % 10));
+                                    printf("He will die after %d more failures.", setIntPrint(3 - (deathSavesSuccFail[j] % 10), 0, 0));
                                     outnl();
                                 }
                             } else {
                                 printName(j);
-                                printf("'s body lies motionless on the ground.");
+                                printf("'s body lies motionless on the ground.", 0);
                                 outnl();
                                 outputc('.');
                                 outnl();
                                 outputc('.');
                                 outnl();
-                                printf("Enter anything to pass the turn.");
+                                printf("Enter anything to pass the turn.", 0);
                                 outnl();
                                 char temp;
                                 cin >> temp;
@@ -887,10 +862,10 @@ main(){
         }
     }
     if(gameState == 1) then {
-        printf("You have successfully cleansed your temple of the monsters!");
+        printf("You have successfully cleansed your temple of the monsters!", 0);
         outnl();
     } else {
-        printf("Sadly, your party has fallen at the hands of the monsters...");
+        printf("Sadly, your party has fallen at the hands of the monsters...", 0);
         outnl();
     }
 }
