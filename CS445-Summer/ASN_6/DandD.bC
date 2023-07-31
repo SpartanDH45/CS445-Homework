@@ -743,14 +743,16 @@ playerTurn(int idNum){
                 int attackChoice : 0;
                 printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
                 outnl();
+                int targX;
+                int targY;
                 attackChoice = input();
                 if(attackChoice == 1 or attackChoice == 2) then {
                     int range : charMonAttackMRan[idNum];
                     if(attackChoice == 2) then {
                         range = charMonAttackRRan[idNum];
                     }
-                    int targX : -1;
-                    int targY : -1;
+                    targX = -1;
+                    targY = -1;
                     while(targX == -1) do {
                         printMap(mapDisplay);
                         printf("Attack range: %d squares.", setIntPrint(range, 0, 0));
@@ -812,6 +814,11 @@ main(){
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
     setCharMon(3, torbinStats, 'T', 10, 19);
+    int deathSavesSuccFail[4];
+    int gameState : 0;
+    for i = 0 to 4 do {
+        deathSavesSuccFail[i] = 0;
+    }
     for i = 4 to 14 do {
         spawnMob(i, zombieDefault, 'Z');
     }
@@ -836,8 +843,7 @@ main(){
         printf(": ID(%d), Initiative(%d)", setIntPrint(i, initiative[i], 0));
         outnl();
     }
-    int deathSavesSuccFail[4] : {0,0,0,0};
-    int gameState : 0;
+    
     while(gameState == 0) do {
         for i = 25 to -5 by -1 do {
             for j = 0 to entityCount do {
