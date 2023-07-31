@@ -7,7 +7,7 @@ int setIntPrint(int in1, in2, in3){
     return 1;
 }
 
-printf(char stringIn[], int in1){
+printf(char stringIn[]; int in1){
     int i : 0;
     int intCount : 0;
     while(i < *stringIn) do {
@@ -30,7 +30,7 @@ int roll(int faces){
 }
 
 //Roll multiple dice (mostly for damage)
-int rollMult(int quant, int faces){
+int rollMult(int quant, faces){
     int sum : 0;
     printf("%dd%d: ", setIntPrint(quant, faces, 0));
     //Sums up rolls to return
