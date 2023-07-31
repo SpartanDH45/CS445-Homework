@@ -387,8 +387,8 @@ setMapDisplay(){
     }
     for i = 0 to entityCount do {
         if(charMonHP[i] > 0) then {
-            int x = charMonXPos[i];
-            int y = charMonYPos[i];
+            int x : charMonXPos[i];
+            int y : charMonYPos[i];
             mapDisplay[calcXY(x,y)] = charMonMapMarker[i];
         }
     }
@@ -662,7 +662,7 @@ monsterTurn(int idNum){
                 if(not (i == 0 and j == 0)) then {
                     if(idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] < pcCount 
                     and idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] > -1 
-                    and charMonHP[idMap[calcXY(charMonXPos[idNum] + j,charMonYPos[idNum] + i)]] > 0){
+                    and charMonHP[idMap[calcXY(charMonXPos[idNum] + j,charMonYPos[idNum] + i)]] > 0) then {
                         targX = charMonXPos[idNum]+j;
                         targY = charMonYPos[idNum]+i;
                     }
