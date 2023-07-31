@@ -741,10 +741,10 @@ playerTurn(int idNum){
             }
             while(choice == 2 and attackPool > 0) do {
                 int attackChoice : 0;
-                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
-                outnl();
                 int targX;
                 int targY;
+                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
+                outnl();
                 attackChoice = input();
                 if(attackChoice == 1 or attackChoice == 2) then {
                     int range : charMonAttackMRan[idNum];
