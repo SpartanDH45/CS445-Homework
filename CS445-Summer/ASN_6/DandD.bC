@@ -148,7 +148,7 @@ int calcXY(int x, y) {
 
 
 Prints character based maps with included coordinate numberings
-void printMap(char *map){
+printMap(char map[]){
     for i = -2 to mapHeight do {
         if(i > -1) then {
             if( i < 9 ) then {
@@ -212,7 +212,7 @@ void printMap(char *map){
 }
 
 //Prints integer based maps
-void printIntMap(int *map){
+printIntMap(int map[]){
     for i = 0 to mapHeight do {
         for j = 0 to mapWidth do {
             int temp : map[calcXY(j, i)];
@@ -236,7 +236,7 @@ void printIntMap(int *map){
 }
 
 //Print the name of the character/monster based off of their token
-void printName(int idNum){
+printName(int idNum){
     if(charMonMapMarker[idNum] == 'D') then {
         printf("Dhulgen", 0);
     } else if(charMonMapMarker[idNum] == 'O') then {
@@ -251,7 +251,7 @@ void printName(int idNum){
 }
 
 //Assign the values inputted to the stat arrays
-void setCharMon(int idNum, int *stats, char marker, int x, int y){
+setCharMon(int idNum, stats[]; char marker; int x, y){
     charMonHP[idNum] = stats[0];
     charMonAC[idNum] = stats[1];
     charMonSpd[idNum] = stats[2];
@@ -284,7 +284,7 @@ void setCharMon(int idNum, int *stats, char marker, int x, int y){
 }
 
 //Gets lowest neighbor for calculating pathing for monsters
-int getLowestNeighbor(int x, int y){
+int getLowestNeighbor(int x, y){
     int lowest : 1000;
     for i = -1 to 2 do {
         for j = -1 to 2 do {
@@ -305,7 +305,7 @@ int getLowestNeighbor(int x, int y){
 }
 
 //If a spot is walkable then it returns true. Otherwise returns false.
-bool isOpenSpot(int x, int y){
+bool isOpenSpot(int x, y){
     if(idMap[calcXY(x, y)] != -2) then {
         return false;
     } else {
@@ -314,7 +314,7 @@ bool isOpenSpot(int x, int y){
 }
 
 //Calculates the pathing value for a given (x,y) coordinate
-void checkSetPath(int x, int y){
+checkSetPath(int x, y){
     if( x > -1 and x < mapWidth and y > -1 and y < mapHeight) then {
         if(isOpenSpot(x, y)) then {
             int temp : getLowestNeighbor(x, y) + 1;
@@ -328,7 +328,7 @@ void checkSetPath(int x, int y){
     }
 }
 
-void setPathingMap(){
+setPathingMap(){
     for i = 0 to mapHeight do {
         for j = 0 to mapWidth do {
             pathingMap[calcXY(j, i)] = 99;
@@ -360,7 +360,7 @@ void setPathingMap(){
     }
 }
 
-void setIDMap(){
+setIDMap(){
     for i = 0 to mapHeight do {
         for j = 0 to mapWidth do {
             if(mapBackground[(i * mapWidth) + j] == '_') then {
@@ -379,7 +379,7 @@ void setIDMap(){
     }
 }
 
-void setMapDisplay(){
+setMapDisplay(){
     for i = 0 to mapHeight do {
         for j = 0 to mapWidth do {
             mapDisplay[(i * mapWidth) + j] = mapBackground[(i * mapWidth) + j];
@@ -394,7 +394,7 @@ void setMapDisplay(){
     }
 }
 
-void printPaths(int idNum){
+printPaths(int idNum){
     int x : charMonXPos[idNum];
     int y : charMonYPos[idNum];
     for i = -1 to 2 do {
@@ -417,7 +417,7 @@ void printPaths(int idNum){
     }
 }
 
-void spawnMob(int idNum, int *stats, char marker){
+spawnMob(int idNum, stats[]; char marker){
     int x : roll(20)-1;
     int y : roll(20)-1;
     //while (x,y) corresponds to an invalid spawning space (occupied or too close)
@@ -428,7 +428,7 @@ void spawnMob(int idNum, int *stats, char marker){
     setCharMon(idNum, stats, marker, x, y);
 }
 
-void moveChar(int idNum, int x, int y){
+moveChar(int idNum, x, y){
     charMonXPos[idNum] = x;
     charMonYPos[idNum] = y;
     setMapDisplay();
@@ -436,7 +436,7 @@ void moveChar(int idNum, int x, int y){
     setPathingMap();
 }
 
-void attack(int idNum, int type, int mod, int targX, int targY){
+attack(int idNum, type, mod, targX, targY){
     int attackBonus;
     int targID : idMap[calcXY(targX,targY)];
     //printf("Target, %d", setIntPrint(targID, 0, 0));
@@ -598,7 +598,7 @@ void attack(int idNum, int type, int mod, int targX, int targY){
 //Returns a modifier to attack rolls. If objects in the way there is a -2 penalty
 //If the target is out of range the penalty will be set to -20 and be considered
 //Not a valid target
-int checkTarget(int idNum, int targX, int targY, int range){
+int checkTarget(int idNum, targX, targY, range){
     int diffX : charMonXPos[idNum]-targX;
     int diffY : charMonYPos[idNum]-targY;
     int penalty : 0;
@@ -613,7 +613,7 @@ int checkTarget(int idNum, int targX, int targY, int range){
     return penalty;
 }
 
-void monsterTurn(int idNum){
+monsterTurn(int idNum){
     int movePool : charMonSpd[idNum];
     int attackPool : charMonAttackNum[idNum];
     int targX : -1;
@@ -689,7 +689,7 @@ void monsterTurn(int idNum){
     }
 }
 
-void playerTurn(int idNum){
+playerTurn(int idNum){
     int movePool : charMonSpd[idNum];
     int attackPool : charMonAttackNum[idNum];
     bool actionUsed : false;
