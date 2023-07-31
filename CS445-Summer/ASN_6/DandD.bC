@@ -676,7 +676,7 @@ monsterTurn(int idNum){
             //printPaths(idNum);
             if(lowest > 90) then {
                 movePool = 0;
-            } else if(targX == -1 and mapDisplay[lowX] > -1) then {
+            } else if(targX == -1 and mapDisplay[calcXY(lowX, lowY)] == '_' ) then {
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
                 printf(" moves to (%d, %d)", setIntPrint(lowX+1, lowY+1, 0));
@@ -895,10 +895,10 @@ main(){
                         outnl();
                         if(charMonHP[j] == 0) then {
                             if(deathSavesSuccFail[j] % 10 != 3)then {
-                                char temp;
+                                int temp;
                                 int deathSave;
                                 printName(j);
-                                printf(" needs to make a death saving throw. Enter anything to roll.", 0);
+                                printf(" needs to make a death saving throw. Enter any number to roll.", 0);
                                 outnl();
                                 temp = input();
                                 deathSave = roll(20);
@@ -932,7 +932,7 @@ main(){
                                     outnl();
                                 }
                             } else {
-                                char temp;
+                                int temp;
                                 printName(j);
                                 printf("'s body lies motionless on the ground.", 0);
                                 outnl();
@@ -940,7 +940,7 @@ main(){
                                 outnl();
                                 outputc('.');
                                 outnl();
-                                printf("Enter anything to pass the turn.", 0);
+                                printf("Enter any number to pass the turn.", 0);
                                 outnl();
                                 temp = input();
                             }
