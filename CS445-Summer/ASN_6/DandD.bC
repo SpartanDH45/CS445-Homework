@@ -109,10 +109,11 @@ int charToInt(char input){
 //Input strings will be in the form of "{1, 2, 3, 4}"
 setStatArray(char inArray[], targ){
     int input : 0;
-    int i;
-    i = *inArray-2;
     int statIndex : 17;
     int orderOfM : 1;
+    int i;
+    i = *inArray-2;
+   
     while(statIndex > -1) do {
         while(inArray[i] != ',' and inArray[i] != '{') do {
             if(inArray[i] == '-') then {
@@ -294,7 +295,7 @@ int getLowestNeighbor(int x, y){
         for j = -1 to 2 do {
             if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
                 if(not (i == 0 and j == 0)) then {
-                    int temp
+                    int temp;
                     temp = pathingMap[calcXY(x + j, y + i)];
                     if(i != 0 and j != 0) then {
                         temp++;
@@ -343,14 +344,14 @@ setPathingMap(){
     for i = 0 to 4 do {
         if(charMonHP[i] > 0) then {
             int startX;
-            startX = charMonXPos[i];
             int startY;
-            startY = charMonYPos[i];
             int currX;
-            currX = startX;
             int currY;
-            currY = startY;
             int radius : 1;
+            startX = charMonXPos[i];
+            startY = charMonYPos[i];
+            currX = startX;
+            currY = startY;
             pathingMap[calcXY(startX, startY)] = 0;
             //While there is a part of the map not seen by the scan
             while(currX - radius > -1 or currX + radius < 20 or currY - radius > -1 or currY + radius < 20) do {
