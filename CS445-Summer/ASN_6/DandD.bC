@@ -74,7 +74,7 @@ int charMonYPos[100];
 char mapDisplay[500];
 char mapBackground[500] : "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
 int idMap[500];
-int pathingMap[500] : {-1};
+int pathingMap[500];
 int pcCount : 4;
 int entityCount : 0;
 bool rogueSnkAtkUsed : false;
