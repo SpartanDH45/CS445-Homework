@@ -14,7 +14,7 @@ printf(char stringIn[]; int in1, in2, in3){
         //    i++;
         //} else if(stringIn[i] == '\n') then {
         //    outnl();
-        }// else {
+        //} else {
             outputc(stringIn[i]);
         //}
         i++;
