@@ -384,7 +384,7 @@ void spawnMob(int idNum, int *stats, char marker){
     int x : roll(20)-1;
     int y : roll(20)-1;
     //while (x,y) corresponds to an invalid spawning space (occupied or too close)
-    while(mapBackground[(y * mapWidth) + x] != '_' or (y > 15 and (x > 5 and x < 14))){
+    while(mapBackground[(y * mapWidth) + x] != '_' or (y > 15 and (x > 5 and x < 14))) do {
         x = roll(20)-1;
         x = roll(20)-1;
     }
@@ -582,8 +582,8 @@ void monsterTurn(int idNum){
     int targX : -1;
     int targY : -1;
     bool attacked : false;
-    while(attackPool > 0 or movePool > 0){
-        while(movePool > 0 and targX == -1){
+    while(attackPool > 0 or movePool > 0) do {
+        while(movePool > 0 and targX == -1) do {
             //printf("LooptestIn");
             //outnl();
             int lowest : 99;
@@ -658,7 +658,7 @@ void playerTurn(int idNum){
     bool actionUsed : false;
     bool turnEnd : false;
     int choice : 0;
-    while(turnEnd == false){
+    while(turnEnd == false) do {
         printf("Choose: ");
         if(movePool > 0) then {
             printf("1 (move), ");
@@ -675,7 +675,7 @@ void playerTurn(int idNum){
             printf("Invalid choice. Try again.");
             outnl();
         } else {
-            while(choice == 1 and movePool > 0){
+            while(choice == 1 and movePool > 0) do {
                 int moveChoice : 0;
                 int currX : charMonXPos[idNum];
                 int currY : charMonYPos[idNum];
@@ -702,7 +702,7 @@ void playerTurn(int idNum){
                 }
                 printMap(mapDisplay);
             }
-            while(choice == 2 and attackPool > 0){
+            while(choice == 2 and attackPool > 0) do {
                 int attackChoice : 0;
                 printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).");
                 outnl();
@@ -714,7 +714,7 @@ void playerTurn(int idNum){
                     }
                     int targX : -1;
                     int targY : -1;
-                    while(targX == -1){
+                    while(targX == -1) do {
                         printMap(mapDisplay);
                         printf("Attack range: %d squares.", range);
                         outnl();
@@ -796,7 +796,7 @@ main(){
     }
     int deathSavesSuccFail[4] : {0,0,0,0};
     int gameState : 0;
-    while(gameState == 0){
+    while(gameState == 0) do {
         for i = 25 to -5 by -1 do {
             for j = 0 to entityCount do {
                 rogueSnkAtkUsed = false;
@@ -885,7 +885,6 @@ main(){
                 }
             }
         }
-        srand((unsigned) time(NULL));
     }
     if(gameState == 1) then {
         printf("You have successfully cleansed your temple of the monsters!");
