@@ -1,5 +1,5 @@
 printf(char stringIn[]; int in1, in2, in3){
-    //int i:0;
+    int i:0;
     int intCount:0;
     bool offset:false;
     while(i < *stringIn) do {
