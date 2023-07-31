@@ -383,8 +383,10 @@ setIDMap(){
     }
     for i = 0 to entityCount do {
         if(charMonHP[i] > 0) then {
-            int x : charMonXPos[i];
-            int y : charMonYPos[i];
+            int x;
+            int y;
+            x = charMonXPos[i];
+            y = charMonYPos[i];
             idMap[calcXY(x, y)] = i;
         }
     }
@@ -398,8 +400,10 @@ setMapDisplay(){
     }
     for i = 0 to entityCount do {
         if(charMonHP[i] > 0) then {
-            int x : charMonXPos[i];
-            int y : charMonYPos[i];
+            int x;
+            int y;
+            x = charMonXPos[i];
+            y = charMonYPos[i];
             mapDisplay[calcXY(x,y)] = charMonMapMarker[i];
         }
     }
@@ -429,8 +433,10 @@ printPaths(int idNum){
 }
 
 spawnMob(int idNum, stats[]; char marker){
-    int x : roll(20)-1;
-    int y : roll(20)-1;
+    int x;
+    int y;
+    x = roll(20)-1;
+    y = roll(20)-1;
     //while (x,y) corresponds to an invalid spawning space (occupied or too close)
     while(mapBackground[(y * mapWidth) + x] != '_' or (y > 15 and (x > 5 and x < 14))) do {
         x = roll(20)-1;
@@ -449,17 +455,20 @@ moveChar(int idNum, x, y){
 
 attack(int idNum, type, mod, targX, targY){
     int attackBonus;
-    int targID : idMap[calcXY(targX,targY)];
-    //printf("Target, %d", setIntPrint(targID, 0, 0));
-    //outnl();
+    int targID;
     int dieType;
     int dieQuant;
     int damMod : 0;
     int save : 0;
     bool hit : false;
-    int dieRoll : roll(20);
+    int dieRoll;
     int rollTotal;
     int damage;
+    targID = idMap[calcXY(targX,targY)];
+    //printf("Target, %d", setIntPrint(targID, 0, 0));
+    //outnl();
+    dieRoll = roll(20);
+    
     if(type == 1) then {
         attackBonus = charMonAttackMAbl[idNum];
         dieType = charMonAttackMDam[idNum];
@@ -524,7 +533,7 @@ attack(int idNum, type, mod, targX, targY){
             printName(targID);
             printf(" rolled a %d for a total of %d and could not resist ", setIntPrint(dieRoll, rollTotal, 0));
             printName(idNum);
-            printf("'s spell and took ");
+            printf("'s spell and took ", 0);
         } else {
             printName(targID);
             printf(" rolled a %d for a total of %d and was able to resist ", setIntPrint(dieRoll, rollTotal, 0));
