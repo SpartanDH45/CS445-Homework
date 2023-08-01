@@ -861,11 +861,11 @@ playerTurn(int idNum){
 main(){
     int deathSavesSuccFail[4];
     int gameState : 0;
-    //constructMap();
-    printf("The party makes it to the outskirts of the temple just about dusk.", 0);
-    outnl();
-    printf("These four dwarves take a short while to rest and get ready for the fight ahead.", 0);
-    outnl();
+    constructMap();
+    //printf("The party makes it to the outskirts of the temple just about dusk.", 0);
+    //outnl();
+    //printf("These four dwarves take a short while to rest and get ready for the fight ahead.", 0);
+    //outnl();
     setStatArray("{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1}", 'Z');
     setStatArray("{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2}", 'D');
     setStatArray("{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1}", 'O');
