@@ -861,7 +861,7 @@ playerTurn(int idNum){
 main(){
     int deathSavesSuccFail[4];
     int gameState : 0;
-    constructMap();
+    //constructMap();
     printf("The party makes it to the outskirts of the temple just about dusk.", 0);
     outnl();
     printf("These four dwarves take a short while to rest and get ready for the fight ahead.", 0);
