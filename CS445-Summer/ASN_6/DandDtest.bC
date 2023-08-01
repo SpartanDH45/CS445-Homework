@@ -23,6 +23,32 @@ printf(char stringIn[]; int in1){
     printfiArr[0] = 0;
 }
 
+//Roll a die
+int roll(int faces){
+    int temp;
+    temp = ((?faces) + 1);
+    return temp;
+}
+
+//Roll multiple dice (mostly for damage)
+int rollMult(int quant, faces){
+    int sum : 0;
+    printf("%dd%d: ", setIntPrint(quant, faces, 0));
+    //Sums up rolls to return
+    for i = 0 to quant do{
+        int temp;
+        temp = roll(faces);
+        printf("%d ", setIntPrint(temp, 0, 0));
+        sum += temp;
+        if(i != quant - 1) then {
+            printf("+ ", 0);
+        }
+    }
+    printf("= %d", setIntPrint(sum, 0, 0));
+    outnl();
+    return sum;
+}
+
 main(){
     printf("Test", 0);
     printf("Test %d Test %d Test %d", setIntPrint(1,2,3));
