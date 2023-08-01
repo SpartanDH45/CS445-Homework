@@ -546,7 +546,7 @@ void monsterTurn(int idNum){
             //printPaths(idNum);
             if(lowest > 90){
                 movePool = 0;
-            } else if(targX == -1 && mapDisplay[lowX]){
+            } else if(targX == -1 && mapDisplay[calcXY(lowX, lowY)] == '_'){
                 moveChar(idNum, lowX, lowY);
                 printName(idNum);
                 printf(" moves to (%d, %d)\n", lowX+1, lowY+1);
@@ -689,6 +689,22 @@ int main(){
     setCharMon(1, ogrimStats, 'O', 10, 18);
     setCharMon(2, kolgarStats, 'K', 9, 19);
     setCharMon(3, torbinStats, 'T', 10, 19);
+    printf("The party makes it to the outskirts of the temple just about dusk.\n");
+    printf("These four dwarves take a short while to rest and get ready for the \n");
+    printf("fight ahead.\n");
+    printf("The party approaches the temple. Leading the way is Dhulgen Brightforge,\n");
+    printf("the heavily armored fighter, wielding a greatsword. Just behind him is\n");
+    printf("Ogrim Ironhearth, cleric of Morthun, wielding holy light and his trusty\n");
+    printf("axe. Next is Kolgar Goldhand the warmage. He wields elemental magic while\n");
+    printf("wearing armor that most human wizards would find stifling. Finally, the\n");
+    printf("gladiator, Torbin Swiftaxe, brings up the rear. He is renowned for his\n");
+    printf("ability to slip the points of his dwarven dueling picks into the vulnerable");
+    printf("areas of his enemies, causing major damage.\n");
+    printf("As the party enters the temple they are met with a large room, lit barely\n");
+    printf("by the glow of the canals of lava passing through and dividing it.\n");
+    printf("The door shuts behind the party with a loud THUD. The dwarves hear shuffling\n");
+    printf("feet and smell the stench of decay. Ogrim says, 'Let us cleanse this holy \n");
+    printf("place of these foul mockeries of life and death.\n");
     for(int i = 4; i < 14; i++){
         spawnMob(i, zombieDefault, 'Z');
     }
