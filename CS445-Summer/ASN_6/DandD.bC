@@ -85,6 +85,24 @@ int pcCount : 4;
 int entityCount : 0;
 bool rogueSnkAtkUsed : false;
 
+constructMap(){
+    int i : 0;
+    while(i < 400) do {
+        for j = 0 to 100 do {
+            if(i < 100) then {
+                mapBackground[i] = mapPart1[j];
+            } else if(i < 200) then {
+                mapBackground[i] = mapPart2[j];
+            } else if(i < 300) then {
+                mapBackground[i] = mapPart3[j];
+            } else {
+                mapBackground[i] = mapPart4[j];
+            }
+            i++;
+        }
+    }
+}
+
 int charToInt(char input){
     if(input == '0') then {
         return 0;
