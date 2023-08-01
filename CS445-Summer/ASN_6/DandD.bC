@@ -893,7 +893,9 @@ main(){
     outnl();
     printf("feet and smell the stench of decay. Ogrim says, 'Let us cleanse this holy ", 0);
     outnl();
-    printf("place of these foul mockeries of life and death.", 0);
+    printf("place of these foul mockeries of life and death.'", 0);
+    outnl();
+    printf("Enter any number to start.", 0);
     outnl();
     temp = input();
     setStatArray("{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1}", 'Z');

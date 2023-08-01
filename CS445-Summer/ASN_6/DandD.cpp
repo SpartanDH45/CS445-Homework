@@ -704,7 +704,7 @@ int main(){
     printf("by the glow of the canals of lava passing through and dividing it.\n");
     printf("The door shuts behind the party with a loud THUD. The dwarves hear shuffling\n");
     printf("feet and smell the stench of decay. Ogrim says, 'Let us cleanse this holy \n");
-    printf("place of these foul mockeries of life and death.\n");
+    printf("place of these foul mockeries of life and death.'\n");
     printf("Enter any number to start.\n");
     int temp;
     cin >> temp;
