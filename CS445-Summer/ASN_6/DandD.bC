@@ -74,7 +74,7 @@ int charMonXPos[100];
 int charMonYPos[100];
 //
 char mapDisplay[500];
-char mapBackground[500]; // : "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
+char mapBackground[500] : "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
 int idMap[500];
 int pathingMap[500];
 int pcCount : 4;
@@ -839,6 +839,10 @@ playerTurn(int idNum){
 main(){
     int deathSavesSuccFail[4];
     int gameState : 0;
+    printf("The party makes it to the outskirts of the temple just about dusk.", 0);
+    outnl();
+    printf("These four dwarves take a short while to rest and get ready for the fight ahead.", 0);
+    outnl();
     setStatArray("{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1}", 'Z');
     setStatArray("{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2}", 'D');
     setStatArray("{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1}", 'O');
