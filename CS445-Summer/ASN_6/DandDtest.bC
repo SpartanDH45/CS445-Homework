@@ -49,6 +49,107 @@ int rollMult(int quant, faces){
     return sum;
 }
 
+int mapWidth : 20;
+int mapHeight : 20;
+
+//Arrays of stats for monsters/characters
+
+//Order for storage : HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
+//                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav, AttackNum
+int zombieDefault[18]; //{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1};
+int dhulgenStats[18]; //{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
+int ogrimStats[18]; //{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
+int kolgarStats[18]; //{37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1};
+int torbinStats[18]; //{43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
+int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
+int charMonStr[100], charMonDex[100], charMonCon[100];
+int charMonInt[100], charMonWis[100], charMonCha[100];
+int charMonAttackMDam[100], charMonAttackMRan[100], charMonAttackMAbl[100];
+int charMonAttackRDam[100], charMonAttackRRan[100], charMonAttackRAbl[100];
+int charMonAttackRSav[100], charMonAttackNum[100];
+char charMonMapMarker[100];
+int initiative[100];
+//XY Positions given as a single integer XXYY
+int charMonXPos[100];
+int charMonYPos[100];
+//
+char mapDisplay[500];
+char mapBackground[500] : "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
+int idMap[500];
+int pathingMap[500];
+int pcCount : 4;
+int entityCount : 0;
+bool rogueSnkAtkUsed : false;
+
+int charToInt(char input){
+    if(input == '0') then {
+        return 0;
+    } else if(input == '1') then {
+        return 1;
+    } else if(input == '2') then {
+        return 2;
+    } else if(input == '3') then {
+        return 3;
+    } else if(input == '4') then {
+        return 4;
+    } else if(input == '5') then {
+        return 5;
+    } else if(input == '6') then {
+        return 6;
+    } else if(input == '7') then {
+        return 7;
+    } else if(input == '8') then {
+        return 8;
+    } else if(input == '9') then {
+        return 9;
+    } else {
+        return -1;
+    }
+}
+//Input strings will be in the form of "{1, 2, 3, 4}"
+setStatArray(char inArray[], targ){
+    int input : 0;
+    int statIndex : 17;
+    int orderOfM : 1;
+    int i;
+    i = *inArray-2;
+   
+    while(statIndex > -1) do {
+        while(inArray[i] != ',' and inArray[i] != '{') do {
+            if(inArray[i] == '-') then {
+                input *= -1;
+            } else if(inArray[i] == ' ') then {
+
+            } else {
+                input += (charToInt(inArray[i]) * orderOfM);
+                orderOfM *= 10;
+            }
+            i--;
+        }
+        if(targ == 'D') then {
+            dhulgenStats[statIndex] = input;
+        } else if(targ == 'O') then {
+            ogrimStats[statIndex] = input;
+        } else if(targ == 'K') then {
+            kolgarStats[statIndex] = input;
+        } else if(targ == 'T') then {
+            torbinStats[statIndex] = input;
+        } else if(targ == 'Z') then {
+            zombieDefault[statIndex] = input;
+        }
+        i--;
+        statIndex--;
+        input = 0;
+        orderOfM = 1;
+    }
+
+}
+
+//Returns an integer value to represent a two dimensional coordinate in a map array
+int calcXY(int x, y) {
+    return ((y * mapWidth) + x);
+}
+
 main(){
     printf("Test", 0);
     printf("Test %d Test %d Test %d", setIntPrint(1,2,3));
