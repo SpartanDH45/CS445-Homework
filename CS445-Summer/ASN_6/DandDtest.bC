@@ -837,5 +837,5 @@ playerTurn(int idNum){
 }
 
 main(){
-    printf("Test", 0);
+    //printf("Test", 0);
 }
