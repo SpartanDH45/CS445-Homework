@@ -1,0 +1,841 @@
+int printfiArr[4];
+int setIntPrint(int in1, in2, in3){
+    printfiArr[0] = 1;
+    printfiArr[1] = in1;
+    printfiArr[2] = in2;
+    printfiArr[3] = in3;
+    return 1;
+}
+
+printf(char stringIn[]; int in1){
+    int i : 0;
+    int intCount : 0;
+    while(i < *stringIn) do {
+        if(stringIn[i] == '%' and stringIn[i+1] == 'd' and printfiArr[0] > 0 and in1 > 0) then {
+            intCount++;
+            output(printfiArr[intCount]);
+            i++;
+        } else {
+            outputc(stringIn[i]);
+        }
+        i++;
+    }
+    printfiArr[0] = 0;
+}
+
+//Roll a die
+int roll(int faces){
+    int temp;
+    temp = ((?faces) + 1);
+    return temp;
+}
+
+//Roll multiple dice (mostly for damage)
+int rollMult(int quant, faces){
+    int sum : 0;
+    printf("%dd%d: ", setIntPrint(quant, faces, 0));
+    //Sums up rolls to return
+    for i = 0 to quant do{
+        int temp;
+        temp = roll(faces);
+        printf("%d ", setIntPrint(temp, 0, 0));
+        sum += temp;
+        if(i != quant - 1) then {
+            printf("+ ", 0);
+        }
+    }
+    printf("= %d", setIntPrint(sum, 0, 0));
+    outnl();
+    return sum;
+}
+
+int mapWidth : 20;
+int mapHeight : 20;
+
+//Arrays of stats for monsters/characters
+
+//Order for storage : HP,AC,Spd,Prof,Str,Dex,Con,Int,Wis,Cha,
+//                   MDam,MRan,Mabl,RDam,RRan,RAbl,RSav, AttackNum
+int zombieDefault[18]; //{22, 10, 4, 2, 1, -2, 3, 3, 0, -3, 106, 1, 1, 0, 0, 1, 0, 1};
+int dhulgenStats[18]; //{49, 18, 5, 3, 4, 0, 3, 1, 1, -1, 206, 1, 1, 106, 6, 1, 0, 2};
+int ogrimStats[18]; //{43, 18, 5, 3, 2, 2, 3, 1, 4, -1, 108, 1, 1, 208, 12, 5, 2, 1};
+int kolgarStats[18]; //{37, 16, 5, 3, 1, 2, 3, 4, 1, -1, 108, 1, 1, 2010, 20, 4, 0, 1};
+int torbinStats[18]; //{43, 16, 5, 3, 4, 2, 3, 1, 0, 3, 108, 1, 1, 104, 6, 1, 0, 2};
+int charMonHP[100], charMonAC[100], charMonSpd[100], charMonProf[100];
+int charMonStr[100], charMonDex[100], charMonCon[100];
+int charMonInt[100], charMonWis[100], charMonCha[100];
+int charMonAttackMDam[100], charMonAttackMRan[100], charMonAttackMAbl[100];
+int charMonAttackRDam[100], charMonAttackRRan[100], charMonAttackRAbl[100];
+int charMonAttackRSav[100], charMonAttackNum[100];
+char charMonMapMarker[100];
+int initiative[100];
+//XY Positions given as a single integer XXYY
+int charMonXPos[100];
+int charMonYPos[100];
+//
+char mapDisplay[500];
+char mapBackground[500] : "_x_x_~__xxxx__~_xx___________xx________x___x____________x________~xxx__xxx~_____~~__~~~~~__~~~~~__~~_____~________~______xx________________x___________________x_xx__~____x___~____________x_xx_x______x_______x_xx________x___x_~___xx_x_~_____x______x_xx________xx__x______x________x_____~________~_____~~__~~~~~__~~~~~__~~___x_~________~_______________________x__x________________x____x_~________~_____";
+int idMap[500];
+int pathingMap[500];
+int pcCount : 4;
+int entityCount : 0;
+bool rogueSnkAtkUsed : false;
+
+int charToInt(char input){
+    if(input == '0') then {
+        return 0;
+    } else if(input == '1') then {
+        return 1;
+    } else if(input == '2') then {
+        return 2;
+    } else if(input == '3') then {
+        return 3;
+    } else if(input == '4') then {
+        return 4;
+    } else if(input == '5') then {
+        return 5;
+    } else if(input == '6') then {
+        return 6;
+    } else if(input == '7') then {
+        return 7;
+    } else if(input == '8') then {
+        return 8;
+    } else if(input == '9') then {
+        return 9;
+    } else {
+        return -1;
+    }
+}
+//Input strings will be in the form of "{1, 2, 3, 4}"
+setStatArray(char inArray[], targ){
+    int input : 0;
+    int statIndex : 17;
+    int orderOfM : 1;
+    int i;
+    i = *inArray-2;
+   
+    while(statIndex > -1) do {
+        while(inArray[i] != ',' and inArray[i] != '{') do {
+            if(inArray[i] == '-') then {
+                input *= -1;
+            } else if(inArray[i] == ' ') then {
+
+            } else {
+                input += (charToInt(inArray[i]) * orderOfM);
+                orderOfM *= 10;
+            }
+            i--;
+        }
+        if(targ == 'D') then {
+            dhulgenStats[statIndex] = input;
+        } else if(targ == 'O') then {
+            ogrimStats[statIndex] = input;
+        } else if(targ == 'K') then {
+            kolgarStats[statIndex] = input;
+        } else if(targ == 'T') then {
+            torbinStats[statIndex] = input;
+        } else if(targ == 'Z') then {
+            zombieDefault[statIndex] = input;
+        }
+        i--;
+        statIndex--;
+        input = 0;
+        orderOfM = 1;
+    }
+
+}
+
+//Returns an integer value to represent a two dimensional coordinate in a map array
+int calcXY(int x, y) {
+    return ((y * mapWidth) + x);
+}
+
+
+//Prints character based maps with included coordinate numberings
+printMap(char map[]){
+    for i = -2 to mapHeight do {
+        if(i > -1) then {
+            if( i < 9 ) then {
+                printf(" %d", setIntPrint(i+1, 0, 0));
+            } else {
+                printf("%d", setIntPrint(i+1, 0, 0));
+            }
+        }
+        if( i == 2 or i == 9 or i == 10 or i == 17) then {
+            printf("|", 0);
+        } else if( i == -1) then {
+            printf("  X", 0);
+        } else if( i > -1) then {
+            outputc('X');
+        } else {
+            printf("   ", 0);
+        }
+        for j = 0 to mapWidth do {
+            if(i == -2) then {
+                if( j < 9 ) then {
+                    printf("%d ", setIntPrint(j+1, 0, 0));
+                } else {
+                    printf("%d", setIntPrint(j+1, 0, 0));
+                }
+            }
+            if(i == -1 and (j == 2 or j == 6 or j == 7 or j == 12 or j == 13 or j == 17)) then {
+                if(j == 6 or j == 12) then {
+                    printf("==", 0);
+                } else {
+                    printf("=X", 0);
+                }
+            } else if(i == mapHeight and (j == 2 or j == 9 or j == 10 or j == 17)) then {
+                if(j == 9) then {
+                    printf("==", 0);
+                } else {
+                    printf("=X", 0);
+                }
+            }
+            else if(i == -1 or i == mapHeight) then {
+                outputc('X');
+                if(j != mapWidth-1) then {
+                    outputc('X');
+                }
+            } else {
+                outputc(map[calcXY(j, i)]);
+                if(j != mapWidth-1 and i != -2) then {
+                    outputc(' ');
+                }
+            }
+        }
+        if( i == 2 or i == 9 or i == 10 or i == 17) then {
+            outputc('|');
+            outnl();
+        } else if(i != -2) then {
+            outputc('X');
+            outnl();
+        } else {
+            outnl();
+        }
+    }
+}
+
+//Prints integer based maps
+printIntMap(int map[]){
+    for i = 0 to mapHeight do {
+        for j = 0 to mapWidth do {
+            int temp;
+            temp = map[calcXY(j, i)];
+            if(temp > -1) then {
+                printf("  ", 0);
+            } else {
+                printf(" -", 0);
+            }
+            //get absolute value of temp
+            if(temp < 0) then {
+                temp = temp*-1;
+            }
+            if(temp < 10) then {
+                printf("0%d", setIntPrint(temp, 0, 0));
+            } else {
+                printf("%d", setIntPrint(temp, 0, 0));
+            }
+        }
+        outnl();
+    }
+}
+
+//Print the name of the character/monster based off of their token
+printName(int idNum){
+    if(charMonMapMarker[idNum] == 'D') then {
+        printf("Dhulgen", 0);
+    } else if(charMonMapMarker[idNum] == 'O') then {
+        printf("Ogrim", 0);
+    } else if(charMonMapMarker[idNum] == 'K') then {
+        printf("Kolgar", 0);
+    } else if(charMonMapMarker[idNum] == 'T') then {
+        printf("Torbin", 0);
+    } else if(charMonMapMarker[idNum] == 'Z') then {
+        printf("Zombie", 0);
+    }
+}
+
+//Assign the values inputted to the stat arrays
+setCharMon(int idNum, stats[]; char marker; int x, y){
+    charMonHP[idNum] = stats[0];
+    charMonAC[idNum] = stats[1];
+    charMonSpd[idNum] = stats[2];
+    charMonProf[idNum] = stats[3];
+    charMonStr[idNum] = stats[4];
+    charMonDex[idNum] = stats[5];
+    charMonCon[idNum] = stats[6];
+    charMonInt[idNum] = stats[7];
+    charMonWis[idNum] = stats[8];
+    charMonCha[idNum] = stats[9];
+    charMonAttackMDam[idNum] = stats[10];
+    charMonAttackMRan[idNum] = stats[11];
+    charMonAttackMAbl[idNum] = stats[12];
+    charMonAttackRDam[idNum] = stats[13];
+    charMonAttackRRan[idNum] = stats[14];
+    charMonAttackRAbl[idNum] = stats[15];
+    charMonAttackRSav[idNum] = stats[16];
+    charMonAttackNum[idNum] = stats[17];
+    charMonMapMarker[idNum] = marker;
+    charMonXPos[idNum] = x;
+    charMonYPos[idNum] = y;
+    //If a monster is spawned out of bounds, it is dead by default
+    if(x > 19 or x < 0 or y > 19 or y < 0) then {
+        charMonHP[idNum] = 0;
+    } else {
+        idMap[(y * mapWidth) + x] = idNum;
+        mapDisplay[(y * mapWidth) + x] = marker;
+    }
+    entityCount++;
+}
+
+//Gets lowest neighbor for calculating pathing for monsters
+int getLowestNeighbor(int x, y){
+    int lowest : 1000;
+    for i = -1 to 2 do {
+        for j = -1 to 2 do {
+            if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
+                if(not (i == 0 and j == 0)) then {
+                    int temp;
+                    temp = pathingMap[calcXY(x + j, y + i)];
+                    if(i != 0 and j != 0) then {
+                        temp++;
+                    }
+                    if(temp<lowest) then {
+                        lowest = temp;
+                    }
+                }
+            }
+        }
+    }
+    return lowest;
+}
+
+//If a spot is walkable then it returns true. Otherwise returns false.
+bool isOpenSpot(int x, y){
+    if(idMap[calcXY(x, y)] != -2) then {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+//Calculates the pathing value for a given (x,y) coordinate
+checkSetPath(int x, y){
+    if( x > -1 and x < mapWidth and y > -1 and y < mapHeight) then {
+        if(isOpenSpot(x, y)) then {
+            int temp;
+            temp = getLowestNeighbor(x, y) + 1;
+            if(temp > 99) then {
+                temp = 99;
+            }
+            pathingMap[calcXY(x, y)] = temp;
+        } else if((idMap[calcXY(x,y)] > pcCount-1 or idMap[calcXY(x,y)] < 0) or charMonHP[idMap[calcXY(x,y)]] == 0) then {
+            pathingMap[calcXY(x, y)] = 99;
+        }
+    }
+}
+
+setPathingMap(){
+    for i = 0 to mapHeight do {
+        for j = 0 to mapWidth do {
+            pathingMap[calcXY(j, i)] = 99;
+        }
+    }
+    for i = 0 to 4 do {
+        if(charMonHP[i] > 0) then {
+            int startX;
+            int startY;
+            int currX;
+            int currY;
+            int radius : 1;
+            startX = charMonXPos[i];
+            startY = charMonYPos[i];
+            currX = startX;
+            currY = startY;
+            pathingMap[calcXY(startX, startY)] = 0;
+            //While there is a part of the map not seen by the scan
+            while(currX - radius > -1 or currX + radius < 20 or currY - radius > -1 or currY + radius < 20) do {
+                for circOffset = 0 to radius + 1 do {
+                    checkSetPath(startX-radius, startY+circOffset);
+                    checkSetPath(startX-radius, startY-circOffset-1);
+                    checkSetPath(startX+radius, startY+circOffset);
+                    checkSetPath(startX+radius, startY-circOffset-1);
+                    checkSetPath(startX+circOffset, startY-radius);
+                    checkSetPath(startX-circOffset-1, startY-radius);
+                    checkSetPath(startX+circOffset, startY+radius);
+                    checkSetPath(startX-circOffset-1, startY+radius);
+                }
+                radius++;
+            }
+        }
+    }
+}
+
+setIDMap(){
+    for i = 0 to mapHeight do {
+        for j = 0 to mapWidth do {
+            if(mapBackground[(i * mapWidth) + j] == '_') then {
+                idMap[(i * mapWidth) + j] = -2;
+            } else {
+                idMap[(i * mapWidth) + j] = -1;
+            }
+        }
+    }
+    for i = 0 to entityCount do {
+        if(charMonHP[i] > 0) then {
+            int x;
+            int y;
+            x = charMonXPos[i];
+            y = charMonYPos[i];
+            idMap[calcXY(x, y)] = i;
+        }
+    }
+}
+
+setMapDisplay(){
+    for i = 0 to mapHeight do {
+        for j = 0 to mapWidth do {
+            mapDisplay[(i * mapWidth) + j] = mapBackground[(i * mapWidth) + j];
+        }
+    }
+    for i = 0 to entityCount do {
+        if(charMonHP[i] > 0) then {
+            int x;
+            int y;
+            x = charMonXPos[i];
+            y = charMonYPos[i];
+            mapDisplay[calcXY(x,y)] = charMonMapMarker[i];
+        }
+    }
+}
+
+printPaths(int idNum){
+    int x;
+    int y;
+    x = charMonXPos[idNum];
+    y = charMonYPos[idNum];
+    for i = -1 to 2 do {
+        for j = -1 to 2 do {
+            if(x + j > -1 and x + j < mapWidth and y + i > -1 and y + i < mapHeight) then {
+                if(not (i == 0 and j == 0)) then {
+                    if(pathingMap[calcXY(x + j,y + i)] < 10) then {
+                        outputc('0');
+                    }
+                    printf("%d ", setIntPrint(pathingMap[calcXY(x + j,y + i)], 0, 0));
+                } else {
+                    printf("Zo ", 0);
+                }
+                if(j == 1) then {
+                    outnl();
+                }
+
+            }
+        }
+    }
+}
+
+spawnMob(int idNum, stats[]; char marker){
+    int x;
+    int y;
+    x = roll(20)-1;
+    y = roll(20)-1;
+    //while (x,y) corresponds to an invalid spawning space (occupied or too close)
+    while(mapBackground[(y * mapWidth) + x] != '_' or (y > 15 and (x > 5 and x < 14))) do {
+        x = roll(20)-1;
+        x = roll(20)-1;
+    }
+    setCharMon(idNum, stats, marker, x, y);
+}
+
+moveChar(int idNum, x, y){
+    charMonXPos[idNum] = x;
+    charMonYPos[idNum] = y;
+    setMapDisplay();
+    setIDMap();
+    setPathingMap();
+}
+
+attack(int idNum, type, mod, targX, targY){
+    int attackBonus;
+    int targID;
+    int dieType;
+    int dieQuant;
+    int damMod : 0;
+    int save : 0;
+    bool hit : false;
+    int dieRoll;
+    int rollTotal;
+    int damage;
+    targID = idMap[calcXY(targX,targY)];
+    //printf("Target, %d", setIntPrint(targID, 0, 0));
+    //outnl();
+    dieRoll = roll(20);
+
+    if(type == 1) then {
+        attackBonus = charMonAttackMAbl[idNum];
+        dieType = charMonAttackMDam[idNum];
+    } else {
+        attackBonus = charMonAttackRAbl[idNum];
+        dieType = charMonAttackRDam[idNum];
+        save = charMonAttackRSav[idNum];
+    }
+    if(attackBonus == 1) then {
+        attackBonus = charMonStr[idNum] + charMonProf[idNum];
+        damMod = charMonStr[idNum];
+    } else if(attackBonus == 2) then {
+        attackBonus = charMonDex[idNum] + charMonProf[idNum];
+        damMod = charMonDex[idNum];
+    } else if(attackBonus == 3) then {
+        attackBonus = charMonCon[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 4) then {
+        attackBonus = charMonInt[idNum] + charMonProf[idNum];
+    } else if(attackBonus == 5) then {
+        attackBonus = charMonWis[idNum] + charMonProf[idNum];
+    } else {
+        attackBonus = charMonCha[idNum] + charMonProf[idNum];
+    }
+    if(save == 0) then {
+        rollTotal = dieRoll + attackBonus + mod;
+        if(rollTotal >= charMonAC[targID] and dieRoll != 1) then {
+            hit = true;
+            printName(idNum);
+            printf(" rolled a %d for a total of %d and successfully hit ", setIntPrint(dieRoll, rollTotal, 0));
+            printName(targID);
+            printf(" for ", 0);
+        } else if(dieRoll == 1) then {
+            printName(idNum);
+            printf(" rolled a %d and got a critical miss against ", setIntPrint(dieRoll, rollTotal, 0));
+            printName(targID);
+            outputc('.');
+            outnl();
+        } else {
+            printName(idNum);
+            printf(" rolled a %d for a total of %d and failed to hit ", setIntPrint(dieRoll, rollTotal, 0));
+            outputc('.');
+            outnl();
+        }
+    } else {
+        if(attackBonus == 1) then {
+            rollTotal = dieRoll + charMonStr[targID];
+            damMod = charMonStr[idNum];
+        } else if(attackBonus == 2) then {
+            rollTotal = dieRoll + charMonDex[targID];
+            damMod = charMonDex[idNum];
+        } else if(attackBonus == 3) then {
+            rollTotal = dieRoll + charMonCon[targID];
+        } else if(attackBonus == 4) then {
+            rollTotal = dieRoll + charMonInt[targID];
+        } else if(attackBonus == 5) then {
+            rollTotal = dieRoll + charMonWis[targID];
+        } else {
+            rollTotal = dieRoll + charMonCha[targID];
+        }
+        if(rollTotal < (8 + attackBonus)) then {
+            hit = true;
+            printName(targID);
+            printf(" rolled a %d for a total of %d and could not resist ", setIntPrint(dieRoll, rollTotal, 0));
+            printName(idNum);
+            printf("'s spell and took ", 0);
+        } else {
+            printName(targID);
+            printf(" rolled a %d for a total of %d and was able to resist ", setIntPrint(dieRoll, rollTotal, 0));
+            printName(idNum);
+            printf("'s spell.", 0);
+            outnl();
+        }
+    }
+    if(hit == true) then {
+        if(dieType > 1000) then {
+            dieQuant = dieType/1000;
+            dieType = dieType - (dieQuant * 1000);
+        } else {
+            dieQuant = dieType/100;
+            dieType = dieType - (dieQuant * 100);
+        }
+        damage = rollMult(dieQuant, dieType);
+        if(rogueSnkAtkUsed == false and idNum == 3) then {
+            bool allyAdj : false;
+            for i = -1 to 2 do {
+                for j = -1 to 2 do {
+                    if(not (i == 0 and j == 0) and (targX + j > -1 and targX + j < 20 and targY + i > -1 and targY + i < 20)) then {
+                        if(pathingMap[calcXY(targX+j, targY+i)] == 0) then {
+                            allyAdj = true;
+                        }
+                    }
+                }
+            }
+            if(allyAdj == true) then {
+                printf("Sneak attack: ", 0);
+                damage += rollMult(3, 6);
+            }
+        }
+        if(save == 0 and dieRoll == 20) then {
+            printf("Critical Hit!", 0);
+            outnl();
+            damage = damage*2;
+        }
+        damage += damMod;
+        printf("%d damage!", setIntPrint(damage, 0, 0));
+        outnl();
+        charMonHP[targID] -= damage;
+        if(charMonHP[targID] < 0) then {
+            charMonHP[targID] = 0;
+        }
+        printName(targID);
+        printf("'s HP: %d", setIntPrint(charMonHP[targID], 0, 0));
+        outnl();
+        //If the target is a zombie, was dropped to 0, and it wasn't from a crit/spell
+        if(charMonHP[targID] == 0) then {
+            if(charMonMapMarker[targID] == 'Z' and not(dieRoll == 20 or save != 0)) then {
+                if(roll(20) + charMonCon[targID] > 5 + damage) then {
+                    charMonHP[targID] = 1;
+                    printf("Using its undead fortitude, the zombie won't stay down!", 0);
+                    outnl();
+                }
+            }
+            if(targID > pcCount-1) then {
+                printf("The ", 0);
+                printName(targID);
+                printf(" succumbs to its wounds and perishes.", 0);
+                outnl();
+                charMonMapMarker[targID] = '_';
+                charMonXPos[25];
+                charMonYPos[25];
+                initiative[targID] = -10;
+                setIDMap();
+                setMapDisplay();
+
+            } else {
+                printName(targID);
+                printf(" falls unconscious!", 0);
+                outnl();
+                setIDMap();
+                setPathingMap();
+            }
+        }
+    }
+    
+}
+
+//Returns a modifier to attack rolls. If objects in the way there is a -2 penalty
+//If the target is out of range the penalty will be set to -20 and be considered
+//Not a valid target
+int checkTarget(int idNum, targX, targY, range){
+    int diffX;
+    int diffY;
+    int penalty : 0;
+    diffX = charMonXPos[idNum]-targX;
+    diffY = charMonYPos[idNum]-targY;
+    // If the attack is out of range
+    if((diffX*diffX)+(diffY*diffY)>(range*range)) then {
+        if(not ((diffX*diffX)+(diffY*diffY) == 2 and range == 1)) then {
+            penalty = -20;
+        }
+    } else if((diffX*diffX)+(diffY*diffY) == 2 and range > 1) then {
+        penalty -= 3; //Penalty for shooting into melee
+    }
+    return penalty;
+}
+
+monsterTurn(int idNum){
+    int movePool;
+    int attackPool;
+    int targX : -1;
+    int targY : -1;
+    movePool = charMonSpd[idNum];
+    attackPool = charMonAttackNum[idNum];
+    while(attackPool > 0 or movePool > 0) do {
+        while(movePool > 0 and targX == -1) do {
+            //printf("LooptestIn", 0);
+            //outnl();
+            int lowest : 99;
+            int lowX;
+            int lowY;
+            int currX;
+            int currY;
+            currX = charMonXPos[idNum];
+            currY = charMonYPos[idNum];
+            for i = -1 to 2 do {
+                for j = -1 to 2 do {
+                    if(not (i == 0 and j == 0) and (currX + j > -1 and currX + j < 20 and currY + i > -1 and currY + i < 20)) then {
+                        if(idMap[calcXY(currX+j, currY+i)] < pcCount and idMap[calcXY(currX+j, currY+i)] > -1 and charMonHP[idMap[calcXY(currX + j,currY + i)]] > 0) then {
+                            targX = currX+j;
+                            targY = currY+i;
+                            //printf("Found target: (%d, %d)", setIntPrint(targX+1, targY+1, 0));
+                            //outnl();
+                        } else if(pathingMap[calcXY(currX+j, currY+i)] < lowest and (i != j and i != j * -1)) then {
+                            lowest = pathingMap[calcXY(currX+j, currY+i)];
+                            lowX = currX + j;
+                            lowY = currY + i;
+                            //printf("New lowest: %d at (%d,%d)", setIntPrint(lowest, lowX+1, lowY+1));
+                            //outnl();
+                        }
+                    }
+                }
+            }
+            //printPaths(idNum);
+            if(lowest > 90) then {
+                movePool = 0;
+            } else if(targX == -1 and mapDisplay[calcXY(lowX, lowY)] == '_' ) then {
+                moveChar(idNum, lowX, lowY);
+                printName(idNum);
+                printf(" moves to (%d, %d)", setIntPrint(lowX+1, lowY+1, 0));
+                outnl();
+                movePool--;
+            }
+        }
+        for i = -1 to 2 do {
+            for j = -1 to 2 do {
+                if(not (i == 0 and j == 0)) then {
+                    if(idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] < pcCount 
+                    and idMap[calcXY(charMonXPos[idNum]+j, charMonYPos[idNum]+i)] > -1 
+                    and charMonHP[idMap[calcXY(charMonXPos[idNum] + j,charMonYPos[idNum] + i)]] > 0) then {
+                        targX = charMonXPos[idNum]+j;
+                        targY = charMonYPos[idNum]+i;
+                    }
+                }
+            }
+            
+        }
+        if(targX == -1) then {
+            attackPool = 0;
+        } else if(attackPool > 0) then {
+            attack(idNum, 1, 0, targX, targY);
+            attackPool--;
+            //printf("Attackpool: %d", setIntPrint(attackPool, 0, 0));
+            //outnl();
+            if(charMonHP[idMap[calcXY(targX,targY)]] != 0 and attackPool == 0) then {
+                movePool = 0;
+            }
+            targX = -1;
+        } else if(attackPool < 1) then {
+            //printf("Error, aborting turn., 0");
+            //outnl();
+            movePool = 0;
+        }
+    }
+}
+
+playerTurn(int idNum){
+    int movePool; 
+    int attackPool; 
+    bool turnEnd : false;
+    int choice : 0;
+    movePool = charMonSpd[idNum];
+    attackPool = charMonAttackNum[idNum];
+    while(turnEnd == false) do {
+        printf("Choose: ", 0);
+        if(movePool > 0) then {
+            printf("1 (move), ", 0);
+        }
+        if(attackPool > 0) then {
+            printf("2 (attack), ", 0);
+        }
+        printf("3 (end turn).", 0);
+        outnl();
+        printf("You have %d square(s) of movement and %d attack(s)", setIntPrint(movePool, attackPool, 0));
+        outnl();
+        choice = input();
+        if(choice < 0 or choice > 3) then {
+            printf("Invalid choice. Try again.", 0);
+            outnl();
+        } else {
+            while(choice == 1 and movePool > 0) do {
+                int moveChoice : 0;
+                int currX;
+                int currY;
+                currX = charMonXPos[idNum];
+                currY = charMonYPos[idNum];
+                printf("Choose direction: 1 (^Up), 2(<Left), 3(Right>), 4(vDown), or 5(Stop)", 0);
+                outnl();
+                moveChoice = input();
+                if(moveChoice == 1 and mapDisplay[calcXY(currX, currY-1)] == '_') then {
+                    moveChar(idNum, currX, currY-1);
+                    movePool--;
+                } else if(moveChoice == 2 and mapDisplay[calcXY(currX-1, currY)] == '_') then {
+                    moveChar(idNum, currX-1, currY);
+                    movePool--;
+                } else if(moveChoice == 3 and mapDisplay[calcXY(currX+1, currY)] == '_') then {
+                    moveChar(idNum, currX+1, currY);
+                    movePool--;
+                } else if(moveChoice == 4 and mapDisplay[calcXY(currX, currY+1)] == '_') then {
+                    moveChar(idNum, currX, currY+1);
+                    movePool--;
+                } else if(moveChoice == 5) then {
+                    choice = 0;
+                } else {
+                    printf("Invalid input or the space was occupied. Try again.", 0);
+                    outnl();
+                }
+                printMap(mapDisplay);
+            }
+            while(choice == 2 and attackPool > 0) do {
+                int attackChoice : 0;
+                int targX;
+                int targY;
+                printf("Choose attack type: 1 (melee), 2 (ranged), or 3 (cancel).", 0);
+                outnl();
+                attackChoice = input();
+                if(attackChoice == 1 or attackChoice == 2) then {
+                    int range;
+                    range = charMonAttackMRan[idNum];
+                    if(attackChoice == 2) then {
+                        range = charMonAttackRRan[idNum];
+                    }
+                    targX = -1;
+                    targY = -1;
+                    while(targX == -1) do {
+                        printMap(mapDisplay);
+                        printf("Attack range: %d squares.", setIntPrint(range, 0, 0));
+                        outnl();
+                        printf("What is the x value of the target? (Enter 0 to cancel attack)", 0);
+                        outnl();
+                        targX = input();
+                        if(targX != 0) then {
+                            printf("What is the y value of the target?", 0);
+                            outnl();
+                            targY = input();
+                            if(targX > 0 and targX < 21 and targY > 0 and targY < 21) then {
+                                targX--;
+                                targY--;
+                                if(idMap[calcXY(targX, targY)] > -1) then {
+                                    int mod;
+                                    mod = checkTarget(idNum, targX, targY, range);
+                                    if(mod < -19) then {
+                                        printf("Target is out of range. Choose another option or set x to 0 to cancel.", 0);
+                                        outnl();
+                                        targX == -1;
+                                        targY == -1;
+                                    } else {
+                                        attack(idNum, attackChoice, mod, targX, targY);
+                                        attackPool--;
+                                    }
+                                } else {
+                                    printf("There isn't anyone in that spot.", 0);
+                                    outnl();
+                                }
+                            } else {
+                                printf("Target is not on the map. What are you aiming at?", 0);
+                                outnl();
+                            }
+                        } else {
+                            choice = 0;
+                        }
+                    }
+                } else if(attackChoice == 3) then {
+                    choice = 0;
+                } else {
+                    printf("Invalid choice. Try again.", 0);
+                    outnl();
+                }
+            }
+            if(choice == 3) then {
+                turnEnd = true;
+            }
+        }
+    }
+}
+
+main(){
+    printf("Test", 0);
+}
